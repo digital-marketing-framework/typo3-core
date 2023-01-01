@@ -1,0 +1,8 @@
+
+configurationStorage {
+    # cat=Configuration Document Storage; type=integer; label=Storage UID for configuration documents
+    uid = 0
+
+    # cat=Configuration Document Storage; type=string; label=Storage folder for configuration documents
+    folder = /digital_marketing_framework/configuration
+}

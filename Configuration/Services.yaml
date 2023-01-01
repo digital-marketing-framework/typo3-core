@@ -1,0 +1,26 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  DigitalMarketingFramework\Typo3\Core\:
+    resource: '../Classes/*'
+
+  DigitalMarketingFramework\Typo3\Core\Registry\EventListener\CoreRegistryGlobalConfigurationUpdateEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'digital-marketing-framework/core/registry-update/core/global-configuration'
+        event: DigitalMarketingFramework\Typo3\Core\Registry\Event\CoreRegistryGlobalConfigurationUpdateEvent
+
+  DigitalMarketingFramework\Typo3\Core\Registry\EventListener\CoreRegistryServiceUpdateEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'digital-marketing-framework/core/registry-update/core/service'
+        event: DigitalMarketingFramework\Typo3\Core\Registry\Event\CoreRegistryServiceUpdateEvent
+
+  DigitalMarketingFramework\Typo3\Core\Registry\EventListener\CoreRegistryPluginUpdateEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'digital-marketing-framework/core/registry-update/core/plugin'
+        event: DigitalMarketingFramework\Typo3\Core\Registry\Event\CoreRegistryPluginUpdateEvent

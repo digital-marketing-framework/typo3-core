@@ -8,6 +8,7 @@ class JsonFileConfigurationDocumentStorage extends FileConfigurationDocumentStor
 {
     protected function checkFileValidity(File $file): bool
     {
-        return strtolower($file->getExtension()) === 'json';
+        return parent::checkFileValidity($file)
+            && strtolower($file->getExtension()) === 'json';
     }
 }

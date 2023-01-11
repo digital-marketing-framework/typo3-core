@@ -8,6 +8,7 @@ class YamlFileConfigurationDocumentStorage extends FileConfigurationDocumentStor
 {
     protected function checkFileValidity(File $file): bool
     {
-        return in_array(strtolower($file->getExtension()), ['yml', 'yaml']);
+        return parent::checkFileValidity($file)
+            && in_array(strtolower($file->getExtension()), ['yml', 'yaml']);
     }
 }

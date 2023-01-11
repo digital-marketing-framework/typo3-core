@@ -12,7 +12,10 @@ use TYPO3\CMS\Core\Resource\ResourceFactory;
 
 abstract class FileConfigurationDocumentStorage extends ConfigurationDocumentStorage
 {
-    abstract protected function checkFileValidity(File $file): bool;
+    protected function checkFileValidity(File $file): bool
+    {
+        return preg_match('/.config$/', strtolower($file->getNameWithoutExtension()));
+    }
 
     public function __construct(
         protected ResourceFactory $resourceFactory,

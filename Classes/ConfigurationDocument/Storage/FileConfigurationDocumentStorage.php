@@ -2,6 +2,7 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage;
 
+use DigitalMarketingFramework\Core\ConfigurationDocument\Exception\ConfigurationDocumentNotFoundException;
 use DigitalMarketingFramework\Core\ConfigurationDocument\Storage\ConfigurationDocumentStorage;
 use DigitalMarketingFramework\Core\Exception\DigitalMarketingFrameworkException;
 use TYPO3\CMS\Core\Resource\Exception\ResourceDoesNotExistException;
@@ -51,7 +52,7 @@ abstract class FileConfigurationDocumentStorage extends ConfigurationDocumentSto
     {
         $file = $this->resourceFactory->getFileObjectFromCombinedIdentifier($documentIdentifier);
         if ($file === null) {
-            throw new DigitalMarketingFrameworkException(sprintf('Configuration document not found: %s', $documentIdentifier));
+            throw new ConfigurationDocumentNotFoundException(sprintf('Configuration document not found: %s', $documentIdentifier));
         }
         return $file;
     }

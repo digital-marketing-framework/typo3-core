@@ -7,6 +7,7 @@ use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\YamlFileC
 use DigitalMarketingFramework\Typo3\Core\Context\Typo3RequestContext;
 use DigitalMarketingFramework\Typo3\Core\Log\LoggerFactory;
 use DigitalMarketingFramework\Typo3\Core\Registry\Event\CoreRegistryServiceUpdateEvent;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 
 class CoreRegistryServiceUpdateEventListener
@@ -15,6 +16,7 @@ class CoreRegistryServiceUpdateEventListener
         protected LoggerFactory $loggerFactory,
         protected Typo3RequestContext $requestContext,
         protected ResourceFactory $resourceFactory,
+        protected EventDispatcherInterface $eventDispatcher,
     ) {}
 
     public function __invoke(CoreRegistryServiceUpdateEvent $event): void
@@ -24,7 +26,7 @@ class CoreRegistryServiceUpdateEventListener
         $registry->setLoggerFactory($this->loggerFactory);
 
         $registry->setConfigurationDocumentStorage(
-            $registry->createObject(YamlFileConfigurationDocumentStorage::class, [$this->resourceFactory])
+            $registry->createObject(YamlFileConfigurationDocumentStorage::class, [$this->eventDispatcher, $this->resourceFactory])
         );
         $registry->setConfigurationDocumentParser(
             $registry->createObject(YamlConfigurationDocumentParser::class)

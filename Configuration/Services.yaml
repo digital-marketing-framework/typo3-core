@@ -7,6 +7,20 @@ services:
   DigitalMarketingFramework\Typo3\Core\:
     resource: '../Classes/*'
 
+  # static configuration document update
+  DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\EventListener\StaticConfigurationDocumentIdentifierCollectionEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'digital-marketing-framework/core/static-configuration-document/collect-identifiers'
+        event: DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\Event\StaticConfigurationDocumentIdentifierCollectionEvent
+
+  DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\EventListener\StaticConfigurationDocumentLoadEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'digital-marketing-framework/core/static-configuration-document/load'
+        event: DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\Event\StaticConfigurationDocumentLoadEvent
+
+  # registry updates
   DigitalMarketingFramework\Typo3\Core\Registry\EventListener\CoreRegistryGlobalConfigurationUpdateEventListener:
     tags:
       - name: event.listener

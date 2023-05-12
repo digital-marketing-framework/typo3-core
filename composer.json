@@ -6,35 +6,21 @@
 	"keywords": [
 		"TYPO3",
 		"extension",
-		"form",
-		"formrelay"
+		"marketing",
+		"framework",
+		"data",
+		"relay",
+		"distribution",
+		"distributor",
+		"collector"
 	],
 	"homepage": "https://www.mediatis.de",
 	"authors": [
 		{
-			"name": "Michael Vöhringer",
+			"email": "info@mediatis.de",
+			"homepage": "http://www.mediatis.de",
+			"name": "Mediatis AG",
 			"role": "Developer"
-		},
-		{
-			"name": "Meelis Karulin",
-			"role": "Developer"
-		},
-		{
-			"name": "Damian Ickler",
-			"role": "Developer"
-		},
-		{
-			"name": "Stephan Ude",
-			"role": "Developer"
-		}
-	],
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "git@github.com:digital-marketing-framework/core.git",
-			"only": [
-				"digital-marketing-framework/core"
-			]
 		}
 	],
 	"require": {

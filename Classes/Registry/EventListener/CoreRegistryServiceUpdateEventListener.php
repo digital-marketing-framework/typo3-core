@@ -5,6 +5,7 @@ namespace DigitalMarketingFramework\Typo3\Core\Registry\EventListener;
 use DigitalMarketingFramework\Core\ConfigurationDocument\Parser\YamlConfigurationDocumentParser;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\YamlFileConfigurationDocumentStorage;
 use DigitalMarketingFramework\Typo3\Core\Context\Typo3RequestContext;
+use DigitalMarketingFramework\Typo3\Core\FileStorage\FileStorage;
 use DigitalMarketingFramework\Typo3\Core\Log\LoggerFactory;
 use DigitalMarketingFramework\Typo3\Core\Registry\Event\CoreRegistryServiceUpdateEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -24,6 +25,10 @@ class CoreRegistryServiceUpdateEventListener
         $registry = $event->getRegistry();
         $registry->setContext($this->requestContext);
         $registry->setLoggerFactory($this->loggerFactory);
+        
+        $registry->setFileStorage(
+            $registry->createObject(FileStorage::class, [$this->resourceFactory])
+        );
 
         $registry->setConfigurationDocumentStorage(
             $registry->createObject(YamlFileConfigurationDocumentStorage::class, [$this->eventDispatcher, $this->resourceFactory])

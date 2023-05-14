@@ -6,9 +6,9 @@ use TYPO3\CMS\Core\Resource\File;
 
 class JsonFileConfigurationDocumentStorage extends FileConfigurationDocumentStorage
 {
-    protected function checkFileValidity(File $file): bool
+    protected function checkFileValidity(string $fileIdentifier): bool
     {
-        return parent::checkFileValidity($file)
-            && strtolower($file->getExtension()) === 'json';
+        return parent::checkFileValidity($fileIdentifier)
+            && strtolower($this->fileStorage->getFileExtension($fileIdentifier)) === 'json';
     }
 }

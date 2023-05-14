@@ -3,7 +3,6 @@
 namespace DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\EventListener;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\PathUtility;
 
 abstract class StaticConfigurationDocumentEventListener
 {

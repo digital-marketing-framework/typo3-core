@@ -2,38 +2,23 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Event;
 
+use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\SchemaDocument;
 use DigitalMarketingFramework\Core\Registry\RegistryInterface;
 
 class ConfigurationDocumentMetaDataUpdateEvent
 {
-    protected $defaultConfiguration = [];
-    protected $configurationSchema = [];
+    protected array $defaultConfiguration = [];
+    protected SchemaDocument $configurationSchema;
+
+    public function __construct()
+    {
+        $this->configurationSchema = new SchemaDocument();
+    }
 
     public function processRegistry(RegistryInterface $registry): void
     {
-        $this->addDefaultConfiguration($registry->getDefaultConfiguration());
-        $this->addConfigurationSchema($registry->getConfigurationSchema());
-    }
-
-    protected function merge(array &$target, array $source): void
-    {
-        foreach ($source as $key => $value) {
-            if (isset($target[$key]) && is_array($value) && is_array($target[$key])) {
-                $this->merge($target[$key], $value);
-            } else {
-                $target[$key] = $value;
-            }
-        }
-    }
-
-    public function addDefaultConfiguration(array $defaultConfiguration): void
-    {
-        $this->merge($this->defaultConfiguration, $defaultConfiguration);
-    }
-
-    public function addConfigurationSchema(array $configurationSchema): void
-    {
-        $this->merge($this->configurationSchema, $configurationSchema);
+        $registry->addDefaultConfiguration($this->defaultConfiguration);
+        $registry->addConfigurationSchema($this->configurationSchema);
     }
 
     public function resetDefaultConfiguration(): void
@@ -43,7 +28,7 @@ class ConfigurationDocumentMetaDataUpdateEvent
 
     public function resetConfigurationSchema(): void
     {
-        $this->configurationSchema = [];
+        $this->configurationSchema = new SchemaDocument();
     }
 
     public function reset(): void
@@ -59,6 +44,6 @@ class ConfigurationDocumentMetaDataUpdateEvent
 
     public function getConfigurationSchema(): array
     {
-        return $this->configurationSchema;
+        return $this->configurationSchema->toArray();
     }
 }

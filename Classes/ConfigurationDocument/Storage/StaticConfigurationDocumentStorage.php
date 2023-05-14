@@ -2,20 +2,12 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage;
 
-use DigitalMarketingFramework\Core\ConfigurationDocument\Exception\ConfigurationDocumentNotFoundException;
-use DigitalMarketingFramework\Core\ConfigurationDocument\Storage\ConfigurationDocumentStorage as OriginalConfigurationDocumentStorage;
+use DigitalMarketingFramework\Core\ConfigurationDocument\Storage\StaticConfigurationDocumentStorage as OriginalStaticConfigurationDocumentStorage;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\Event\StaticConfigurationDocumentIdentifierCollectionEvent;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\Event\StaticConfigurationDocumentLoadEvent;
-use Exception;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use TYPO3\CMS\Core\Resource\File;
-use TYPO3\CMS\Core\Resource\Folder;
-use TYPO3\CMS\Core\Resource\ResourceFactory;
-use TYPO3\CMS\Core\Resource\ResourceStorage;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\PathUtility;
 
-abstract class ConfigurationDocumentStorage extends OriginalConfigurationDocumentStorage
+class StaticConfigurationDocumentStorage extends OriginalStaticConfigurationDocumentStorage
 {
     public function __construct(
         protected EventDispatcherInterface $eventDispatcher,

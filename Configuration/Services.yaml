@@ -7,6 +7,16 @@ services:
   DigitalMarketingFramework\Typo3\Core\:
     resource: '../Classes/*'
 
+  DigitalMarketingFramework\Typo3\Core\Controller\ConfigurationDocumentAjaxController:
+    public: true
+
+  # backend module controllers
+  DigitalMarketingFramework\Typo3\Core\Controller\EventListener\BackendControllerUpdateEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'digital-marketing-framework/core/backend-controller/update'
+        event: DigitalMarketingFramework\Typo3\Core\Controller\Event\BackendControllerUpdateEvent
+
   # static configuration document update
   DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\EventListener\StaticConfigurationDocumentIdentifierCollectionEventListener:
     tags:

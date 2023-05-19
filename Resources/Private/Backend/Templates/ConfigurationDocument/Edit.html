@@ -1,0 +1,63 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+    <f:layout name="Default" />
+
+    <f:section name="Buttons"></f:section>
+
+    <f:section name="Content">
+        <h1>{document.name}</h1>
+
+        <f:form action="save">
+            <div>
+                <p>
+                    <f:link.action action="list"
+                                   class="btn btn-default btn-sm t3-form-element-close-form-button"
+                                   title="Close">
+                        <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-close"
+                              data-identifier="actions-close">
+                            <span class="icon-markup">
+                                <svg class="icon-color">
+                                    <use
+                                         xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-close">
+                                    </use>
+                                </svg>
+                            </span>
+                        </span> Close
+                    </f:link.action>
+
+                    <f:if condition="!{document.readonly}">
+                        <button class="btn btn-default btn-sm t3-form-element-save-form-button"
+                                value="save"
+                                title="Save"
+                                type="submit">
+                            <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-document-save"
+                                  data-identifier="actions-document-save">
+                                <span class="icon-markup">
+                                    <svg class="icon-color">
+                                        <use
+                                             xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-save">
+                                        </use>
+                                    </svg>
+                                </span>
+                            </span> Save
+                        </button>
+                    </f:if>
+                </p>
+            </div>
+
+            <div>
+                <f:form.hidden name="documentIdentifier"
+                               value="{document.id}" />
+                <f:form.textarea name="document"
+                                 value="{document.content}"
+                                 class="dmf-configuration-document"
+                                 style="width:60%;min-height:400px;"
+                                 disabled="{f:if(condition:document.readonly, then:'disabled', else:'')}"
+                                 data="{app:'true',mode:'embedded',readonly:'{f:if(condition:document.readonly,then:\'true\',else:\'false\')}',schema:'{f:be.uri(route:\'ajax_digitalmarketingframework_configuration_schema\')}'}" />
+            </div>
+        </f:form>
+    </f:section>
+
+</html>

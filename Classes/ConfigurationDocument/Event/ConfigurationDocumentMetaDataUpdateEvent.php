@@ -46,4 +46,12 @@ class ConfigurationDocumentMetaDataUpdateEvent
     {
         return $this->configurationSchema->toArray();
     }
+
+    public function toArray(): array
+    {
+        return [
+            'defaults' => $this->getDefaultConfiguration(),
+            'schema' => $this->getConfigurationSchema(),
+        ];
+    }
 }

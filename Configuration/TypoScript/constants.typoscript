@@ -1,0 +1,10 @@
+
+module.tx_digitalmarketingframework_web_digitalmarketingframeworkmanager {
+    view {
+        templateRootPath = EXT:digitalmarketingframework/Resources/Private/Backend/Templates/
+        partialRootPath = EXT:digitalmarketingframework/Resources/Private/Backend/Partials/
+        layoutRootPath = EXT:digitalmarketingframework/Resources/Private/Backend/Layouts/
+    }
+    settings {
+    }
+}

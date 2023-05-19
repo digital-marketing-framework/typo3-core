@@ -1,0 +1,24 @@
+
+module.tx_digitalmarketingframework_web_digitalmarketingframeworkmanager {
+    view {
+        templateRootPaths.0 = EXT:digitalmarketingframework/Resources/Private/Backend/Templates/
+        templateRootPaths.1 = {$module.tx_digitalmarketingframework_web_digitalmarketingframeworkmanager.view.templateRootPath}
+        partialRootPaths.0 = EXT:digitalmarketingframework/Resources/Private/Backend/Partials/
+        partialRootPaths.1 = {$module.tx_digitalmarketingframework_web_digitalmarketingframeworkmanager.view.partialRootPath}
+        layoutRootPaths.0 = EXT:digitalmarketingframework/Resources/Private/Backend/Layouts/
+        layoutRootPaths.1 = {$module.tx_digitalmarketingframework_web_digitalmarketingframeworkmanager.view.layoutRootPath}
+    }
+    settings {
+      sections {
+        configuration {
+          title = Configuration
+          subtitle = CORE
+          controller = ConfigurationDocument
+          action = list
+          actionLabel = Show
+          description = Manage Configuration Documents
+          icon =
+        }
+      }
+    }
+}

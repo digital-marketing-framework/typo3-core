@@ -7,6 +7,7 @@ use DigitalMarketingFramework\Core\FileStorage\FileStorageInterface;
 use DigitalMarketingFramework\Core\Log\LoggerAwareInterface;
 use DigitalMarketingFramework\Core\Log\LoggerAwareTrait;
 use Exception;
+use TYPO3\CMS\Core\Resource\Exception\ResourceDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
@@ -22,9 +23,20 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
     ) {
     }
 
+    protected function getResource(string $identifier): null|File|Folder
+    {
+        try {
+            return $this->resourceFactory->retrieveFileOrFolderObject($identifier);
+        } catch (ResourceDoesNotExistException $e) {
+            $this->logger->error(sprintf('Resource does not exist: %s', $e->getMessage()));
+            return null;
+        }
+        return null;
+    }
+
     protected function getFile(string $identifier): ?File
     {
-        $file = $this->resourceFactory->retrieveFileOrFolderObject($identifier);
+        $file = $this->getResource($identifier);
         if ($file instanceof File) {
             return $file;
         }
@@ -33,7 +45,7 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
 
     protected function getFolder(string $identifier): ?Folder
     {
-        $file = $this->resourceFactory->retrieveFileOrFolderObject($identifier);
+        $file = $this->getResource($identifier);
         if ($file instanceof Folder) {
             return $file;
         }
@@ -66,7 +78,19 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
 
     public function putFileContents(string $fileIdentifier, string $fileContent): void
     {
-        $this->getFile($fileIdentifier)->setContents($fileContent);
+        $file = $this->getFile($fileIdentifier);
+        if ($file === null) {
+            [$storageUid, $filePath] = explode(':', $fileIdentifier);
+            $pathinfo = pathinfo($filePath);
+            $folder = $this->getFolder($storageUid . ':' . $pathinfo['dirname']);
+            $file = $folder->createFile($pathinfo['basename']);
+        }
+        $file->setContents($fileContent);
+    }
+
+    public function deleteFile(string $fileIdentifier): void
+    {
+        $this->getFile($fileIdentifier)?->delete();
     }
 
     public function getFileName(string $fileIdentifier): ?string
@@ -83,7 +107,7 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
     {
         return $this->getFile($fileIdentifier)?->getExtension();
     }
-    
+
     public function fileExists(string $fileIdentifier): bool
     {
         return $this->getFileContents($fileIdentifier) !== null;

@@ -6,6 +6,11 @@ use TYPO3\CMS\Core\Resource\File;
 
 class YamlFileConfigurationDocumentStorage extends FileConfigurationDocumentStorage
 {
+    protected function getFileExtension(): string
+    {
+        return 'yaml';
+    }
+
     protected function checkFileValidity(string $fileIdentifier): bool
     {
         return parent::checkFileValidity($fileIdentifier)

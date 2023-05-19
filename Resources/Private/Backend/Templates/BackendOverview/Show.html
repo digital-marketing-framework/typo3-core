@@ -1,0 +1,65 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+    <f:layout name="Default" />
+
+    <f:section name="Buttons"></f:section>
+
+    <f:section name="Content">
+        <h1>Digital Marketing</h1>
+
+        <div class="card-container">
+            <f:for each="{settings.sections}"
+                   as="section">
+                <div class="card card-size-fixed-small">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <f:image src="{f:if(condition:section.icon, then:section.icon, else:'EXT:digitalmarketingframework/Resources/Public/Icons/Extension.svg')}"
+                                     width="64"
+                                     height="64"
+                                     class="card-header-icon-image" />
+                        </div>
+                        <div class="card-header-body">
+                            <h1 class="card-title">{section.title}</h1>
+                            <span class="card-subtitle">{section.subtitle}</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">{section.description}</p>
+                    </div>
+                    <div class="card-footer">
+                        <f:link.action controller="{section.controller}"
+                                       action="{section.action}"
+                                       class="btn btn-primary">
+                            {section.actionLabel}
+                        </f:link.action>
+                    </div>
+                </div>
+            </f:for>
+        </div>
+        <script>
+            // all buttons should only be clicked once (per page)
+            // this is mainly here to prevent bigger actions (like an import or a cleanup task) from being triggered twice
+            (function () {
+                function handleButton(button) {
+                    let clicked = false;
+                    button.addEventListener('click', function (e) {
+                        if (clicked) {
+                            e.preventDefault();
+                        } else {
+                            button.disabled = true;
+                            button.classList.add('disabled');
+                            clicked = true;
+                        }
+                    });
+                }
+                let buttons = document.getElementById('digitalmarketingframework-be-content').querySelectorAll('.btn');
+                buttons.forEach(button => {
+                    handleButton(button);
+                });
+            })();
+        </script>
+    </f:section>
+
+</html>

@@ -118,6 +118,9 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
         if (PathUtility::isExtensionPath($fileIdentifier)) {
             return true;
         }
+        if (preg_match('/^[^0-9]+:/', $fileIdentifier)) {
+            return true;
+        }
         $file = $this->getFile($fileIdentifier);
         if ($file !== null) {
             return !$file->checkActionPermission('write');

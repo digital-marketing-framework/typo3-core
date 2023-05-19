@@ -18,6 +18,18 @@ services:
         event: DigitalMarketingFramework\Typo3\Core\Controller\Event\BackendControllerUpdateEvent
 
   # static configuration document update
+  DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\EventListener\SystemConfigurationDocumentIdentifierCollectionEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'digital-marketing-framework/core/system-configuration-document/collect-identifiers'
+        event: DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\Event\StaticConfigurationDocumentIdentifierCollectionEvent
+
+  DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\EventListener\SystemConfigurationDocumentLoadEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'digital-marketing-framework/core/system-configuration-document/load'
+        event: DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\Event\StaticConfigurationDocumentLoadEvent
+
   DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\EventListener\StaticConfigurationDocumentIdentifierCollectionEventListener:
     tags:
       - name: event.listener

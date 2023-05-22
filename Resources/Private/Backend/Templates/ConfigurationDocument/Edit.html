@@ -60,7 +60,7 @@
                                  class="dmf-configuration-document"
                                  style="width:60%;min-height:400px;"
                                  disabled="{f:if(condition:document.readonly, then:'disabled', else:'')}"
-                                 data="{app:'true',mode:'embedded',readonly:'{f:if(condition:document.readonly,then:\'true\',else:\'false\')}',schema:'{f:be.uri(route:\'ajax_digitalmarketingframework_configuration_schema\')}'}" />
+                                 data="{app:'true',mode:'embedded',readonly:'{f:if(condition:document.readonly,then:\'true\',else:\'false\')}','url-schema':'{f:be.uri(route:\'ajax_digitalmarketingframework_configuration_schema\')}','url-defaults':'{f:be.uri(route:\'ajax_digitalmarketingframework_configuration_defaults\')}','url-merge':'{f:be.uri(route:\'ajax_digitalmarketingframework_configuration_merge\')}','url-split':'{f:be.uri(route:\'ajax_digitalmarketingframework_configuration_split\')}','url-update-includes':'{f:be.uri(route:\'ajax_digitalmarketingframework_configuration_update_includes\')}'}" />
             </div>
         </f:form>
     </f:section>

@@ -1,5 +1,4 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-      xmlns:d="http://typo3.org/ns/DigitalMarketingFramework/Typo3/Core/ViewHelpers"
       data-namespace-typo3-fluid="true">
 
     <f:layout name="Default" />
@@ -7,10 +6,7 @@
     <f:section name="Buttons"></f:section>
 
     <f:section name="Content">
-        <f:asset.script identifier="dmf-dce-script"
-                        src="{d:vendorAsset(src:'digital-marketing-framework/core/assets/scripts/configuration-document-editor.js')}" />
-        <f:asset.css identifier="dmf-dce-styles"
-                     href="{d:vendorAsset(src:'digital-marketing-framework/core/assets/styles/configuration-document-editor.css')}" />
+        <f:render partial="ConfigurationDocument/ConfigurationEditorAssets" />
 
         <h1>{document.name}</h1>
 

@@ -8,7 +8,7 @@ use TYPO3\CMS\Core\Core\Environment;
 class VendorAssetUtility
 {
     public const PATH_VENDOR = 'vendor';
-    public const PATH_ASSETS = 'typo3temp/assets';
+    public const PATH_ASSETS = 'typo3temp/assets/vendor-assets';
 
     protected static function getVendorPath(): string
     {
@@ -25,33 +25,29 @@ class VendorAssetUtility
         return static::PATH_ASSETS;
     }
 
-    protected static function getSourcePath(string $path): string
+    protected static function getSourcePath(string $composerName, string $path): string
     {
-        return static::getVendorPath() . '/' . $path;
+        return static::getVendorPath() . '/' . $composerName . '/assets/' . $path;
     }
 
-    protected static function getRelativeTargetPath(string $path): string
+    protected static function getRelativeTargetPath(string $composerName, string $path): string
     {
-        // vendor-name/package-name/assets/scripts/my-script.js
-        // ... becomes...
-        // vendor-name/package-name/scripts/my-script.js
-        // ... because the "assets" folder is already included in the temp directory
         $pathParts = explode('/', $path);
-        if ($pathParts[2] === 'assets') {
-            array_splice($pathParts, 2, 1);
-            $path = implode('/', $pathParts);
-        }
-        return $path;
+        $lastPathPart = array_pop($pathParts);
+        $leadingPath = implode('/', $pathParts);
+        $relativePath = $composerName . '/' . $leadingPath;
+        $salt = $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'];
+        return strrev(md5($relativePath . '|' . $salt)) . '/' . $lastPathPart;
     }
 
-    protected static function getTargetPath(string $path): string
+    protected static function getTargetPath(string $composerName, string $path): string
     {
-        return static::getTempPath() . '/' . static::getRelativeTargetPath($path);
+        return static::getTempPath() . '/' . static::getRelativeTargetPath($composerName, $path);
     }
 
-    protected static function getPublicTargetPath(string $path): string
+    protected static function getPublicTargetPath(string $composerName, string $path): string
     {
-        return static::getPublicTempPath() . '/' . static::getRelativeTargetPath($path);
+        return static::getPublicTempPath() . '/' . static::getRelativeTargetPath($composerName, $path);
     }
 
     protected static function getCacheHash(string $source): string
@@ -71,10 +67,10 @@ class VendorAssetUtility
         }
     }
 
-    protected static function copyFile(string $path): void
+    protected static function copyFile(string $composerName, string $path): void
     {
-        $source = static::getSourcePath($path);
-        $target = static::getTargetPath($path);
+        $source = static::getSourcePath($composerName, $path);
+        $target = static::getTargetPath($composerName, $path);
 
         if (!file_exists($source)) {
             throw new DigitalMarketingFrameworkException(sprintf('Asset "%s" does not seem to exist.', $source));
@@ -91,10 +87,10 @@ class VendorAssetUtility
         }
     }
 
-    protected static function getPublicUrl(string $path): string
+    protected static function getPublicUrl(string $composerName, string $path): string
     {
-        $source = static::getSourcePath($path);
-        $url = static::getPublicTargetPath($path);
+        $source = static::getSourcePath($composerName, $path);
+        $url = static::getPublicTargetPath($composerName, $path);
         $hash = static::getCacheHash($source);
         if ($hash !== '') {
             $url .= '?' . $hash;
@@ -102,10 +98,25 @@ class VendorAssetUtility
         return $url;
     }
 
-    public static function makeVendorAssetAvailable(string $path): string
+    protected static function checkFile(string $composerName, string $path): void
+    {
+        if (!preg_match('/^[-_a-zA-Z0-9]+\\/[-_a-zA-Z0-9]+$/', $composerName)) {
+            throw new DigitalMarketingFrameworkException(sprintf('composer name "%s" is invalid', $composerName));
+        }
+        $source = realpath(static::getSourcePath($composerName, $path));
+        if ($source === false) {
+            throw new DigitalMarketingFrameworkException(sprintf('source "%s" file does not seem to exist in package "%s"', $path, $composerName));
+        }
+        if (strpos($source, static::getSourcePath($composerName, '')) !== 0) {
+            throw new DigitalMarketingFrameworkException(sprintf('asset path "%s" seems to lead out of package assets folder', $path));
+        }
+    }
+
+    public static function makeVendorAssetAvailable(string $composerName, string $path): string
     {
         $path = ltrim($path, '/');
-        static::copyFile($path);
-        return static::getPublicUrl($path);
+        static::checkFile($composerName, $path);
+        static::copyFile($composerName, $path);
+        return static::getPublicUrl($composerName, $path);
     }
 }

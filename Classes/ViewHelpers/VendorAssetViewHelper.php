@@ -11,7 +11,8 @@ class VendorAssetViewHelper extends AbstractViewHelper
 {
     public function initializeArguments()
     {
-        $this->registerArgument('src', 'string', 'path to the vendor asset');
+        $this->registerArgument('package', 'string', 'composer package name');
+        $this->registerArgument('path', 'string', 'package path to asset');
     }
 
     public static function renderStatic(
@@ -19,6 +20,6 @@ class VendorAssetViewHelper extends AbstractViewHelper
         Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
     ): string {
-        return VendorAssetUtility::makeVendorAssetAvailable($arguments['src']);
+        return VendorAssetUtility::makeVendorAssetAvailable($arguments['package'], $arguments['path']);
     }
 }

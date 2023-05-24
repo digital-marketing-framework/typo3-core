@@ -3,7 +3,6 @@
 namespace DigitalMarketingFramework\Typo3\Core\Controller;
 
 use DigitalMarketingFramework\Core\ConfigurationDocument\ConfigurationDocumentManagerInterface;
-use DigitalMarketingFramework\Core\Utility\ConfigurationUtility;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Event\ConfigurationDocumentMetaDataUpdateEvent;
 use DigitalMarketingFramework\Typo3\Core\Registry\Registry;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -48,23 +47,17 @@ class ConfigurationDocumentAjaxController
     public function mergeAction(ServerRequestInterface $request): ResponseInterface
     {
         $document = json_decode((string)$request->getBody(), true)['document'] ?? '';
-        $configurationStack = $this->configurationDocumentManager->getConfigurationStackFromDocument($document);
-        $configuration = ConfigurationUtility::mergeConfigurationStack($configurationStack);
-        return $this->jsonResponse($configuration);
-    }
-
-    protected function splitConfiguration(array $mergedConfiguration): array
-    {
-        $configurationStack = $this->configurationDocumentManager->getConfigurationStackFromConfiguration($mergedConfiguration);
-        array_pop($configurationStack);
-        $parentConfiguration = ConfigurationUtility::mergeConfigurationStack($configurationStack);
-        return ConfigurationUtility::splitConfiguration($parentConfiguration, $mergedConfiguration);
+        $configuration = $this->configurationDocumentManager->getParser()->parseDocument($document);
+        return $this->jsonResponse([
+            'configuration' => $this->configurationDocumentManager->mergeConfiguration($configuration),
+            'inheritedConfiguration' => $this->configurationDocumentManager->mergeConfiguration($configuration, inheritedConfigurationOnly:true),
+        ]);
     }
 
     public function splitAction(ServerRequestInterface $request): ResponseInterface
     {
         $mergedConfiguration = json_decode((string)$request->getBody(), true);
-        $splitConfiguration = $this->splitConfiguration($mergedConfiguration);
+        $splitConfiguration = $this->configurationDocumentManager->splitConfiguration($mergedConfiguration);
         $splitDocument = $this->configurationDocumentManager->getParser()->produceDocument($splitConfiguration);
         return $this->jsonResponse(['document' => $splitDocument]);
     }
@@ -72,20 +65,16 @@ class ConfigurationDocumentAjaxController
     public function updateIncludesAction(ServerRequestInterface $request): ResponseInterface
     {
         $data = json_decode((string)$request->getBody(), true);
-        $referenceData = $data['referenceData'];
-        $newData = $data['newData'];
-
-        $oldIncludes = $referenceData['includes'];
-        $newIncludes = $newData['includes'];
-
-        $mergedData = $newData;
-        $mergedData['includes'] = $oldIncludes;
-        $splitData = $this->splitConfiguration($mergedData);
-
-        $splitData['includes'] = $newIncludes;
-        $configurationStack = $this->configurationDocumentManager->getConfigurationStackFromConfiguration($splitData);
-        $configuration = ConfigurationUtility::mergeConfigurationStack($configurationStack);
-
-        return $this->jsonResponse($configuration);
+        return $this->jsonResponse([
+            'configuration' => $this->configurationDocumentManager->processIncludesChange(
+                $data['referenceData'],
+                $data['newData']
+            ),
+            'inheritedConfiguration' => $this->configurationDocumentManager->processIncludesChange(
+                $data['referenceData'],
+                $data['newData'],
+                inheritedConfigurationOnly:true
+            ),
+        ]);
     }
 }

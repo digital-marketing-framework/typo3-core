@@ -9,7 +9,13 @@ class StaticConfigurationDocumentLoadEvent
 
     public function __construct(
         protected string $identifier,
+        protected bool $metaDataOnly = false,
     ) {
+    }
+
+    public function getMetaDataOnly(): bool
+    {
+        return $this->metaDataOnly;
     }
 
     public function getIdentifier(): string

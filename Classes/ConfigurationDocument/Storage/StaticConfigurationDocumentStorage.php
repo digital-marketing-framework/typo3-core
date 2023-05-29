@@ -21,9 +21,9 @@ class StaticConfigurationDocumentStorage extends OriginalStaticConfigurationDocu
         return $event->getIdentifiers();
     }
 
-    public function getDocument(string $documentIdentifier): string
+    public function getDocument(string $documentIdentifier, bool $metaDataOnly = false): string
     {
-        $event = new StaticConfigurationDocumentLoadEvent($documentIdentifier);
+        $event = new StaticConfigurationDocumentLoadEvent($documentIdentifier, $metaDataOnly);
         $this->eventDispatcher->dispatch($event);
         return $event->isLoaded() ? $event->getDocument() : '';
     }

@@ -34,30 +34,39 @@ abstract class SystemConfigurationDocumentEventListener
         $event = new ConfigurationDocumentMetaDataUpdateEvent();
         $this->eventDispatcher->dispatch($event);
         return $event->getDefaultConfiguration();
-
     }
 
-    protected function getResetDocument(): string
+    protected function getResetConfig(): array
     {
+        $reset = [];
         $defaults = $this->getDefaults();
         foreach (array_keys($defaults) as $key) {
-            $defaults[$key] = null;
+            $reset[$key] = null;
         }
-        return $this->parser->produceDocument(['name' => 'Reset'] + $defaults);
+        return $reset;
     }
 
-    protected function getDefaultsDocument(): string
+    protected function getResetDocument(bool $metaDataOnly = false): string
     {
-        return $this->parser->produceDocument(['name' => 'Defaults'] + $this->getDefaults());
+        $metaData = ['name' => 'Reset'];
+        $config = $metaDataOnly ? [] : $this->getResetConfig();
+        return $this->parser->produceDocument($metaData + $config);
     }
 
-    protected function getDocument(string $documentIdentifier): ?string
+    protected function getDefaultsDocument(bool $metaDataOnly = false): string
+    {
+        $metaData = ['name' => 'Defaults'];
+        $config = $metaDataOnly ? [] : $this->getDefaults();
+        return $this->parser->produceDocument($metaData + $config);
+    }
+
+    protected function getDocument(string $documentIdentifier, bool $metaDataOnly = false): ?string
     {
         switch ($documentIdentifier) {
             case static::ID_DEFAULTS:
-                return $this->getDefaultsDocument();
+                return $this->getDefaultsDocument($metaDataOnly);
             case static::ID_RESET:
-                return $this->getResetDocument();
+                return $this->getResetDocument($metaDataOnly);
             default:
                 return null;
         }

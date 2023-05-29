@@ -13,6 +13,7 @@ class VendorAssetViewHelper extends AbstractViewHelper
     {
         $this->registerArgument('package', 'string', 'composer package name');
         $this->registerArgument('path', 'string', 'package path to asset');
+        $this->registerArgument('returnUrl', 'bool', 'return the url of the resulting asset');
     }
 
     public static function renderStatic(
@@ -20,6 +21,10 @@ class VendorAssetViewHelper extends AbstractViewHelper
         Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
     ): string {
-        return VendorAssetUtility::makeVendorAssetAvailable($arguments['package'], $arguments['path']);
+        $url = VendorAssetUtility::makeVendorAssetAvailable($arguments['package'], $arguments['path']);
+        if ($arguments['returnUrl'] ?? true) {
+            return $url;
+        }
+        return '';
     }
 }

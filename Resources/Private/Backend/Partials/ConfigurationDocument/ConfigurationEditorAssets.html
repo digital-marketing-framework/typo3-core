@@ -2,8 +2,46 @@
       xmlns:d="http://typo3.org/ns/DigitalMarketingFramework/Typo3/Core/ViewHelpers"
       data-namespace-typo3-fluid="true">
     <f:asset.script identifier="dmf-dce-script"
-                    src="{d:vendorAsset(package:'digital-marketing-framework/core', path:'/scripts/configuration-document-editor.js')}" />
+                    src="{d:vendorAsset(package:'digital-marketing-framework/core', path:'/scripts/index.js')}" />
+    {d:vendorAsset(package:'digital-marketing-framework/core', path:'/scripts/index.js.map', returnUrl:0)}
     <f:asset.css identifier="dmf-dce-styles"
-                 href="{d:vendorAsset(package:'digital-marketing-framework/core', path:'/styles/configuration-document-editor.css')}" />
+                 href="{d:vendorAsset(package:'digital-marketing-framework/core', path:'/styles/index.css')}" />
+    <f:asset.css identifier="dmf-dce-inline-styles">
+        @layer base {
+        /* Caveat */
+        @font-face {
+        font-family: "Caveat";
+        font-display: swap;
+        font-style: normal;
+        font-weight: 700;
+        src: url("{d:vendorAsset(package:'digital-marketing-framework/core',path:'/fonts/caveat/Caveat-Bold.ttf')}")
+        format("truetype");
+        }
+        @font-face {
+        font-family: "Caveat";
+        font-display: swap;
+        font-style: normal;
+        font-weight: 600;
+        src: url("{d:vendorAsset(package:'digital-marketing-framework/core',path:'/fonts/caveat/Caveat-SemiBold.ttf')}")
+        format("truetype");
+        }
+        @font-face {
+        font-family: "Caveat";
+        font-display: swap;
+        font-style: normal;
+        font-weight: 500;
+        src: url("{d:vendorAsset(package:'digital-marketing-framework/core',path:'/fonts/caveat/Caveat-Medium.ttf')}")
+        format("truetype");
+        }
+        @font-face {
+        font-family: "Caveat";
+        font-display: swap;
+        font-style: normal;
+        font-weight: 400;
+        src: url("{d:vendorAsset(package:'digital-marketing-framework/core',path:'/fonts/caveat/Caveat-Regular.ttf')}")
+        format("truetype");
+        }
+        }
+    </f:asset.css>
 
 </html>

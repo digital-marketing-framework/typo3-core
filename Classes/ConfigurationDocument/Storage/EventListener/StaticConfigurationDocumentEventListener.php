@@ -36,7 +36,7 @@ abstract class StaticConfigurationDocumentEventListener
         return $results;
     }
 
-    protected function getDocument(string $documentIdentifier): ?string
+    protected function getDocument(string $documentIdentifier, bool $metaDataOnly = false): ?string
     {
         // NOTE: the normal identifiers can be loaded without the need for custom development
         // example: EXT:ext_key/Resources/Private/ConfigurationDocuments/custom_name.config.yaml

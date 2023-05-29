@@ -13,7 +13,7 @@ class StaticConfigurationDocumentLoadEventListener extends StaticConfigurationDo
 
     public function __invoke(StaticConfigurationDocumentLoadEvent $event): void
     {
-        $document = $this->getDocument($event->getIdentifier());
+        $document = $this->getDocument($event->getIdentifier(), $event->getMetaDataOnly());
         if ($document !== null) {
             $event->setLoadedDocument($document);
         }

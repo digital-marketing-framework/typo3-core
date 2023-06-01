@@ -1,4 +1,5 @@
-name: Reset
+metaData:
+    name: Reset
 valueMaps: null
 distributor: null
 collector: null

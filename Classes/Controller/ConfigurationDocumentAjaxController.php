@@ -30,6 +30,17 @@ class ConfigurationDocumentAjaxController
         return $response;
     }
 
+    protected function adjustIncludes(array &$configuration): void
+    {
+        // TODO having the sys:defaults injected for processing purposes is one thing
+        //      however, this code also actually adds the include to the document, when using the editor app
+        //      should it remove the include once the processing is done, before the configuration is sent to the client?
+        $includes = $this->configurationDocumentManager->getIncludes($configuration);
+        if (empty($includes)) {
+            $this->configurationDocumentManager->setIncludes($configuration, ['SYS:defaults']);
+        }
+    }
+
     public function schemaAction(ServerRequestInterface $request): ResponseInterface
     {
         $event = new ConfigurationDocumentMetaDataUpdateEvent();
@@ -48,6 +59,7 @@ class ConfigurationDocumentAjaxController
     {
         $document = json_decode((string)$request->getBody(), true)['document'] ?? '';
         $configuration = $this->configurationDocumentManager->getParser()->parseDocument($document);
+        $this->adjustIncludes($configuration);
         return $this->jsonResponse([
             'configuration' => $this->configurationDocumentManager->mergeConfiguration($configuration),
             'inheritedConfiguration' => $this->configurationDocumentManager->mergeConfiguration($configuration, inheritedConfigurationOnly:true),
@@ -57,6 +69,7 @@ class ConfigurationDocumentAjaxController
     public function splitAction(ServerRequestInterface $request): ResponseInterface
     {
         $mergedConfiguration = json_decode((string)$request->getBody(), true);
+        $this->adjustIncludes($mergedConfiguration);
         $splitConfiguration = $this->configurationDocumentManager->splitConfiguration($mergedConfiguration);
         $splitDocument = $this->configurationDocumentManager->getParser()->produceDocument($splitConfiguration);
         return $this->jsonResponse(['document' => $splitDocument]);
@@ -65,6 +78,8 @@ class ConfigurationDocumentAjaxController
     public function updateIncludesAction(ServerRequestInterface $request): ResponseInterface
     {
         $data = json_decode((string)$request->getBody(), true);
+        $this->adjustIncludes($data['referenceData']);
+        $this->adjustIncludes($data['newData']);
         return $this->jsonResponse([
             'configuration' => $this->configurationDocumentManager->processIncludesChange(
                 $data['referenceData'],

@@ -2,6 +2,7 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\EventListener;
 
+use DigitalMarketingFramework\Core\ConfigurationDocument\ConfigurationDocumentManagerInterface;
 use DigitalMarketingFramework\Core\ConfigurationDocument\Parser\ConfigurationDocumentParserInterface;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Event\ConfigurationDocumentMetaDataUpdateEvent;
 use DigitalMarketingFramework\Typo3\Core\Registry\Registry;
@@ -48,14 +49,22 @@ abstract class SystemConfigurationDocumentEventListener
 
     protected function getResetDocument(bool $metaDataOnly = false): string
     {
-        $metaData = ['name' => 'Reset'];
+        $metaData = [
+            ConfigurationDocumentManagerInterface::KEY_META_DATA => [
+                ConfigurationDocumentManagerInterface::KEY_DOCUMENT_NAME => 'Reset',
+            ]
+        ];
         $config = $metaDataOnly ? [] : $this->getResetConfig();
         return $this->parser->produceDocument($metaData + $config);
     }
 
     protected function getDefaultsDocument(bool $metaDataOnly = false): string
     {
-        $metaData = ['name' => 'Defaults'];
+        $metaData = [
+            ConfigurationDocumentManagerInterface::KEY_META_DATA => [
+                ConfigurationDocumentManagerInterface::KEY_DOCUMENT_NAME => 'Defaults',
+            ]
+        ];
         $config = $metaDataOnly ? [] : $this->getDefaults();
         return $this->parser->produceDocument($metaData + $config);
     }

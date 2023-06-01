@@ -29,7 +29,7 @@ class ConfigurationDocumentController extends AbstractBackendController
         $list = [];
         $documentIdentifiers = $this->configurationDocumentManager->getDocumentIdentifiers();
         foreach ($documentIdentifiers as $documentIdentifier) {
-            $list[$documentIdentifier] = $this->configurationDocumentManager->getMetaDataFromIdentifier($documentIdentifier);
+            $list[$documentIdentifier] = $this->configurationDocumentManager->getDocumentInformation($documentIdentifier);
         }
         $this->view->assign('documents', $list);
         return $this->htmlResponse();
@@ -37,7 +37,7 @@ class ConfigurationDocumentController extends AbstractBackendController
 
     public function editAction(string $documentIdentifier): ResponseInterface
     {
-        $document = $this->configurationDocumentManager->getMetaDataFromIdentifier($documentIdentifier);
+        $document = $this->configurationDocumentManager->getDocumentInformation($documentIdentifier);
         $document['content'] = $this->configurationDocumentManager->getDocumentFromIdentifier($documentIdentifier);
         $this->view->assign('document', $document);
 

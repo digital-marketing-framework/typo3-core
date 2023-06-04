@@ -4,6 +4,7 @@ namespace DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\Eve
 
 use DigitalMarketingFramework\Core\ConfigurationDocument\ConfigurationDocumentManagerInterface;
 use DigitalMarketingFramework\Core\ConfigurationDocument\Parser\ConfigurationDocumentParserInterface;
+use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\SchemaDocument;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Event\ConfigurationDocumentMetaDataUpdateEvent;
 use DigitalMarketingFramework\Typo3\Core\Registry\Registry;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
@@ -14,6 +15,8 @@ abstract class SystemConfigurationDocumentEventListener
     public const ID_RESET = 'SYS:reset';
 
     protected ConfigurationDocumentParserInterface $parser;
+
+    protected ?ConfigurationDocumentMetaDataUpdateEvent $configurationDocumentMetaData = null;
 
     public function __construct(
         protected EventDispatcher $eventDispatcher,
@@ -30,11 +33,23 @@ abstract class SystemConfigurationDocumentEventListener
         ];
     }
 
+    protected function getConfigurationDocumentMetaData(): ConfigurationDocumentMetaDataUpdateEvent
+    {
+        if ($this->configurationDocumentMetaData === null) {
+            $this->configurationDocumentMetaData = new ConfigurationDocumentMetaDataUpdateEvent();
+            $this->eventDispatcher->dispatch($this->configurationDocumentMetaData);
+        }
+        return $this->configurationDocumentMetaData;
+    }
+
+    protected function getSchemaDocument(): SchemaDocument
+    {
+        return $this->getConfigurationDocumentMetaData()->getSchemaDocument();
+    }
+
     protected function getDefaults(): array
     {
-        $event = new ConfigurationDocumentMetaDataUpdateEvent();
-        $this->eventDispatcher->dispatch($event);
-        return $event->getDefaultConfiguration();
+        return $this->getConfigurationDocumentMetaData()->getDefaultConfiguration();
     }
 
     protected function getResetConfig(): array
@@ -55,7 +70,10 @@ abstract class SystemConfigurationDocumentEventListener
             ]
         ];
         $config = $metaDataOnly ? [] : $this->getResetConfig();
-        return $this->parser->produceDocument($metaData + $config);
+        return $this->parser->produceDocument(
+            $metaData + $config,
+            $metaDataOnly ? null : $this->getSchemaDocument()
+        );
     }
 
     protected function getDefaultsDocument(bool $metaDataOnly = false): string
@@ -66,7 +84,10 @@ abstract class SystemConfigurationDocumentEventListener
             ]
         ];
         $config = $metaDataOnly ? [] : $this->getDefaults();
-        return $this->parser->produceDocument($metaData + $config);
+        return $this->parser->produceDocument(
+            $metaData + $config,
+            $metaDataOnly ? null : $this->getSchemaDocument()
+        );
     }
 
     protected function getDocument(string $documentIdentifier, bool $metaDataOnly = false): ?string

@@ -24,6 +24,11 @@ class ConfigurationDocumentMetaDataUpdateEvent
         $this->configurationSchema = new SchemaDocument();
     }
 
+    public function getSchemaDocument(): SchemaDocument
+    {
+        return $this->configurationSchema;
+    }
+
     public function getDefaultConfiguration(): array
     {
         return $this->configurationSchema->getDefaultValue();

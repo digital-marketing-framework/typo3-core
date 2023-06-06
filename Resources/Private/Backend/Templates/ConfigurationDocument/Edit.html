@@ -8,14 +8,13 @@
     <f:section name="Content">
         <f:render partial="ConfigurationDocument/ConfigurationEditorAssets" />
 
-        <h1>{document.name}</h1>
-
         <f:form action="save">
             <div>
                 <p>
                     <f:link.action action="list"
                                    class="btn btn-default btn-sm t3-form-element-close-form-button"
-                                   title="Close">
+                                   title="Close"
+                                   additionalAttributes="{'data-role':'close'}">
                         <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-close"
                               data-identifier="actions-close">
                             <span class="icon-markup">
@@ -47,6 +46,8 @@
                     </f:if>
                 </p>
             </div>
+
+            <h1>{document.name}</h1>
 
             <div>
                 <f:form.hidden name="documentIdentifier"

@@ -16,10 +16,13 @@ class BackendControllerUpdateEvent
         }
     }
 
-    public function getControllersAndActions(): array
+    public function getControllersAndActions(bool $t3V11 = false): array
     {
-        return array_map(function(array $actions) {
-            return implode(',', $actions);
-        }, $this->controllers);
+        if ($t3V11) {
+            return array_map(function(array $actions) {
+                return implode(',', $actions);
+            }, $this->controllers);
+        }
+        return $this->controllers;
     }
 }

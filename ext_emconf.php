@@ -1,7 +1,7 @@
 <?php
 
 $EM_CONF[$_EXTKEY] = [
-    'title' => 'Digital Marketing Framwork - Core',
+    'title' => 'Digital Marketing Framework - Core',
     'description' => 'Base library for connecting CMS and CRM',
     'category' => 'be',
     'author_email' => 'info@mediatis.de',
@@ -10,7 +10,7 @@ $EM_CONF[$_EXTKEY] = [
     'version' => '1.0.0',
     'constraints' => [
         'depends' => [
-            'typo3' => '11.5.0-11.5.99',
+            'typo3' => '11.5.0-12.4.99',
         ],
         'conflicts' => [
         ],

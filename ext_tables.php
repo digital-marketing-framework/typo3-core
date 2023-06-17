@@ -19,7 +19,7 @@ defined('TYPO3') || die();
         'web',
         'manager',
         '',
-        $controllerEvent->getControllersAndActions(),
+        $controllerEvent->getControllersAndActions(true),
         [
             'access' => 'user,group',
             'icon'   => 'EXT:digitalmarketingframework/Resources/Public/Icons/Extension.svg',

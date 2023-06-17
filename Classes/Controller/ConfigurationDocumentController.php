@@ -11,6 +11,7 @@ use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Extbase\Http\ForwardResponse;
 
 class ConfigurationDocumentController extends AbstractBackendController
 {
@@ -38,10 +39,9 @@ class ConfigurationDocumentController extends AbstractBackendController
 
     public function createAction(string $documentName): ResponseInterface
     {
-        $identifier = $this->configurationDocumentManager->getDocumentIdentifierFromBaseName($documentName);
-        $this->configurationDocumentManager->createDocument($identifier, '', $documentName, $this->schemaDocument);
-        $this->redirect(actionName:'edit', arguments:['documentIdentifier' => $identifier]);
-        return $this->backendHtmlResponse();
+        $documentIdentifier = $this->configurationDocumentManager->getDocumentIdentifierFromBaseName($documentName);
+        $this->configurationDocumentManager->createDocument($documentIdentifier, '', $documentName, $this->schemaDocument);
+        return (new ForwardResponse('edit'))->withArguments(['documentIdentifier' => $documentIdentifier]);
     }
 
     public function listAction(): ResponseInterface
@@ -66,14 +66,12 @@ class ConfigurationDocumentController extends AbstractBackendController
     public function saveAction(string $documentIdentifier, string $document): ResponseInterface
     {
         $this->configurationDocumentManager->saveDocument($documentIdentifier, $document, $this->schemaDocument);
-        $this->redirect(actionName:'edit', arguments:['documentIdentifier' => $documentIdentifier]);
-        return $this->backendHtmlResponse();
+        return (new ForwardResponse('edit'))->withArguments(['documentIdentifier' => $documentIdentifier]);
     }
 
     public function deleteAction(string $documentIdentifier): ResponseInterface
     {
         $this->configurationDocumentManager->deleteDocument($documentIdentifier);
-        $this->redirect(actionName:'list');
-        return $this->backendHtmlResponse();
+        return new ForwardResponse('list');
     }
 }

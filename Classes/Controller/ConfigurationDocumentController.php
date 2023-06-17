@@ -7,8 +7,10 @@ use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\SchemaDo
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Event\ConfigurationDocumentMetaDataUpdateEvent;
 use DigitalMarketingFramework\Typo3\Core\Registry\Registry;
 use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Backend\Template\Components\ButtonBar;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
-use TYPO3\CMS\Form\Controller\AbstractBackendController;
+use TYPO3\CMS\Core\Imaging\IconFactory;
 
 class ConfigurationDocumentController extends AbstractBackendController
 {
@@ -16,13 +18,22 @@ class ConfigurationDocumentController extends AbstractBackendController
     protected SchemaDocument $schemaDocument;
 
     public function __construct(
+        ModuleTemplateFactory $moduleTemplateFactory,
+        IconFactory $iconFactory,
         Registry $registry,
         EventDispatcher $eventDispatcher,
     ) {
+        parent::__construct($moduleTemplateFactory, $iconFactory);
         $this->configurationDocumentManager = $registry->getConfigurationDocumentManager();
         $event = new ConfigurationDocumentMetaDataUpdateEvent();
         $eventDispatcher->dispatch($event);
         $this->schemaDocument = $event->getSchemaDocument();
+    }
+
+    protected function addActionButtons(ButtonBar $buttonBar): void
+    {
+        parent::addActionButtons($buttonBar);
+        $this->addReloadButton($buttonBar);
     }
 
     public function createAction(string $documentName): ResponseInterface
@@ -30,7 +41,7 @@ class ConfigurationDocumentController extends AbstractBackendController
         $identifier = $this->configurationDocumentManager->getDocumentIdentifierFromBaseName($documentName);
         $this->configurationDocumentManager->createDocument($identifier, '', $documentName, $this->schemaDocument);
         $this->redirect(actionName:'edit', arguments:['documentIdentifier' => $identifier]);
-        return $this->htmlResponse();
+        return $this->backendHtmlResponse();
     }
 
     public function listAction(): ResponseInterface
@@ -41,7 +52,7 @@ class ConfigurationDocumentController extends AbstractBackendController
             $list[$documentIdentifier] = $this->configurationDocumentManager->getDocumentInformation($documentIdentifier);
         }
         $this->view->assign('documents', $list);
-        return $this->htmlResponse();
+        return $this->backendHtmlResponse();
     }
 
     public function editAction(string $documentIdentifier): ResponseInterface
@@ -49,20 +60,20 @@ class ConfigurationDocumentController extends AbstractBackendController
         $document = $this->configurationDocumentManager->getDocumentInformation($documentIdentifier);
         $document['content'] = $this->configurationDocumentManager->getDocumentFromIdentifier($documentIdentifier);
         $this->view->assign('document', $document);
-        return $this->htmlResponse();
+        return $this->backendHtmlResponse();
     }
 
     public function saveAction(string $documentIdentifier, string $document): ResponseInterface
     {
         $this->configurationDocumentManager->saveDocument($documentIdentifier, $document, $this->schemaDocument);
         $this->redirect(actionName:'edit', arguments:['documentIdentifier' => $documentIdentifier]);
-        return $this->htmlResponse();
+        return $this->backendHtmlResponse();
     }
 
     public function deleteAction(string $documentIdentifier): ResponseInterface
     {
         $this->configurationDocumentManager->deleteDocument($documentIdentifier);
         $this->redirect(actionName:'list');
-        return $this->htmlResponse();
+        return $this->backendHtmlResponse();
     }
 }

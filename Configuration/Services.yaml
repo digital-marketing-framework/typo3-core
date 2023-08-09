@@ -43,20 +43,8 @@ services:
         event: DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\Event\StaticConfigurationDocumentLoadEvent
 
   # registry updates
-  DigitalMarketingFramework\Typo3\Core\Registry\EventListener\CoreRegistryGlobalConfigurationUpdateEventListener:
+  DigitalMarketingFramework\Typo3\Core\Registry\EventListener\CoreRegistryUpdateEventListener:
     tags:
       - name: event.listener
-        identifier: 'digital-marketing-framework/core/registry-update/core/global-configuration'
-        event: DigitalMarketingFramework\Typo3\Core\Registry\Event\CoreRegistryGlobalConfigurationUpdateEvent
-
-  DigitalMarketingFramework\Typo3\Core\Registry\EventListener\CoreRegistryServiceUpdateEventListener:
-    tags:
-      - name: event.listener
-        identifier: 'digital-marketing-framework/core/registry-update/core/service'
-        event: DigitalMarketingFramework\Typo3\Core\Registry\Event\CoreRegistryServiceUpdateEvent
-
-  DigitalMarketingFramework\Typo3\Core\Registry\EventListener\CoreRegistryPluginUpdateEventListener:
-    tags:
-      - name: event.listener
-        identifier: 'digital-marketing-framework/core/registry-update/core/plugin'
-        event: DigitalMarketingFramework\Typo3\Core\Registry\Event\CoreRegistryPluginUpdateEvent
+        identifier: 'digital-marketing-framework/core/registry-update/core'
+        event: DigitalMarketingFramework\Typo3\Core\Registry\Event\CoreRegistryUpdateEvent

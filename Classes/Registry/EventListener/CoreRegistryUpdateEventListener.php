@@ -3,27 +3,38 @@
 namespace DigitalMarketingFramework\Typo3\Core\Registry\EventListener;
 
 use DigitalMarketingFramework\Core\ConfigurationDocument\Parser\YamlConfigurationDocumentParser;
+use DigitalMarketingFramework\Core\CoreInitalization;
+use DigitalMarketingFramework\Core\Registry\RegistryInterface;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\StaticConfigurationDocumentStorage;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\YamlFileConfigurationDocumentStorage;
 use DigitalMarketingFramework\Typo3\Core\Context\Typo3RequestContext;
 use DigitalMarketingFramework\Typo3\Core\FileStorage\FileStorage;
+use DigitalMarketingFramework\Typo3\Core\GlobalConfiguration\GlobalConfiguration;
 use DigitalMarketingFramework\Typo3\Core\Log\LoggerFactory;
-use DigitalMarketingFramework\Typo3\Core\Registry\Event\CoreRegistryServiceUpdateEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 
-class CoreRegistryServiceUpdateEventListener
+class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventListener
 {
     public function __construct(
+        protected GlobalConfiguration $globalConfiguration,
         protected LoggerFactory $loggerFactory,
         protected Typo3RequestContext $requestContext,
         protected ResourceFactory $resourceFactory,
         protected EventDispatcherInterface $eventDispatcher,
-    ) {}
+    ) {
+        parent::__construct(new CoreInitalization());
+    }
 
-    public function __invoke(CoreRegistryServiceUpdateEvent $event): void
+    protected function initGlobalConfiguration(RegistryInterface $registry): void
     {
-        $registry = $event->getRegistry();
+        parent::initGlobalConfiguration($registry);
+        $registry->setGlobalConfiguration($this->globalConfiguration);
+    }
+
+    protected function initServices(RegistryInterface $registry): void
+    {
+        parent::initServices($registry);
         $registry->setContext($this->requestContext);
         $registry->setLoggerFactory($this->loggerFactory);
 

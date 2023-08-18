@@ -9,7 +9,7 @@ use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Event\Configurati
 use DigitalMarketingFramework\Typo3\Core\Registry\Registry;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 
-abstract class SystemConfigurationDocumentEventListener
+class CoreSystemConfigurationDocumentEventListener extends AbstractStaticConfigurationDocumentEventListener
 {
     public const ID_DEFAULTS = 'SYS:defaults';
     public const ID_RESET = 'SYS:reset';

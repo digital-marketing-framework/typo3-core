@@ -32,17 +32,6 @@ class ConfigurationDocumentAjaxController
         return $response;
     }
 
-    protected function adjustIncludes(array &$configuration): void
-    {
-        // TODO having the sys:defaults injected for processing purposes is one thing
-        //      however, this code also actually adds the include to the document, when using the editor app
-        //      should it remove the include once the processing is done, before the configuration is sent to the client?
-        $includes = $this->configurationDocumentManager->getIncludes($configuration);
-        if (empty($includes)) {
-            $this->configurationDocumentManager->setIncludes($configuration, ['SYS:defaults']);
-        }
-    }
-
     protected function getConfigurationDocumentMetaData(): ConfigurationDocumentMetaDataUpdateEvent
     {
         if ($this->configurationDocumentMetaData === null) {
@@ -70,7 +59,6 @@ class ConfigurationDocumentAjaxController
         $schemaDocument = $this->getConfigurationDocumentMetaData()->getSchemaDocument();
         $document = json_decode((string)$request->getBody(), true)['document'] ?? '';
         $configuration = $this->configurationDocumentManager->getParser()->parseDocument($document);
-        $this->adjustIncludes($configuration);
 
         $mergedConfiguration = $this->configurationDocumentManager->mergeConfiguration($configuration);
         $mergedInheritedConfiguration = $this->configurationDocumentManager->mergeConfiguration($configuration, inheritedConfigurationOnly:true);
@@ -87,7 +75,6 @@ class ConfigurationDocumentAjaxController
     {
         $schemaDocument = $this->getConfigurationDocumentMetaData()->getSchemaDocument();
         $mergedConfiguration = json_decode((string)$request->getBody(), true);
-        $this->adjustIncludes($mergedConfiguration);
         $splitConfiguration = $this->configurationDocumentManager->splitConfiguration($mergedConfiguration);
         $splitDocument = $this->configurationDocumentManager->getParser()->produceDocument($splitConfiguration, $schemaDocument);
         return $this->jsonResponse(['document' => $splitDocument]);
@@ -97,8 +84,6 @@ class ConfigurationDocumentAjaxController
     {
         $schemaDocument = $this->getConfigurationDocumentMetaData()->getSchemaDocument();
         $data = json_decode((string)$request->getBody(), true);
-        $this->adjustIncludes($data['referenceData']);
-        $this->adjustIncludes($data['newData']);
 
         $mergedConfiguration = $this->configurationDocumentManager->processIncludesChange(
             $data['referenceData'],

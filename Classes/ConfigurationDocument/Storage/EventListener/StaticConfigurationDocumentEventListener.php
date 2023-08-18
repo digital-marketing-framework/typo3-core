@@ -4,7 +4,7 @@ namespace DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\Eve
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-abstract class StaticConfigurationDocumentEventListener
+abstract class StaticConfigurationDocumentEventListener extends AbstractStaticConfigurationDocumentEventListener
 {
     protected const PATH_PATTERN = 'EXT:%s/Resources/Private/ConfigurationDocuments';
 

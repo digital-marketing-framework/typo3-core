@@ -1,5 +1,6 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
       xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+      xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
       data-namespace-typo3-fluid="true">
 
     <f:layout name="Default" />
@@ -10,23 +11,17 @@
         <h1>Configuration Documents</h1>
 
         <f:form action="create">
-            <label>New Configuration Document:
-                <f:form.textfield name="documentName" />
+            <label for="create-document-name">New Configuration Document:
+                <f:form.textfield id="create-document-name"
+                                  name="documentName"
+                                  required="required" />
             </label>
             <f:comment>
                 <f:form.submit value="create"><button>add</button></f:form.submit>
             </f:comment>
             <button type="submit">
-                <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-add"
-                      data-identifier="actions-add">
-                    <span class="icon-markup">
-                        <svg class="icon-color">
-                            <use
-                                 xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-add">
-                            </use>
-                        </svg>
-                    </span>
-                </span>
+                <core:icon identifier="actions-add"
+                           size="small" />
             </button>
         </f:form>
 
@@ -51,17 +46,8 @@
                                 <span data-bs-toggle="tooltip"
                                       data-bs-placement="right"
                                       aria-label="id={document.shortId}">
-                                    <span class="t3js-icon icon icon-size-small icon-state-default icon-content-form"
-                                          data-identifier="content-form">
-                                        <span class="icon-markup">
-                                            <svg class="icon-color">
-                                                <use
-                                                     xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/content.svg#content-form">
-                                                </use>
-                                            </svg>
-                                        </span>
-
-                                    </span>
+                                    <core:icon identifier="content-form"
+                                               size="small" />
                                 </span>
 
                             </td>
@@ -82,16 +68,8 @@
                                                    title="{f:if(condition:document.readonly, then:'View this configuration document', else:'Edit this configuration document')}"
                                                    class="btn btn-default form-record-open"
                                                    arguments="{documentIdentifier: id}">
-                                        <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-file-view"
-                                              data-identifier="actions-{f:if(condition:document.readonly, then'file-view', else:'open')}">
-                                            <span class="icon-markup">
-                                                <svg class="icon-color">
-                                                    <use
-                                                         xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-{f:if(condition:document.readonly, then:'file-view', else:'open')}">
-                                                    </use>
-                                                </svg>
-                                            </span>
-                                        </span>
+                                        <core:icon identifier="{f:if(condition:document.readonly, then:'actions-file-view', else:'actions-open')}"
+                                                   size="small" />
                                     </f:link.action>
                                 </div>
                                 <div class="btn-group dropdown position-static">
@@ -99,18 +77,10 @@
                                        class="btn btn-default dropdown-toggle dropdown-toggle-no-chevron"
                                        data-bs-toggle="dropdown"
                                        data-bs-boundary="window"
-                                       aria-expanded="false"><span
-                                              class="t3js-icon icon icon-size-small icon-state-default icon-actions-menu-alternative"
-                                              data-identifier="actions-menu-alternative">
-                                            <span class="icon-markup">
-                                                <svg class="icon-color">
-                                                    <use
-                                                         xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-menu-alternative">
-                                                    </use>
-                                                </svg>
-                                            </span>
-
-                                        </span></a>
+                                       aria-expanded="false">
+                                        <core:icon identifier="actions-menu-alternative"
+                                                   size="small" />
+                                    </a>
                                     <ul id="actions-{document.shortId}"
                                         class="dropdown-menu dropdown-list">
 
@@ -118,17 +88,8 @@
                                             <f:link.action action="edit"
                                                            arguments="{documentIdentifier: id}"
                                                            class="dropdown-item">
-                                                <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-duplicate"
-                                                      data-identifier="actions-duplicate">
-                                                    <span class="icon-markup">
-                                                        <svg class="icon-color">
-                                                            <use
-                                                                 xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-duplicate">
-                                                            </use>
-                                                        </svg>
-                                                    </span>
-
-                                                </span>
+                                                <core:icon identifier="actions-duplicate"
+                                                           size="small" />
                                                 Duplicate this configuration document
                                             </f:link.action>
                                         </li>
@@ -140,17 +101,8 @@
                                                 <f:link.action action="delete"
                                                                arguments="{documentIdentifier: id}"
                                                                class="dropdown-item">
-                                                    <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-delete"
-                                                          data-identifier="actions-edit-delete">
-                                                        <span class="icon-markup">
-                                                            <svg class="icon-color">
-                                                                <use
-                                                                     xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-delete">
-                                                                </use>
-                                                            </svg>
-                                                        </span>
-
-                                                    </span>
+                                                    <core:icon identifier="actions-edit-delete"
+                                                               size="small" />
                                                     Delete this configuration document
                                                 </f:link.action>
                                             </li>

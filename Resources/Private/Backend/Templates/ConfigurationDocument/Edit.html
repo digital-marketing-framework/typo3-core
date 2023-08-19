@@ -1,4 +1,5 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
       data-namespace-typo3-fluid="true">
 
     <f:layout name="Default" />
@@ -15,16 +16,9 @@
                                    class="btn btn-default btn-sm t3-form-element-close-form-button"
                                    title="Close"
                                    additionalAttributes="{'data-role':'close'}">
-                        <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-close"
-                              data-identifier="actions-close">
-                            <span class="icon-markup">
-                                <svg class="icon-color">
-                                    <use
-                                         xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-close">
-                                    </use>
-                                </svg>
-                            </span>
-                        </span> Close
+                        <core:icon identifier="actions-close"
+                                   size="small" />
+                        Close
                     </f:link.action>
 
                     <f:if condition="!{document.readonly}">
@@ -32,16 +26,9 @@
                                 value="save"
                                 title="Save"
                                 type="submit">
-                            <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-document-save"
-                                  data-identifier="actions-document-save">
-                                <span class="icon-markup">
-                                    <svg class="icon-color">
-                                        <use
-                                             xlink:href="/typo3/sysext/core/Resources/Public/Icons/T3Icons/sprites/actions.svg#actions-save">
-                                        </use>
-                                    </svg>
-                                </span>
-                            </span> Save
+                            <core:icon identifier="actions-document-save"
+                                       size="small" />
+                            Save
                         </button>
                     </f:if>
                 </p>

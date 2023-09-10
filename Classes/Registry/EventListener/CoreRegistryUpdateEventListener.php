@@ -3,7 +3,7 @@
 namespace DigitalMarketingFramework\Typo3\Core\Registry\EventListener;
 
 use DigitalMarketingFramework\Core\ConfigurationDocument\Parser\YamlConfigurationDocumentParser;
-use DigitalMarketingFramework\Core\CoreInitalization;
+use DigitalMarketingFramework\Core\CoreInitialization;
 use DigitalMarketingFramework\Core\Registry\RegistryInterface;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\StaticConfigurationDocumentStorage;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\YamlFileConfigurationDocumentStorage;
@@ -23,7 +23,7 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
         protected ResourceFactory $resourceFactory,
         protected EventDispatcherInterface $eventDispatcher,
     ) {
-        parent::__construct(new CoreInitalization());
+        parent::__construct(new CoreInitialization());
     }
 
     protected function initGlobalConfiguration(RegistryInterface $registry): void

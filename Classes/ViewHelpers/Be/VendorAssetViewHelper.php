@@ -1,6 +1,6 @@
 <?php
 
-namespace DigitalMarketingFramework\Typo3\Core\ViewHelpers;
+namespace DigitalMarketingFramework\Typo3\Core\ViewHelpers\Be;
 
 use Closure;
 use DigitalMarketingFramework\Typo3\Core\Utility\VendorAssetUtility;

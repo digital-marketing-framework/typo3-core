@@ -1,5 +1,6 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
       xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+      xmlns:d="http://typo3.org/ns/DigitalMarketingFramework/Typo3/Core/ViewHelpers"
       data-namespace-typo3-fluid="true">
 
     <f:layout name="Default" />
@@ -44,7 +45,7 @@
                                  class="dmf-configuration-document"
                                  style="width:60%;min-height:400px;"
                                  disabled="{f:if(condition:document.readonly, then:'disabled', else:'')}"
-                                 data="{app:'true',mode:'embedded',global-document:'true',readonly:'{f:if(condition:document.readonly,then:\'true\',else:\'false\')}','url-schema':'{f:be.uri(route:\'ajax_digitalmarketingframework_configuration_schema\')}','url-defaults':'{f:be.uri(route:\'ajax_digitalmarketingframework_configuration_defaults\')}','url-merge':'{f:be.uri(route:\'ajax_digitalmarketingframework_configuration_merge\')}','url-split':'{f:be.uri(route:\'ajax_digitalmarketingframework_configuration_split\')}','url-update-includes':'{f:be.uri(route:\'ajax_digitalmarketingframework_configuration_update_includes\')}'}" />
+                                 data="{d:be.configurationEditor.dataAttributes(mode:'embedded', ready:1, readonly:document.readonly, globalDocument:1)}" />
             </div>
         </f:form>
     </f:section>

@@ -21,7 +21,7 @@ class ConfigurationEditorRenderUtility
             'url-defaults' => (string)$uriBuilder->buildUriFromRoute('ajax_digitalmarketingframework_configuration_defaults'),
             'url-merge' => (string)$uriBuilder->buildUriFromRoute('ajax_digitalmarketingframework_configuration_merge'),
             'url-split' => (string)$uriBuilder->buildUriFromRoute('ajax_digitalmarketingframework_configuration_split'),
-            'url-update' => (string)$uriBuilder->buildUriFromRoute('ajax_digitalmarketingframework_configuration_update_includes'),
+            'url-update-includes' => (string)$uriBuilder->buildUriFromRoute('ajax_digitalmarketingframework_configuration_update_includes'),
         ];
 
         return $attributes;

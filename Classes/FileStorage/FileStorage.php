@@ -29,8 +29,10 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
             return $this->resourceFactory->retrieveFileOrFolderObject($identifier);
         } catch (ResourceDoesNotExistException $e) {
             $this->logger->error(sprintf('Resource does not exist: %s', $e->getMessage()));
+
             return null;
         }
+
         return null;
     }
 
@@ -40,6 +42,7 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
         if ($file instanceof File) {
             return $file;
         }
+
         return null;
     }
 
@@ -49,6 +52,7 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
         if ($file instanceof Folder) {
             return $file;
         }
+
         return null;
     }
 
@@ -59,19 +63,24 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
                 $absoluteFilePath = GeneralUtility::getFileAbsFileName($fileIdentifier);
                 if ($absoluteFilePath === '') {
                     $this->logger->warning(sprintf('File %s does not seem to exist.', $fileIdentifier));
+
                     return null;
                 }
+
                 return file_get_contents($absoluteFilePath);
             } else {
                 $file = $this->getFile($fileIdentifier);
                 if ($file === null) {
                     $this->logger->warning(sprintf('File %s does not seem to exist.', $fileIdentifier));
+
                     return null;
                 }
+
                 return $file->getContents();
             }
         } catch (Exception $e) {
             $this->logger->warning(sprintf('File %s does not seem to exist.', $fileIdentifier));
+
             return null;
         }
     }
@@ -82,7 +91,7 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
         if ($file === null) {
             [$storageUid, $filePath] = explode(':', $fileIdentifier);
             $pathinfo = pathinfo($filePath);
-            $folder = $this->getFolder($storageUid . ':' . $pathinfo['dirname']);
+            $folder = $this->getFolder($storageUid.':'.$pathinfo['dirname']);
             $file = $folder->createFile($pathinfo['basename']);
         }
         $file->setContents($fileContent);
@@ -125,6 +134,7 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
         if ($file !== null) {
             return !$file->checkActionPermission('write');
         }
+
         return false;
     }
 
@@ -143,6 +153,7 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
         foreach ($folder->getFiles() as $file) {
             $list[] = $file->getCombinedIdentifier();
         }
+
         return $list;
     }
 

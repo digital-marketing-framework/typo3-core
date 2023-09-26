@@ -12,7 +12,7 @@ abstract class FileConfigurationDocumentStorage extends OriginalFileConfiguratio
     public function initalizeConfigurationDocumentStorage(): void
     {
         parent::initalizeConfigurationDocumentStorage();
-        $accessFileIdentifier = $this->getStorageFolderIdentifier() . '/' . '.htaccess';
+        $accessFileIdentifier = $this->getStorageFolderIdentifier().'/.htaccess';
         if (!$this->fileStorage->fileExists($accessFileIdentifier)) {
             try {
                 $accessFileContents = $this->fileStorage->getFileContents(static::ACCESS_FILE_PATH);

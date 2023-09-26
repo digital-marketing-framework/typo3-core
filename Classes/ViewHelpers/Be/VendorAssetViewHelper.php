@@ -25,6 +25,7 @@ class VendorAssetViewHelper extends AbstractViewHelper
         if ($arguments['returnUrl'] ?? true) {
             return $url;
         }
+
         return '';
     }
 }

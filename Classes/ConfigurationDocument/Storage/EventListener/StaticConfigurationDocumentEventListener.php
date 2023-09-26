@@ -13,6 +13,7 @@ abstract class StaticConfigurationDocumentEventListener extends AbstractStaticCo
     protected function getFolderPath(): string
     {
         $path = sprintf(static::PATH_PATTERN, $this->getExtensionKey());
+
         return GeneralUtility::getFileAbsFileName($path);
     }
 
@@ -30,9 +31,10 @@ abstract class StaticConfigurationDocumentEventListener extends AbstractStaticCo
                 if (!is_file($filePath)) {
                     continue;
                 }
-                $results[] = sprintf(static::PATH_PATTERN . '/%s', $this->getExtensionKey(), $file);
+                $results[] = sprintf(static::PATH_PATTERN.'/%s', $this->getExtensionKey(), $file);
             }
         }
+
         return $results;
     }
 

@@ -12,12 +12,12 @@ class VendorAssetUtility
 
     protected static function getVendorPath(): string
     {
-        return Environment::getProjectPath() . '/' . static::PATH_VENDOR;
+        return Environment::getProjectPath().'/'.static::PATH_VENDOR;
     }
 
     protected static function getTempPath(): string
     {
-        return Environment::getPublicPath() . '/' . static::PATH_ASSETS;
+        return Environment::getPublicPath().'/'.static::PATH_ASSETS;
     }
 
     protected static function getPublicTempPath(): string
@@ -27,7 +27,7 @@ class VendorAssetUtility
 
     protected static function getSourcePath(string $composerName, string $path): string
     {
-        return static::getVendorPath() . '/' . $composerName . '/assets/' . $path;
+        return static::getVendorPath().'/'.$composerName.'/assets/'.$path;
     }
 
     protected static function getRelativeTargetPath(string $composerName, string $path): string
@@ -35,19 +35,20 @@ class VendorAssetUtility
         $pathParts = explode('/', $path);
         $lastPathPart = array_pop($pathParts);
         $leadingPath = implode('/', $pathParts);
-        $relativePath = $composerName . '/' . $leadingPath;
+        $relativePath = $composerName.'/'.$leadingPath;
         $salt = $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'];
-        return strrev(md5($relativePath . '|' . $salt)) . '/' . $lastPathPart;
+
+        return strrev(md5($relativePath.'|'.$salt)).'/'.$lastPathPart;
     }
 
     protected static function getTargetPath(string $composerName, string $path): string
     {
-        return static::getTempPath() . '/' . static::getRelativeTargetPath($composerName, $path);
+        return static::getTempPath().'/'.static::getRelativeTargetPath($composerName, $path);
     }
 
     protected static function getPublicTargetPath(string $composerName, string $path): string
     {
-        return static::getPublicTempPath() . '/' . static::getRelativeTargetPath($composerName, $path);
+        return static::getPublicTempPath().'/'.static::getRelativeTargetPath($composerName, $path);
     }
 
     protected static function getCacheHash(string $source): string
@@ -63,7 +64,7 @@ class VendorAssetUtility
             if (file_exists($folder)) {
                 throw new DigitalMarketingFrameworkException(sprintf('Asset target folder "%s" seems to be a file.', $folder));
             }
-            mkdir($folder, recursive:true);
+            mkdir($folder, recursive: true);
         }
     }
 
@@ -93,8 +94,9 @@ class VendorAssetUtility
         $url = static::getPublicTargetPath($composerName, $path);
         $hash = static::getCacheHash($source);
         if ($hash !== '') {
-            $url .= '?' . $hash;
+            $url .= '?'.$hash;
         }
+
         return $url;
     }
 
@@ -117,6 +119,7 @@ class VendorAssetUtility
         $path = ltrim($path, '/');
         static::checkFile($composerName, $path);
         static::copyFile($composerName, $path);
+
         return static::getPublicUrl($composerName, $path);
     }
 }

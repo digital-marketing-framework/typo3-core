@@ -39,6 +39,7 @@ class CoreSystemConfigurationDocumentEventListener extends AbstractStaticConfigu
             $this->configurationDocumentMetaData = new ConfigurationDocumentMetaDataUpdateEvent();
             $this->eventDispatcher->dispatch($this->configurationDocumentMetaData);
         }
+
         return $this->configurationDocumentMetaData;
     }
 
@@ -59,6 +60,7 @@ class CoreSystemConfigurationDocumentEventListener extends AbstractStaticConfigu
         foreach (array_keys($defaults) as $key) {
             $reset[$key] = null;
         }
+
         return $reset;
     }
 
@@ -67,9 +69,10 @@ class CoreSystemConfigurationDocumentEventListener extends AbstractStaticConfigu
         $metaData = [
             ConfigurationDocumentManagerInterface::KEY_META_DATA => [
                 ConfigurationDocumentManagerInterface::KEY_DOCUMENT_NAME => 'Reset',
-            ]
+            ],
         ];
         $config = $metaDataOnly ? [] : $this->getResetConfig();
+
         return $this->parser->produceDocument(
             $metaData + $config,
             $metaDataOnly ? null : $this->getSchemaDocument()
@@ -81,9 +84,10 @@ class CoreSystemConfigurationDocumentEventListener extends AbstractStaticConfigu
         $metaData = [
             ConfigurationDocumentManagerInterface::KEY_META_DATA => [
                 ConfigurationDocumentManagerInterface::KEY_DOCUMENT_NAME => 'Defaults',
-            ]
+            ],
         ];
         $config = $metaDataOnly ? [] : $this->getDefaults();
+
         return $this->parser->produceDocument(
             $metaData + $config,
             $metaDataOnly ? null : $this->getSchemaDocument()

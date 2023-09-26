@@ -14,7 +14,6 @@ use TYPO3\CMS\Form\Controller\AbstractBackendController as OriginalAbstractBacke
 
 class AbstractBackendController extends OriginalAbstractBackendController
 {
-
     public function __construct(
         protected ModuleTemplateFactory $moduleTemplateFactory,
         protected IconFactory $iconFactory,
@@ -26,10 +25,11 @@ class AbstractBackendController extends OriginalAbstractBackendController
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->initializeModuleTemplate($moduleTemplate, $this->request);
 
-        $moduleTemplate->setModuleClass($this->request->getPluginName() . '_' . $this->request->getControllerName());
+        $moduleTemplate->setModuleClass($this->request->getPluginName().'_'.$this->request->getControllerName());
         $moduleTemplate->setFlashMessageQueue($this->getFlashMessageQueue());
         $moduleTemplate->setTitle($this->getLanguageService()->sL($title) ?: $title);
         $moduleTemplate->setContent($this->view->render());
+
         return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
@@ -55,7 +55,7 @@ class AbstractBackendController extends OriginalAbstractBackendController
 
         foreach ($sections as $section) {
             $menuItem = $sectionMenu->makeMenuItem();
-            $menuItem->setHref((string)$this->uriBuilder->uriFor(actionName: $section['action'], controllerName: $section['controller']));
+            $menuItem->setHref((string) $this->uriBuilder->uriFor(actionName: $section['action'], controllerName: $section['controller']));
             $menuItem->setTitle($section['title']);
             if ($this->sectionIsActive($section)) {
                 $menuItem->setActive(true);

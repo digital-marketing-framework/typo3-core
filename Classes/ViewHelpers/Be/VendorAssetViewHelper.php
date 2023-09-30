@@ -23,7 +23,7 @@ class VendorAssetViewHelper extends AbstractViewHelper
         RenderingContextInterface $renderingContext
     ): string {
         $url = VendorAssetUtility::makeVendorAssetAvailable($arguments['package'], $arguments['path']);
-        if ((bool) $arguments['returnUrl']) {
+        if ((bool)$arguments['returnUrl']) {
             return $url;
         }
 

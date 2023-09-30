@@ -63,7 +63,7 @@ class ConfigurationDocumentAjaxController
     public function mergeAction(ServerRequestInterface $request): ResponseInterface
     {
         $schemaDocument = $this->getConfigurationDocumentMetaData()->getSchemaDocument();
-        $document = json_decode((string) $request->getBody(), true, 512, JSON_THROW_ON_ERROR)['document'] ?? '';
+        $document = json_decode((string)$request->getBody(), true, 512, JSON_THROW_ON_ERROR)['document'] ?? '';
         $configuration = $this->configurationDocumentManager->getParser()->parseDocument($document);
 
         $mergedConfiguration = $this->configurationDocumentManager->mergeConfiguration($configuration);
@@ -81,7 +81,7 @@ class ConfigurationDocumentAjaxController
     public function splitAction(ServerRequestInterface $request): ResponseInterface
     {
         $schemaDocument = $this->getConfigurationDocumentMetaData()->getSchemaDocument();
-        $mergedConfiguration = json_decode((string) $request->getBody(), true, 512, JSON_THROW_ON_ERROR);
+        $mergedConfiguration = json_decode((string)$request->getBody(), true, 512, JSON_THROW_ON_ERROR);
         $splitConfiguration = $this->configurationDocumentManager->splitConfiguration($mergedConfiguration);
         $splitDocument = $this->configurationDocumentManager->getParser()->produceDocument($splitConfiguration, $schemaDocument);
 
@@ -91,7 +91,7 @@ class ConfigurationDocumentAjaxController
     public function updateIncludesAction(ServerRequestInterface $request): ResponseInterface
     {
         $schemaDocument = $this->getConfigurationDocumentMetaData()->getSchemaDocument();
-        $data = json_decode((string) $request->getBody(), true, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode((string)$request->getBody(), true, 512, JSON_THROW_ON_ERROR);
 
         $mergedConfiguration = $this->configurationDocumentManager->processIncludesChange(
             $data['referenceData'],

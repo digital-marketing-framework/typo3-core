@@ -66,16 +66,16 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
                 }
 
                 return file_get_contents($absoluteFilePath);
-            } else {
-                $file = $this->getFile($fileIdentifier);
-                if (!$file instanceof File) {
-                    $this->logger->warning(sprintf('File %s does not seem to exist.', $fileIdentifier));
-
-                    return null;
-                }
-
-                return $file->getContents();
             }
+
+            $file = $this->getFile($fileIdentifier);
+            if (!$file instanceof File) {
+                $this->logger->warning(sprintf('File %s does not seem to exist.', $fileIdentifier));
+
+                return null;
+            }
+
+            return $file->getContents();
         } catch (Exception) {
             $this->logger->warning(sprintf('File %s does not seem to exist.', $fileIdentifier));
 
@@ -168,7 +168,7 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
     {
         if (!$this->folderExists($folderIdentifier)) {
             $identifierParts = explode(':', $folderIdentifier);
-            $storageUid = (int) array_shift($identifierParts);
+            $storageUid = (int)array_shift($identifierParts);
             $path = implode(':', $identifierParts);
             $storage = $this->resourceFactory->getStorageObject($storageUid);
             try {

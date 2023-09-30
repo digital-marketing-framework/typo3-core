@@ -20,11 +20,11 @@ class ConfigurationEditorRenderUtility
             'readonly' => $readonly ? 'true' : 'false',
             'global-document' => $globalDocument ? 'true' : 'false',
 
-            'url-schema' => (string) $uriBuilder->buildUriFromRoute('ajax_digitalmarketingframework_configuration_schema'),
-            'url-defaults' => (string) $uriBuilder->buildUriFromRoute('ajax_digitalmarketingframework_configuration_defaults'),
-            'url-merge' => (string) $uriBuilder->buildUriFromRoute('ajax_digitalmarketingframework_configuration_merge'),
-            'url-split' => (string) $uriBuilder->buildUriFromRoute('ajax_digitalmarketingframework_configuration_split'),
-            'url-update-includes' => (string) $uriBuilder->buildUriFromRoute('ajax_digitalmarketingframework_configuration_update_includes'),
+            'url-schema' => (string)$uriBuilder->buildUriFromRoute('ajax_digitalmarketingframework_configuration_schema'),
+            'url-defaults' => (string)$uriBuilder->buildUriFromRoute('ajax_digitalmarketingframework_configuration_defaults'),
+            'url-merge' => (string)$uriBuilder->buildUriFromRoute('ajax_digitalmarketingframework_configuration_merge'),
+            'url-split' => (string)$uriBuilder->buildUriFromRoute('ajax_digitalmarketingframework_configuration_split'),
+            'url-update-includes' => (string)$uriBuilder->buildUriFromRoute('ajax_digitalmarketingframework_configuration_update_includes'),
         ];
     }
 }

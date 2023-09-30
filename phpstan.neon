@@ -1,0 +1,2 @@
+includes:
+	- .Build/vendor/mediatis/typo3-coding-standards/phpstan.neon

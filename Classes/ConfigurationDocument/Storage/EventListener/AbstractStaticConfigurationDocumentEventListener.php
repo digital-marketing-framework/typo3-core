@@ -7,7 +7,11 @@ use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\Event\Sta
 
 abstract class AbstractStaticConfigurationDocumentEventListener
 {
+    /**
+     * @return array<string>
+     */
     abstract protected function getIdentifiers(): array;
+
     abstract protected function getDocument(string $documentIdentifier, bool $metaDataOnly = false): ?string;
 
     public function __invoke(StaticConfigurationDocumentIdentifierCollectionEvent|StaticConfigurationDocumentLoadEvent $event): void

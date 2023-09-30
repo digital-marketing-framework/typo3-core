@@ -5,6 +5,7 @@ namespace DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\Eve
 class StaticConfigurationDocumentLoadEvent
 {
     protected string $document = '';
+
     protected bool $loaded = false;
 
     public function __construct(

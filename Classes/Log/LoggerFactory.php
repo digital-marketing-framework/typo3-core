@@ -4,7 +4,6 @@ namespace DigitalMarketingFramework\Typo3\Core\Log;
 
 use DigitalMarketingFramework\Core\Log\LoggerFactoryInterface;
 use DigitalMarketingFramework\Core\Log\LoggerInterface;
-use DigitalMarketingFramework\Typo3\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogManagerInterface;
 
 class LoggerFactory implements LoggerFactoryInterface

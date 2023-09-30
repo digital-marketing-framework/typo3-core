@@ -11,7 +11,14 @@ use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 
 class CoreSystemConfigurationDocumentEventListener extends AbstractStaticConfigurationDocumentEventListener
 {
+    /**
+     * @var string
+     */
     public const ID_DEFAULTS = 'SYS:defaults';
+
+    /**
+     * @var string
+     */
     public const ID_RESET = 'SYS:reset';
 
     protected ConfigurationDocumentParserInterface $parser;
@@ -25,6 +32,9 @@ class CoreSystemConfigurationDocumentEventListener extends AbstractStaticConfigu
         $this->parser = $registry->getConfigurationDocumentParser();
     }
 
+    /**
+     * @return array<string>
+     */
     protected function getIdentifiers(): array
     {
         return [
@@ -35,10 +45,11 @@ class CoreSystemConfigurationDocumentEventListener extends AbstractStaticConfigu
 
     protected function getConfigurationDocumentMetaData(): ConfigurationDocumentMetaDataUpdateEvent
     {
-        if ($this->configurationDocumentMetaData === null) {
+        if (!$this->configurationDocumentMetaData instanceof ConfigurationDocumentMetaDataUpdateEvent) {
             $this->configurationDocumentMetaData = new ConfigurationDocumentMetaDataUpdateEvent();
             $this->eventDispatcher->dispatch($this->configurationDocumentMetaData);
         }
+
         return $this->configurationDocumentMetaData;
     }
 
@@ -47,11 +58,17 @@ class CoreSystemConfigurationDocumentEventListener extends AbstractStaticConfigu
         return $this->getConfigurationDocumentMetaData()->getSchemaDocument();
     }
 
+    /**
+     * @return array<string,mixed>
+     */
     protected function getDefaults(): array
     {
         return $this->getConfigurationDocumentMetaData()->getDefaultConfiguration();
     }
 
+    /**
+     * @return array<string,mixed>
+     */
     protected function getResetConfig(): array
     {
         $reset = [];
@@ -59,6 +76,7 @@ class CoreSystemConfigurationDocumentEventListener extends AbstractStaticConfigu
         foreach (array_keys($defaults) as $key) {
             $reset[$key] = null;
         }
+
         return $reset;
     }
 
@@ -67,9 +85,10 @@ class CoreSystemConfigurationDocumentEventListener extends AbstractStaticConfigu
         $metaData = [
             ConfigurationDocumentManagerInterface::KEY_META_DATA => [
                 ConfigurationDocumentManagerInterface::KEY_DOCUMENT_NAME => 'Reset',
-            ]
+            ],
         ];
         $config = $metaDataOnly ? [] : $this->getResetConfig();
+
         return $this->parser->produceDocument(
             $metaData + $config,
             $metaDataOnly ? null : $this->getSchemaDocument()
@@ -81,9 +100,10 @@ class CoreSystemConfigurationDocumentEventListener extends AbstractStaticConfigu
         $metaData = [
             ConfigurationDocumentManagerInterface::KEY_META_DATA => [
                 ConfigurationDocumentManagerInterface::KEY_DOCUMENT_NAME => 'Defaults',
-            ]
+            ],
         ];
         $config = $metaDataOnly ? [] : $this->getDefaults();
+
         return $this->parser->produceDocument(
             $metaData + $config,
             $metaDataOnly ? null : $this->getSchemaDocument()
@@ -92,13 +112,10 @@ class CoreSystemConfigurationDocumentEventListener extends AbstractStaticConfigu
 
     protected function getDocument(string $documentIdentifier, bool $metaDataOnly = false): ?string
     {
-        switch ($documentIdentifier) {
-            case static::ID_DEFAULTS:
-                return $this->getDefaultsDocument($metaDataOnly);
-            case static::ID_RESET:
-                return $this->getResetDocument($metaDataOnly);
-            default:
-                return null;
-        }
+        return match ($documentIdentifier) {
+            static::ID_DEFAULTS => $this->getDefaultsDocument($metaDataOnly),
+            static::ID_RESET => $this->getResetDocument($metaDataOnly),
+            default => null,
+        };
     }
 }

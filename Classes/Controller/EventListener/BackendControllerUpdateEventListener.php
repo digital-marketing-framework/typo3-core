@@ -7,7 +7,7 @@ use DigitalMarketingFramework\Typo3\Core\Controller\Event\BackendControllerUpdat
 
 class BackendControllerUpdateEventListener
 {
-    public function __invoke(BackendControllerUpdateEvent $event)
+    public function __invoke(BackendControllerUpdateEvent $event): void
     {
         $event->addControllerActions(ConfigurationDocumentController::class, ['list', 'edit', 'save', 'create', 'delete']);
     }

@@ -7,7 +7,14 @@ use TYPO3\CMS\Core\Core\Environment;
 
 class VendorAssetUtility
 {
+    /**
+     * @var string
+     */
     public const PATH_VENDOR = 'vendor';
+
+    /**
+     * @var string
+     */
     public const PATH_ASSETS = 'typo3temp/assets/vendor-assets';
 
     protected static function getVendorPath(): string
@@ -37,6 +44,7 @@ class VendorAssetUtility
         $leadingPath = implode('/', $pathParts);
         $relativePath = $composerName . '/' . $leadingPath;
         $salt = $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'];
+
         return strrev(md5($relativePath . '|' . $salt)) . '/' . $lastPathPart;
     }
 
@@ -63,7 +71,8 @@ class VendorAssetUtility
             if (file_exists($folder)) {
                 throw new DigitalMarketingFrameworkException(sprintf('Asset target folder "%s" seems to be a file.', $folder));
             }
-            mkdir($folder, recursive:true);
+
+            mkdir($folder, recursive: true);
         }
     }
 
@@ -95,6 +104,7 @@ class VendorAssetUtility
         if ($hash !== '') {
             $url .= '?' . $hash;
         }
+
         return $url;
     }
 
@@ -103,11 +113,13 @@ class VendorAssetUtility
         if (!preg_match('/^[-_a-zA-Z0-9]+\\/[-_a-zA-Z0-9]+$/', $composerName)) {
             throw new DigitalMarketingFrameworkException(sprintf('composer name "%s" is invalid', $composerName));
         }
+
         $source = realpath(static::getSourcePath($composerName, $path));
         if ($source === false) {
             throw new DigitalMarketingFrameworkException(sprintf('source "%s" file does not seem to exist in package "%s"', $path, $composerName));
         }
-        if (strpos($source, static::getSourcePath($composerName, '')) !== 0) {
+
+        if (!str_starts_with($source, static::getSourcePath($composerName, ''))) {
             throw new DigitalMarketingFrameworkException(sprintf('asset path "%s" seems to lead out of package assets folder', $path));
         }
     }
@@ -117,6 +129,7 @@ class VendorAssetUtility
         $path = ltrim($path, '/');
         static::checkFile($composerName, $path);
         static::copyFile($composerName, $path);
+
         return static::getPublicUrl($composerName, $path);
     }
 }

@@ -14,7 +14,6 @@ use TYPO3\CMS\Form\Controller\AbstractBackendController as OriginalAbstractBacke
 
 class AbstractBackendController extends OriginalAbstractBackendController
 {
-
     public function __construct(
         protected ModuleTemplateFactory $moduleTemplateFactory,
         protected IconFactory $iconFactory,
@@ -24,12 +23,13 @@ class AbstractBackendController extends OriginalAbstractBackendController
     protected function backendHtmlResponse(string $title = 'Digital Marketing'): ResponseInterface
     {
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
-        $this->initializeModuleTemplate($moduleTemplate, $this->request);
+        $this->initializeModuleTemplate($moduleTemplate);
 
         $moduleTemplate->setModuleClass($this->request->getPluginName() . '_' . $this->request->getControllerName());
         $moduleTemplate->setFlashMessageQueue($this->getFlashMessageQueue());
-        $moduleTemplate->setTitle($this->getLanguageService()->sL($title) ?: $title);
+        $moduleTemplate->setTitle($this->getLanguageService()->sL($title));
         $moduleTemplate->setContent($this->view->render());
+
         return $this->htmlResponse($moduleTemplate->renderContent());
     }
 
@@ -55,11 +55,12 @@ class AbstractBackendController extends OriginalAbstractBackendController
 
         foreach ($sections as $section) {
             $menuItem = $sectionMenu->makeMenuItem();
-            $menuItem->setHref((string)$this->uriBuilder->uriFor(actionName: $section['action'], controllerName: $section['controller']));
+            $menuItem->setHref($this->uriBuilder->uriFor(actionName: $section['action'], controllerName: $section['controller']));
             $menuItem->setTitle($section['title']);
             if ($this->sectionIsActive($section)) {
                 $menuItem->setActive(true);
             }
+
             $sectionMenu->addMenuItem($menuItem);
         }
     }
@@ -89,7 +90,7 @@ class AbstractBackendController extends OriginalAbstractBackendController
     protected function initializeModuleTemplate(ModuleTemplate $moduleTemplate): void
     {
         $sectionMenu = $moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
-        $this->buildSectionmenu($sectionMenu);
+        $this->buildSectionMenu($sectionMenu);
         $moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->addMenu($sectionMenu);
 
         $buttonBar = $moduleTemplate->getDocHeaderComponent()->getButtonBar();

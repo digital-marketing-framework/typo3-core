@@ -29,11 +29,18 @@ class ConfigurationDocumentMetaDataUpdateEvent
         return $this->configurationSchema;
     }
 
+    /**
+     * @return array<string,mixed>
+     */
     public function getDefaultConfiguration(): array
     {
+        /** @var array<string,mixed> */
         return $this->configurationSchema->getDefaultValue();
     }
 
+    /**
+     * @return array{valueSets:array<string,array<string,string>>,types:array<string,array<string,mixed>>,schema:array<string,mixed>}
+     */
     public function getConfigurationSchema(): array
     {
         return $this->configurationSchema->toArray();

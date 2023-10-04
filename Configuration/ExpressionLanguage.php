@@ -1,7 +1,9 @@
 <?php
 
+use DigitalMarketingFramework\Typo3\Core\ExpressionLanguage\TypoScriptConditionProvider;
+
 return [
     'typoscript' => [
-        \DigitalMarketingFramework\Typo3\Core\ExpressionLanguage\TypoScriptConditionProvider::class,
+        TypoScriptConditionProvider::class,
     ],
 ];

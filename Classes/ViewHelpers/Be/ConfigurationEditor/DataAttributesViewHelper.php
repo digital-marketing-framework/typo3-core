@@ -16,6 +16,9 @@ class DataAttributesViewHelper extends AbstractBackendViewHelper
         $this->registerArgument('globalDocument', 'bool', 'Global document', false, false);
     }
 
+    /**
+     * @return array<string,string>
+     */
     public function render(): array
     {
         return ConfigurationEditorRenderUtility::getTextAreaDataAttributes(

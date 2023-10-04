@@ -6,6 +6,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 abstract class StaticConfigurationDocumentEventListener extends AbstractStaticConfigurationDocumentEventListener
 {
+    /**
+     * @var string
+     */
     protected const PATH_PATTERN = 'EXT:%s/Resources/Private/ConfigurationDocuments';
 
     abstract protected function getExtensionKey(): string;
@@ -13,6 +16,7 @@ abstract class StaticConfigurationDocumentEventListener extends AbstractStaticCo
     protected function getFolderPath(): string
     {
         $path = sprintf(static::PATH_PATTERN, $this->getExtensionKey());
+
         return GeneralUtility::getFileAbsFileName($path);
     }
 
@@ -21,18 +25,25 @@ abstract class StaticConfigurationDocumentEventListener extends AbstractStaticCo
         $results = [];
         $path = $this->getFolderPath();
         if (is_dir($path)) {
-            $files = scandir($path) ?: [];
+            $files = scandir($path);
+            if ($files === false) {
+                $files = [];
+            }
+
             foreach ($files as $file) {
                 if ($file === '.' || $file === '..') {
                     continue;
                 }
+
                 $filePath = sprintf('%s/%s', $path, $file);
                 if (!is_file($filePath)) {
                     continue;
                 }
+
                 $results[] = sprintf(static::PATH_PATTERN . '/%s', $this->getExtensionKey(), $file);
             }
         }
+
         return $results;
     }
 

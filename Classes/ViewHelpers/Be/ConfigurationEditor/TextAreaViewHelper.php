@@ -38,6 +38,7 @@ class TextAreaViewHelper extends AbstractBackendViewHelper
         foreach ($additionalAttributes as $name => $value) {
             $attributeMarkupList[$name] = sprintf('%s="%s"', $name, $value);
         }
+
         return '<textarea ' . implode(' ', $attributeMarkupList) . '></textarea>';
     }
 }

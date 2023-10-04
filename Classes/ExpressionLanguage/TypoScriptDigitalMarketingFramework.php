@@ -6,7 +6,7 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 class TypoScriptDigitalMarketingFramework
 {
-    public function extensionLoaded($extKey)
+    public function extensionLoaded(string $extKey): bool
     {
         return ExtensionManagementUtility::isLoaded($extKey);
     }

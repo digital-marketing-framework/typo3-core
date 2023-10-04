@@ -1,65 +1,187 @@
 {
-  "name": "digital-marketing-framework/typo3-core",
-  "type": "typo3-cms-extension",
-  "description": "Digital Marketing Framework - Core",
-  "license": "GPL-2.0-or-later",
-  "keywords": [
-    "TYPO3",
-    "extension",
-    "marketing",
-    "framework",
-    "data",
-    "relay",
-    "distribution",
-    "distributor",
-    "collector"
-  ],
-  "homepage": "https://www.mediatis.de",
-  "authors": [
-    {
-      "email": "info@mediatis.de",
-      "homepage": "https://www.mediatis.de",
-      "name": "Mediatis AG",
-      "role": "Developer"
+    "name": "digital-marketing-framework/typo3-core",
+    "description": "Digital Marketing Framework - Core",
+    "license": "GPL-2.0-or-later",
+    "type": "typo3-cms-extension",
+    "keywords": [
+        "TYPO3",
+        "extension",
+        "marketing",
+        "framework",
+        "data",
+        "relay",
+        "distribution",
+        "distributor",
+        "collector"
+    ],
+    "authors": [
+        {
+            "name": "Mediatis AG",
+            "email": "info@mediatis.de",
+            "homepage": "https://www.mediatis.de",
+            "role": "Developer"
+        }
+    ],
+    "homepage": "https://www.mediatis.de",
+    "require": {
+        "php": "^8.1",
+        "digital-marketing-framework/core": "^1.0",
+        "typo3/cms-core": "^11.5 || ^12.4",
+        "typo3/cms-form": "^11.5 || ^12.4"
+    },
+    "require-dev": {
+        "mediatis/typo3-coding-standards": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "DigitalMarketingFramework\\Typo3\\Core\\": "Classes"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DigitalMarketingFramework\\Typo3\\Core\\Tests\\": "Tests"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "typo3/cms-composer-installers": true,
+            "typo3/class-alias-loader": true,
+            "ergebnis/composer-normalize": true,
+            "phpstan/extension-installer": true
+        },
+        "bin-dir": ".Build/bin",
+        "vendor-dir": ".Build/vendor"
+    },
+    "extra": {
+        "typo3/cms": {
+            "app-dir": ".Build",
+            "extension-key": "digitalmarketingframework",
+            "web-dir": ".Build/Web"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "@link-extension"
+        ],
+        "ci": [
+            "@ci:static"
+        ],
+        "ci:composer:normalize": "@composer normalize --no-check-lock --dry-run",
+        "ci:composer:psr-verify": "@composer dumpautoload --optimize --strict-psr",
+        "ci:coverage": [
+            "@ci:coverage:unit",
+            "@ci:coverage:functional"
+        ],
+        "ci:coverage:functional": [
+            "@coverage:create-directories",
+            ".Build/bin/phpunit -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml --whitelist Classes --coverage-php=.Build/coverage/functional.cov Tests/Functional"
+        ],
+        "ci:coverage:merge": [
+            "@coverage:create-directories",
+            "@php tools/phpcov merge --clover=./.Build/logs/clover.xml ./.Build/coverage/"
+        ],
+        "ci:coverage:unit": [
+            "@coverage:create-directories",
+            ".Build/bin/phpunit -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml --whitelist Classes --coverage-php=.Build/coverage/unit.cov Tests/Unit"
+        ],
+        "ci:dynamic": [
+            "@ci:tests"
+        ],
+        "ci:json:lint": "find . ! -path '*.Build/*' ! -path '*node_modules/*' -name '*.json' | xargs -r php .Build/bin/jsonlint -q",
+        "ci:php": [
+            "@ci:php:rector",
+            "@ci:php:cs-fixer",
+            "@ci:php:lint",
+            "@ci:php:stan"
+        ],
+        "ci:php:cs-fixer": "php-cs-fixer fix --config .php-cs-fixer.php -v --dry-run --using-cache no --diff",
+        "ci:php:lint": "find .*.php *.php Classes Configuration Tests -name '*.php' -print0 | xargs -r -0 -n 1 -P 4 php -l",
+        "ci:php:rector": "rector --dry-run",
+        "ci:php:stan": "phpstan --no-progress",
+        "ci:static": [
+            "@ci:composer:normalize",
+            "@ci:json:lint",
+            "@ci:php:cs-fixer",
+            "@ci:php:lint",
+            "@ci:php:stan",
+            "@ci:yaml:lint"
+        ],
+        "ci:tests": [
+            "@ci:tests:unit",
+            "@ci:tests:functional"
+        ],
+        "ci:tests:functional": "find 'Tests/Functional' -wholename '*Test.php' | parallel --gnu 'echo; echo \"Running functional test suite {}\"; .Build/bin/phpunit -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml {}';",
+        "ci:tests:unit": ".Build/bin/phpunit -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml Tests/Unit",
+        "ci:yaml:lint": "find . ! -path '*.Build/*' ! -path '*node_modules/*' -regextype egrep -regex '.*.ya?ml$' | xargs -r php ./.Build/bin/yaml-lint",
+        "coverage:create-directories": "mkdir -p .Build/logs .Build/coverage",
+        "docs:generate": [
+            "@docs:generate:pullimage",
+            "docker run --rm ghcr.io/t3docs/render-documentation show-shell-commands > tempfile.sh; echo 'dockrun_t3rd makehtml' >> tempfile.sh; bash tempfile.sh; rm tempfile.sh"
+        ],
+        "docs:generate:pullimage": [
+            "docker pull ghcr.io/t3docs/render-documentation",
+            "docker tag ghcr.io/t3docs/render-documentation t3docs/render-documentation"
+        ],
+        "fix:composer:normalize": "@composer normalize --no-check-lock",
+        "fix:php": [
+            "@fix:php:rector",
+            "@fix:php:cs"
+        ],
+        "fix:php:cs": "php-cs-fixer fix --config .php-cs-fixer.php",
+        "fix:php:rector": "rector",
+        "link-extension": [
+            "@php -r 'is_dir($extFolder=__DIR__.\"/.Build/Web/typo3conf/ext/\") || mkdir($extFolder, 0777, true);'",
+            "@php -r 'file_exists($extFolder=__DIR__.\"/.Build/Web/typo3conf/ext/digitalmarketingframework\") || symlink(__DIR__,$extFolder);'"
+        ],
+        "phpstan:baseline": ".Build/bin/phpstan  --generate-baseline=.phpstan/phpstan-baseline.neon",
+        "prepare-release": [
+            "rm .gitignore",
+            "rm -rf .Build",
+            "rm -rf .ddev",
+            "rm -rf .github",
+            "rm -rf .gitlab",
+            "rm -rf Build",
+            "rm -rf Tests",
+            "rm -rf tools",
+            "rm .editorconfig",
+            "rm .gitattributes",
+            "rm .php-cs-fixer.php",
+            "rm .eslintignore",
+            "rm .eslintrc.json",
+            "rm .prettierrc.js",
+            "rm package.json",
+            "rm stylelint.config.js",
+            "rm phive.xml",
+            "rm phpstan-baseline.neon",
+            "rm phpstan.neon",
+            "rm phpcs.xml"
+        ]
+    },
+    "scripts-descriptions": {
+        "ci": "Runs all dynamic and static code checks.",
+        "ci:composer:normalize": "Checks the composer.json.",
+        "ci:composer:psr-verify": "Verifies PSR-4 namespace correctness.",
+        "ci:coverage:functional": "Generates the code coverage report for functional tests.",
+        "ci:coverage:merge": "Merges the code coverage reports for unit and functional tests.",
+        "ci:coverage:unit": "Generates the code coverage report for unit tests.",
+        "ci:dynamic": "Runs all PHPUnit tests (unit and functional).",
+        "ci:json:lint": "Lints the JSON files.",
+        "ci:php": "Runs all static checks for the PHP files.",
+        "ci:php:cs-fixer": "Checks the code style with the PHP Coding Standards Fixer (PHP-CS-Fixer).",
+        "ci:php:lint": "Lints the PHP files for syntax errors.",
+        "ci:php:rector": "Checks the code style with the TYPO3 rector (typo3-rector).",
+        "ci:php:stan": "Checks the PHP types using PHPStan.",
+        "ci:static": "Runs all static code checks (syntax, style, types).",
+        "ci:tests": "Runs all PHPUnit tests (unit and functional).",
+        "ci:tests:functional": "Runs the functional tests.",
+        "ci:tests:unit": "Runs the unit tests.",
+        "ci:yaml:lint": "Lints the YAML files.",
+        "coverage:create-directories": "Creates the directories needed for recording and merging the code coverage reports.",
+        "docs:generate": "Renders the extension ReST documentation.",
+        "fix:composer:normalize": "Normalizes composer.json file content.",
+        "fix:php": "Runs all fixers for the PHP code.",
+        "fix:php:cs": "Fixes the code style with PHP-CS-Fixer.",
+        "phpstan:baseline": "Updates the PHPStan baseline file to match the code.",
+        "prepare-release": "Removes development-only files in preparation of a TER release."
     }
-  ],
-  "require": {
-    "php": "^8.1",
-    "typo3/cms-core": "^11.5 || ^12.4",
-    "digital-marketing-framework/core": "^1.0"
-  },
-  "require-dev": {
-    "nimut/testing-framework": "^6.0",
-    "typo3/coding-standards": "^0.5.2"
-  },
-  "autoload": {
-    "psr-4": {
-      "DigitalMarketingFramework\\Typo3\\Core\\": "Classes"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "DigitalMarketingFramework\\Typo3\\Core\\Tests\\": "Tests"
-    }
-  },
-  "config": {
-    "vendor-dir": ".Build/vendor",
-    "bin-dir": ".Build/bin",
-    "allow-plugins": {
-      "typo3/cms-composer-installers": true,
-      "typo3/class-alias-loader": true
-    }
-  },
-  "scripts": {
-    "link-extension": [
-      "mkdir -p .Build/Web/typo3conf/ext/",
-      "[ -L .Build/Web/typo3conf/ext/digitalmarketingframework ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/digitalmarketingframework"
-    ]
-  },
-  "extra": {
-    "typo3/cms": {
-      "web-dir": ".Build/Web",
-      "extension-key": "digitalmarketingframework"
-    }
-  }
 }

@@ -24,20 +24,25 @@ class ConfigurationDocumentAjaxController
         $this->configurationDocumentManager = $registry->getConfigurationDocumentManager();
     }
 
+    /**
+     * @param array<mixed> $result
+     */
     protected function jsonResponse(array $result): ResponseInterface
     {
         $response = $this->responseFactory->createResponse()
             ->withHeader('Content-Type', 'application/json; charset=utf-8');
-        $response->getBody()->write(json_encode($result, JSON_PRETTY_PRINT|JSON_THROW_ON_ERROR));
+        $response->getBody()->write(json_encode($result, JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR));
+
         return $response;
     }
 
     protected function getConfigurationDocumentMetaData(): ConfigurationDocumentMetaDataUpdateEvent
     {
-        if ($this->configurationDocumentMetaData === null) {
+        if (!$this->configurationDocumentMetaData instanceof ConfigurationDocumentMetaDataUpdateEvent) {
             $this->configurationDocumentMetaData = new ConfigurationDocumentMetaDataUpdateEvent();
             $this->eventDispatcher->dispatch($this->configurationDocumentMetaData);
         }
+
         return $this->configurationDocumentMetaData;
     }
 
@@ -51,20 +56,22 @@ class ConfigurationDocumentAjaxController
         $schemaDocument = $this->getConfigurationDocumentMetaData()->getSchemaDocument();
         $defaults = $this->getConfigurationDocumentMetaData()->getDefaultConfiguration();
         $schemaDocument->preSaveDataTransform($defaults);
+
         return $this->jsonResponse($defaults);
     }
 
     public function mergeAction(ServerRequestInterface $request): ResponseInterface
     {
         $schemaDocument = $this->getConfigurationDocumentMetaData()->getSchemaDocument();
-        $document = json_decode((string)$request->getBody(), true)['document'] ?? '';
+        $document = json_decode((string)$request->getBody(), true, 512, JSON_THROW_ON_ERROR)['document'] ?? '';
         $configuration = $this->configurationDocumentManager->getParser()->parseDocument($document);
 
         $mergedConfiguration = $this->configurationDocumentManager->mergeConfiguration($configuration);
-        $mergedInheritedConfiguration = $this->configurationDocumentManager->mergeConfiguration($configuration, inheritedConfigurationOnly:true);
+        $mergedInheritedConfiguration = $this->configurationDocumentManager->mergeConfiguration($configuration, inheritedConfigurationOnly: true);
 
         $schemaDocument->preSaveDataTransform($mergedConfiguration);
         $schemaDocument->preSaveDataTransform($mergedInheritedConfiguration);
+
         return $this->jsonResponse([
             'configuration' => $mergedConfiguration,
             'inheritedConfiguration' => $mergedInheritedConfiguration,
@@ -74,16 +81,17 @@ class ConfigurationDocumentAjaxController
     public function splitAction(ServerRequestInterface $request): ResponseInterface
     {
         $schemaDocument = $this->getConfigurationDocumentMetaData()->getSchemaDocument();
-        $mergedConfiguration = json_decode((string)$request->getBody(), true);
+        $mergedConfiguration = json_decode((string)$request->getBody(), true, 512, JSON_THROW_ON_ERROR);
         $splitConfiguration = $this->configurationDocumentManager->splitConfiguration($mergedConfiguration);
         $splitDocument = $this->configurationDocumentManager->getParser()->produceDocument($splitConfiguration, $schemaDocument);
+
         return $this->jsonResponse(['document' => $splitDocument]);
     }
 
     public function updateIncludesAction(ServerRequestInterface $request): ResponseInterface
     {
         $schemaDocument = $this->getConfigurationDocumentMetaData()->getSchemaDocument();
-        $data = json_decode((string)$request->getBody(), true);
+        $data = json_decode((string)$request->getBody(), true, 512, JSON_THROW_ON_ERROR);
 
         $mergedConfiguration = $this->configurationDocumentManager->processIncludesChange(
             $data['referenceData'],
@@ -93,11 +101,12 @@ class ConfigurationDocumentAjaxController
         $mergedInheritedConfiguration = $this->configurationDocumentManager->processIncludesChange(
             $data['referenceData'],
             $data['newData'],
-            inheritedConfigurationOnly:true
+            inheritedConfigurationOnly: true
         );
 
         $schemaDocument->preSaveDataTransform($mergedConfiguration);
         $schemaDocument->preSaveDataTransform($mergedInheritedConfiguration);
+
         return $this->jsonResponse([
             'configuration' => $mergedConfiguration,
             'inheritedConfiguration' => $mergedInheritedConfiguration,

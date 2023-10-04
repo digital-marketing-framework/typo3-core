@@ -9,11 +9,12 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 class VendorAssetViewHelper extends AbstractViewHelper
 {
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
+        parent::initializeArguments();
         $this->registerArgument('package', 'string', 'composer package name');
         $this->registerArgument('path', 'string', 'package path to asset');
-        $this->registerArgument('returnUrl', 'bool', 'return the url of the resulting asset');
+        $this->registerArgument('returnUrl', 'bool', 'return the url of the resulting asset', false, true);
     }
 
     public static function renderStatic(
@@ -22,9 +23,10 @@ class VendorAssetViewHelper extends AbstractViewHelper
         RenderingContextInterface $renderingContext
     ): string {
         $url = VendorAssetUtility::makeVendorAssetAvailable($arguments['package'], $arguments['path']);
-        if ($arguments['returnUrl'] ?? true) {
+        if ((bool)$arguments['returnUrl']) {
             return $url;
         }
+
         return '';
     }
 }

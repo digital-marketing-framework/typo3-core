@@ -2,18 +2,15 @@
 
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
-defined('TYPO3') or die();
+defined('TYPO3') || die();
 
-call_user_func(function()
-{
+call_user_func(static function () {
     $extensionKey = 'digitalmarketingframework';
-
     ExtensionManagementUtility::addTypoScript(
         $extensionKey,
         'constants',
         "@import 'EXT:digitalmarketingframework/Configuration/TypoScript/constants.typoscript'"
     );
-
     ExtensionManagementUtility::addTypoScript(
         $extensionKey,
         'setup',

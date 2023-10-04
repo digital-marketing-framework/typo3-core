@@ -7,11 +7,14 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ConfigurationEditorRenderUtility
 {
+    /**
+     * @return array<string,string>
+     */
     public static function getTextAreaDataAttributes(bool $ready, string $mode, bool $readonly, bool $globalDocument): array
     {
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
 
-        $attributes = [
+        return [
             'app' => $ready ? 'true' : 'false',
             'mode' => $mode,
             'readonly' => $readonly ? 'true' : 'false',
@@ -23,7 +26,5 @@ class ConfigurationEditorRenderUtility
             'url-split' => (string)$uriBuilder->buildUriFromRoute('ajax_digitalmarketingframework_configuration_split'),
             'url-update-includes' => (string)$uriBuilder->buildUriFromRoute('ajax_digitalmarketingframework_configuration_update_includes'),
         ];
-
-        return $attributes;
     }
 }

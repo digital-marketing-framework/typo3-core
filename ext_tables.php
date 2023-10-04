@@ -12,6 +12,7 @@ defined('TYPO3') || die();
     $eventDispatcher = GeneralUtility::makeInstance(EventDispatcher::class);
     $controllerEvent = new BackendControllerUpdateEvent();
     $controllerEvent->addControllerActions(BackendOverviewController::class, ['show']);
+
     $eventDispatcher->dispatch($controllerEvent);
 
     ExtensionUtility::registerModule(

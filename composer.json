@@ -1,18 +1,16 @@
 {
     "name": "digital-marketing-framework/typo3-core",
-    "description": "Digital Marketing Framework - Core",
+    "description": "Digital Marketing Framework is a data distribution and collection framework.",
     "license": "GPL-2.0-or-later",
     "type": "typo3-cms-extension",
     "keywords": [
         "TYPO3",
-        "extension",
         "marketing",
         "framework",
         "data",
         "relay",
         "distribution",
-        "distributor",
-        "collector"
+        "distributor"
     ],
     "authors": [
         {

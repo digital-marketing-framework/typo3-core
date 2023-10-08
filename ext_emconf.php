@@ -2,7 +2,7 @@
 
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Digital Marketing Framework - Core',
-    'description' => 'Base library for connecting CMS and CRM',
+    'description' => 'Digital Marketing Framework is a data distribution and collection framework.',
     'category' => 'be',
     'author_email' => 'info@mediatis.de',
     'author_company' => 'Mediatis AG',

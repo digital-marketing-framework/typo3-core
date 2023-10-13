@@ -16,15 +16,15 @@ defined('TYPO3') || die();
     $eventDispatcher->dispatch($controllerEvent);
 
     ExtensionUtility::registerModule(
-        'DigitalMarketingFramework',
+        'DmfCore',
         'web',
         'manager',
         '',
         $controllerEvent->getControllersAndActions(true),
         [
             'access' => 'user,group',
-            'icon'   => 'EXT:digitalmarketingframework/Resources/Public/Icons/Extension.svg',
-            'labels' => 'LLL:EXT:digitalmarketingframework/Resources/Private/Language/locallang_manager.xlf',
+            'icon'   => 'EXT:dmf_core/Resources/Public/Icons/Extension.svg',
+            'labels' => 'LLL:EXT:dmf_core/Resources/Private/Language/locallang_manager.xlf',
             'navigationComponentId' => '',
             'inheritNavigationComponentFromMainModule' => false,
         ]

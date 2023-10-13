@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="EXT:digitalmarketingframework/Resources/Private/Language/locallang_mod" date="2022-03-20T16:18:56Z" product-name="digitalmarketingframework">
+	<file source-language="en" datatype="plaintext" original="EXT:dmf_core/Resources/Private/Language/locallang_mod" date="2022-03-20T16:18:56Z" product-name="dmf_core">
 		<header/>
 		<body>
 			<trans-unit id="mlang_labels_tabdescr" resname="mlang_labels_tabdescr">

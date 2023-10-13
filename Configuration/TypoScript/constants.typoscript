@@ -1,9 +1,9 @@
 
-module.tx_digitalmarketingframework_web_digitalmarketingframeworkmanager {
+module.tx_dmfcore_web_dmfcoremanager {
     view {
-        templateRootPath = EXT:digitalmarketingframework/Resources/Private/Backend/Templates/
-        partialRootPath = EXT:digitalmarketingframework/Resources/Private/Backend/Partials/
-        layoutRootPath = EXT:digitalmarketingframework/Resources/Private/Backend/Layouts/
+        templateRootPath = EXT:dmf_core/Resources/Private/Backend/Templates/
+        partialRootPath = EXT:dmf_core/Resources/Private/Backend/Partials/
+        layoutRootPath = EXT:dmf_core/Resources/Private/Backend/Layouts/
     }
     settings {
     }

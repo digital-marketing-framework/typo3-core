@@ -10,7 +10,7 @@ abstract class FileConfigurationDocumentStorage extends OriginalFileConfiguratio
     /**
      * @var string
      */
-    protected const ACCESS_FILE_PATH = 'EXT:digitalmarketingframework/Resources/Private/StaticTemplates/.htaccess';
+    protected const ACCESS_FILE_PATH = 'EXT:dmf_core/Resources/Private/StaticTemplates/.htaccess';
 
     public function initalizeConfigurationDocumentStorage(): void
     {

@@ -6,6 +6,6 @@ class CoreStaticConfigurationDocumentEventListener extends StaticConfigurationDo
 {
     protected function getExtensionKey(): string
     {
-        return 'digitalmarketingframework';
+        return 'dmf_core';
     }
 }

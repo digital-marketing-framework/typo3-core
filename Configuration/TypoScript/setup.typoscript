@@ -1,12 +1,12 @@
 
-module.tx_digitalmarketingframework_web_digitalmarketingframeworkmanager {
+module.tx_dmfcore_web_dmfcoremanager {
     view {
-        templateRootPaths.0 = EXT:digitalmarketingframework/Resources/Private/Backend/Templates/
-        templateRootPaths.1 = {$module.tx_digitalmarketingframework_web_digitalmarketingframeworkmanager.view.templateRootPath}
-        partialRootPaths.0 = EXT:digitalmarketingframework/Resources/Private/Backend/Partials/
-        partialRootPaths.1 = {$module.tx_digitalmarketingframework_web_digitalmarketingframeworkmanager.view.partialRootPath}
-        layoutRootPaths.0 = EXT:digitalmarketingframework/Resources/Private/Backend/Layouts/
-        layoutRootPaths.1 = {$module.tx_digitalmarketingframework_web_digitalmarketingframeworkmanager.view.layoutRootPath}
+        templateRootPaths.0 = EXT:dmf_core/Resources/Private/Backend/Templates/
+        templateRootPaths.1 = {$module.tx_dmfcore_web_dmfcoremanager.view.templateRootPath}
+        partialRootPaths.0 = EXT:dmf_core/Resources/Private/Backend/Partials/
+        partialRootPaths.1 = {$module.tx_dmfcore_web_dmfcoremanager.view.partialRootPath}
+        layoutRootPaths.0 = EXT:dmf_core/Resources/Private/Backend/Layouts/
+        layoutRootPaths.1 = {$module.tx_dmfcore_web_dmfcoremanager.view.layoutRootPath}
     }
     settings {
       sections {

@@ -68,8 +68,8 @@ class AbstractBackendController extends OriginalAbstractBackendController
     protected function addShortcutButton(ButtonBar $buttonBar): void
     {
         $shortcutButton = $buttonBar->makeShortcutButton()
-            ->setRouteIdentifier('web_DigitalMarketingFrameworkManager')
-            ->setDisplayName($this->getLanguageService()->sL('LLL:EXT:digitalmarketingframework/Resources/Private/Language/Database.xlf:module.shortcut_name'));
+            ->setRouteIdentifier('web_DmfCoreManager')
+            ->setDisplayName($this->getLanguageService()->sL('LLL:EXT:dmf_core/Resources/Private/Language/Database.xlf:module.shortcut_name'));
         $buttonBar->addButton($shortcutButton, ButtonBar::BUTTON_POSITION_RIGHT);
     }
 

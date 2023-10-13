@@ -17,6 +17,7 @@ class GlobalConfiguration extends DefaultGlobalConfiguration
     public function get(string $key = '', mixed $default = null): mixed
     {
         try {
+            $key = $this->packageAliases->resolveAlias($key);
             return $this->extensionConfiguration->get($key);
         } catch (ExtensionConfigurationExtensionNotConfiguredException|ExtensionConfigurationPathDoesNotExistException) {
             return parent::get($key, $default);

@@ -23,7 +23,7 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
         protected ResourceFactory $resourceFactory,
         protected EventDispatcherInterface $eventDispatcher,
     ) {
-        parent::__construct(new CoreInitialization());
+        parent::__construct(new CoreInitialization('dmf_core'));
     }
 
     protected function initGlobalConfiguration(RegistryInterface $registry): void

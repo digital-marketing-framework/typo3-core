@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="en" datatype="plaintext" original="EXT:digitalmarketingframework/Resources/Private/Language/Database.xlf" date="2016-08-21T20:15:32Z" product-name="digitalmarketingframework">
+    <file source-language="en" datatype="plaintext" original="EXT:dmf_core/Resources/Private/Language/Database.xlf" date="2016-08-21T20:15:32Z" product-name="dmf_core">
         <header/>
         <body>
             <trans-unit id="module.shortcut_name" resname="module.shortcut_name" xml:space="preserve">

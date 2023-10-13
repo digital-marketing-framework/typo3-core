@@ -11,15 +11,15 @@ $controllerEvent->addControllerActions(BackendOverviewController::class, ['show'
 $eventDispatcher->dispatch($controllerEvent);
 
 return [
-    'web_DigitalMarketingFrameworkManager' => [
+    'web_DmfCoreManager' => [
         'parent' => 'web',
         'inheritNavigationComponentFromMainModule' => false,
         'access' => 'admin',
         'workspaces' => 'live',
-        'icon'   => 'EXT:digitalmarketingframework/Resources/Public/Icons/Extension.svg',
-        'path' => '/module/web/DigitalMarketingFrameworkManager',
-        'labels' => 'LLL:EXT:digitalmarketingframework/Resources/Private/Language/locallang_manager.xlf',
-        'extensionName' => 'DigitalMarketingFramework',
+        'icon'   => 'EXT:dmf_core/Resources/Public/Icons/Extension.svg',
+        'path' => '/module/web/DmfCoreManager',
+        'labels' => 'LLL:EXT:dmf_core/Resources/Private/Language/locallang_manager.xlf',
+        'extensionName' => 'DmfCore',
         'controllerActions' => $controllerEvent->getControllersAndActions(),
     ],
 ];

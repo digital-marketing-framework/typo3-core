@@ -31,7 +31,7 @@ abstract class StaticConfigurationDocumentEventListener extends AbstractStaticCo
             }
 
             foreach ($files as $file) {
-                if ($file === '.' || $file === '..') {
+                if ($file === '.' || $file === '..' || $file === '.gitkeep') {
                     continue;
                 }
 

@@ -4,6 +4,7 @@ namespace DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage;
 
 use DigitalMarketingFramework\Core\ConfigurationDocument\Storage\FileConfigurationDocumentStorage as OriginalFileConfigurationDocumentStorage;
 use Exception;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 abstract class FileConfigurationDocumentStorage extends OriginalFileConfigurationDocumentStorage
 {
@@ -18,7 +19,8 @@ abstract class FileConfigurationDocumentStorage extends OriginalFileConfiguratio
         $accessFileIdentifier = $this->getStorageFolderIdentifier() . '/.htaccess';
         if (!$this->fileStorage->fileExists($accessFileIdentifier)) {
             try {
-                $accessFileContents = $this->fileStorage->getFileContents(static::ACCESS_FILE_PATH);
+                $accessFileSourcePath = GeneralUtility::getFileAbsFileName(static::ACCESS_FILE_PATH);
+                $accessFileContents = file_get_contents($accessFileSourcePath);
                 $this->fileStorage->putFileContents($accessFileIdentifier, $accessFileContents);
             } catch (Exception) {
                 $this->logger->warning(sprintf('Unable to create .htaccess file "%s"', $accessFileIdentifier));

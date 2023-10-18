@@ -3,6 +3,7 @@
 namespace DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\EventListener;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 
 abstract class StaticConfigurationDocumentEventListener extends AbstractStaticConfigurationDocumentEventListener
 {
@@ -31,7 +32,7 @@ abstract class StaticConfigurationDocumentEventListener extends AbstractStaticCo
             }
 
             foreach ($files as $file) {
-                if ($file === '.' || $file === '..' || $file === '.gitkeep') {
+                if ($file === '.' || $file === '..' || strtolower($file) === '.gitkeep') {
                     continue;
                 }
 
@@ -49,8 +50,13 @@ abstract class StaticConfigurationDocumentEventListener extends AbstractStaticCo
 
     protected function getDocument(string $documentIdentifier, bool $metaDataOnly = false): ?string
     {
-        // NOTE: the normal identifiers can be loaded without the need for custom development
-        // example: EXT:ext_key/Resources/Private/ConfigurationDocuments/custom_name.config.yaml
+        if (PathUtility::isExtensionPath($documentIdentifier)) {
+            $absoluteFilePath = GeneralUtility::getFileAbsFileName($documentIdentifier);
+            if ($absoluteFilePath !== '') {
+                return file_get_contents($absoluteFilePath);
+            }
+        }
+
         return null;
     }
 }

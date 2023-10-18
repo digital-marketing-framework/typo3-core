@@ -11,8 +11,6 @@ use TYPO3\CMS\Core\Resource\Exception\ResourceDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\PathUtility;
 
 class FileStorage implements FileStorageInterface, LoggerAwareInterface
 {
@@ -57,17 +55,6 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
     public function getFileContents(string $fileIdentifier): ?string
     {
         try {
-            if (PathUtility::isExtensionPath($fileIdentifier)) {
-                $absoluteFilePath = GeneralUtility::getFileAbsFileName($fileIdentifier);
-                if ($absoluteFilePath === '') {
-                    $this->logger->warning(sprintf('File %s does not seem to exist.', $fileIdentifier));
-
-                    return null;
-                }
-
-                return file_get_contents($absoluteFilePath);
-            }
-
             $file = $this->getFile($fileIdentifier);
             if (!$file instanceof File) {
                 $this->logger->warning(sprintf('File %s does not seem to exist.', $fileIdentifier));
@@ -123,14 +110,6 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
 
     public function fileIsReadOnly(string $fileIdentifier): bool
     {
-        if (PathUtility::isExtensionPath($fileIdentifier)) {
-            return true;
-        }
-
-        if (preg_match('/^[^0-9]+:/', $fileIdentifier)) {
-            return true;
-        }
-
         $file = $this->getFile($fileIdentifier);
         if ($file instanceof File) {
             return !$file->checkActionPermission('write');

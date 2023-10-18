@@ -15,8 +15,8 @@ class StaticConfigurationDocumentStorage extends OriginalStaticConfigurationDocu
 {
     use GlobalConfigurationAwareTrait;
 
-    /** @var array<string,mixed> */
-    protected array $storageSettings = [];
+    /** @var ?array<string,mixed> */
+    protected ?array $storageSettings = null;
 
     public function __construct(
         protected EventDispatcherInterface $eventDispatcher,
@@ -28,7 +28,7 @@ class StaticConfigurationDocumentStorage extends OriginalStaticConfigurationDocu
      */
     protected function getStorageSettings(): array
     {
-        if (!isset($this->storageSettings)) {
+        if ($this->storageSettings === null) {
             $this->storageSettings = $this->globalConfiguration->get('core', [])['configurationStorage'] ?? [];
         }
 

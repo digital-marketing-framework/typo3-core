@@ -3,6 +3,6 @@ configurationStorage {
     # cat=Configuration Document Storage; type=string; label=Storage folder for configuration documents
     folder = 0:/digital_marketing_framework/configuration
 
-    # cat=Configuration Document Storage; type=bool; label=Allow saving documents in extension folders
+    # cat=Configuration Document Storage; type=boolean; label=Allow saving documents in extension folders
     allowSaveToExtensionPaths = 0
 }

@@ -6,3 +6,6 @@ configurationStorage {
     # cat=Configuration Document Storage; type=boolean; label=Allow saving documents in extension folders
     allowSaveToExtensionPaths = 0
 }
+
+# cat=Debug; type=boolean; label=Debug Mode
+debug = 0

@@ -10,6 +10,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ConfigurationEditorRenderUtility
 {
+    /**
+     * @return array{debug?:bool}
+     */
     protected static function getExtensionConfiguration(): array
     {
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class);

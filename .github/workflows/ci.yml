@@ -54,10 +54,8 @@ jobs:
           key: "php${{ matrix.php-version }}-typo3${{ matrix.typo3-version }}-composer-${{ hashFiles('**/composer.json') }}"
           path: ~/.cache/composer
           restore-keys: "php${{ matrix.php-version }}-typo3${{ matrix.typo3-version }}-composer-\n"
-      - name: 'Install TYPO3 core'
-        run: 'composer require typo3/cms-core:^${{ matrix.typo3-version }}'
-      - name: 'Install Composer dependencies'
-        run: 'composer install --no-progress'
+      - name: 'Install Composer dependencies with specific TYPO3 core version'
+        run: 'composer require typo3/cms-core:^${{ matrix.typo3-version }} --no-progress'
       - name: 'Run command'
         run: 'composer ci:${{ matrix.command }}'
     strategy:

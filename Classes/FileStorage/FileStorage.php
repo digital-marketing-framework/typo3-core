@@ -7,10 +7,12 @@ use DigitalMarketingFramework\Core\FileStorage\FileStorageInterface;
 use DigitalMarketingFramework\Core\Log\LoggerAwareInterface;
 use DigitalMarketingFramework\Core\Log\LoggerAwareTrait;
 use Exception;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Resource\Exception\ResourceDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class FileStorage implements FileStorageInterface, LoggerAwareInterface
 {
@@ -156,5 +158,22 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
                 throw new DigitalMarketingFrameworkException($e->getMessage(), $e->getCode(), $e);
             }
         }
+    }
+
+    public function getTempPath(): string
+    {
+        return Environment::getVarPath() . '/transient/';
+    }
+
+    public function writeTempFile(string $filePrefix = '', string $fileContent = '', string $fileSuffix = ''):  string|bool
+    {
+
+        $fileIdentifier = GeneralUtility::tempnam($filePrefix, $fileSuffix);
+        if ($this->fileIsWriteable($fileIdentifier)) {
+            $result = file_put_contents($fileIdentifier, $fileContent);
+        } else {
+            $this->logger->warning(sprintf('File %s does not seem to be writeable.', $fileIdentifier));
+        }
+        return $result ? $fileIdentifier : false;
     }
 }

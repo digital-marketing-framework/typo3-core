@@ -169,7 +169,7 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
     {
         $result = null;
         $filePath = GeneralUtility::tempnam($filePrefix, $fileSuffix);
-        if ($this->fileIsWriteable($filePath)) {
+        if (is_writable($filePath)) {
             $result = file_put_contents($filePath, $fileContent);
         } else {
             $this->logger->warning(sprintf('File %s does not seem to be writeable.', $filePath));

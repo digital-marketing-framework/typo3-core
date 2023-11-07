@@ -165,7 +165,7 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
         return Environment::getVarPath() . '/transient/';
     }
 
-    public function writeTempFile(string $filePrefix = '', string $fileContent = '', string $fileSuffix = ''): string|bool
+    public function writeTempFile(string $filePrefix = '', string $fileContent = '', string $fileSuffix = ''): string|false
     {
         $result = null;
         $filePath = GeneralUtility::tempnam($filePrefix, $fileSuffix);

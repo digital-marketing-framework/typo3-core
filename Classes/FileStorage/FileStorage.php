@@ -168,13 +168,13 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
     public function writeTempFile(string $filePrefix = '', string $fileContent = '', string $fileSuffix = ''): string|bool
     {
         $result = null;
-        $fileIdentifier = GeneralUtility::tempnam($filePrefix, $fileSuffix);
-        if ($this->fileIsWriteable($fileIdentifier)) {
-            $result = file_put_contents($fileIdentifier, $fileContent);
+        $filePath = GeneralUtility::tempnam($filePrefix, $fileSuffix);
+        if ($this->fileIsWriteable($filePath)) {
+            $result = file_put_contents($filePath, $fileContent);
         } else {
-            $this->logger->warning(sprintf('File %s does not seem to be writeable.', $fileIdentifier));
+            $this->logger->warning(sprintf('File %s does not seem to be writeable.', $filePath));
         }
 
-        return $result ? $fileIdentifier : false;
+        return $result ? $filePath : false;
     }
 }

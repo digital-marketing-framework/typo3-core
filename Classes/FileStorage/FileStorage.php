@@ -160,6 +160,12 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
         }
     }
 
+    public function getPublicUrl(string $fileIdentifier): string
+    {
+        return $this->getResource($fileIdentifier)->getPublicUrl() ?? '';
+    }
+
+
     public function getTempPath(): string
     {
         return Environment::getVarPath() . '/transient/';

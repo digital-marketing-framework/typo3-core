@@ -10,7 +10,6 @@ use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
-use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 
 class ConfigurationDocumentController extends AbstractBackendController
@@ -32,16 +31,6 @@ class ConfigurationDocumentController extends AbstractBackendController
         $this->schemaDocument = $event->getSchemaDocument();
     }
 
-    /**
-     * @param ?array<string,mixed> $arguments
-     */
-    protected function redirectResponse(string $action, ?array $arguments = null): RedirectResponse
-    {
-        $uri = $this->uriBuilder->reset()->uriFor(actionName: $action, controllerArguments: $arguments);
-
-        return new RedirectResponse($uri);
-    }
-
     protected function addActionButtons(ButtonBar $buttonBar): void
     {
         parent::addActionButtons($buttonBar);
@@ -53,7 +42,7 @@ class ConfigurationDocumentController extends AbstractBackendController
         $documentIdentifier = $this->configurationDocumentManager->getDocumentIdentifierFromBaseName($documentName);
         $this->configurationDocumentManager->createDocument($documentIdentifier, '', $documentName, $this->schemaDocument);
 
-        return $this->redirectResponse('edit', ['documentIdentifier' => $documentIdentifier]);
+        return $this->redirectResponse(action: 'edit', arguments: ['documentIdentifier' => $documentIdentifier]);
     }
 
     public function listAction(): ResponseInterface
@@ -82,13 +71,13 @@ class ConfigurationDocumentController extends AbstractBackendController
     {
         $this->configurationDocumentManager->saveDocument($documentIdentifier, $document, $this->schemaDocument);
 
-        return $this->redirectResponse('edit', ['documentIdentifier' => $documentIdentifier]);
+        return $this->redirectResponse(action: 'edit', arguments: ['documentIdentifier' => $documentIdentifier]);
     }
 
     public function deleteAction(string $documentIdentifier): ResponseInterface
     {
         $this->configurationDocumentManager->deleteDocument($documentIdentifier);
 
-        return $this->redirectResponse('list');
+        return $this->redirectResponse(action: 'list');
     }
 }

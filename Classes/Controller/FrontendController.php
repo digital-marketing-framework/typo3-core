@@ -5,7 +5,6 @@ namespace DigitalMarketingFramework\Typo3\Core\Controller;
 use DigitalMarketingFramework\Typo3\Core\Controller\Event\FrontendJavaScriptSettingsUpdateEvent;
 use DigitalMarketingFramework\Typo3\Core\Controller\Event\FrontendJavaScriptUpdateEvent;
 use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -21,6 +20,7 @@ class FrontendController extends ActionController
     {
         $rootlineObject = GeneralUtility::makeInstance(RootlineUtility::class, $pageId);
         $rootline = $rootlineObject->get();
+
         return $rootline !== [] ? array_pop($rootline)['uid'] : $pageId;
     }
 

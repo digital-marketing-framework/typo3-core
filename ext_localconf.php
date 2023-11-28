@@ -7,14 +7,13 @@ use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 defined('TYPO3') || die();
 
 call_user_func(static function () {
-    $extensionKey = 'dmf_core';
     ExtensionManagementUtility::addTypoScript(
-        $extensionKey,
+        'dmf_core',
         'constants',
         "@import 'EXT:dmf_core/Configuration/TypoScript/constants.typoscript'"
     );
     ExtensionManagementUtility::addTypoScript(
-        $extensionKey,
+        'dmf_core',
         'setup',
         "@import 'EXT:dmf_core/Configuration/TypoScript/setup.typoscript'"
     );
@@ -27,7 +26,6 @@ call_user_func(static function () {
         ],
         // non-cacheable actions
         [
-            // FrontEndController::class => 'javaScriptSettings',
         ]
     );
 });

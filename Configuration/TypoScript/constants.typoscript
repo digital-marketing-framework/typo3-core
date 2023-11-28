@@ -16,6 +16,6 @@ plugin.tx_dmf_core_frontendservice {
     layoutRootPath = EXT:dmf_core/Resources/Private/Frontend/Layouts/
   }
   settings {
-    enableGlobalSettings = 1
+    enabledFrontendApi = 1
   }
 }

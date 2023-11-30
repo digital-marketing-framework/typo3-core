@@ -26,7 +26,7 @@ class FrontendJavaScriptSettingsUpdateEvent
         return $this->pageId;
     }
 
-    public function getRootPageid(): int
+    public function getRootPageId(): int
     {
         return $this->rootPageId;
     }

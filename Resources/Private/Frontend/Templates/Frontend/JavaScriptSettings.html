@@ -1,13 +1,5 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-      xmlns:d="http://typo3.org/ns/DigitalMarketingFramework/Typo3/Core/ViewHelpers"
       data-namespace-typo3-fluid="true"><f:spaceless>
-<script>window.DMF = {f:format.raw(value:'{f:format.json(value:DMF)}')};</script>
-<f:for each="{scripts}" as="domainScripts" key="domain">
-    <f:for each="{domainScripts}" as="scripts" key="package">
-        <f:for each="{scripts}" as="script">
-            <f:asset.script identifier="dmf-script-{domain}-{package}-{script}"
-                    src="{d:be.vendorAsset(package:package, path:script)}" />
-        </f:for>
-    </f:for>
-</f:for>
+<f:render partial="Settings" arguments="{DMF:DMF}" />
+<f:render partial="Scripts" arguments="{scripts:scripts}" />
 </f:spaceless></html>

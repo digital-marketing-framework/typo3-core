@@ -4,14 +4,12 @@ namespace DigitalMarketingFramework\Typo3\Core\Controller\Event;
 
 class FrontendJavaScriptSettingsUpdateEvent
 {
-    /** @var array{settings:array<string,mixed>,urls:array<string,array<string,string>>,pluginSettings:array<string,array<string,array<string,mixed>>>} */
+    /** @var array{settings:array<string,mixed>,urls:array<string,array<string,string>>,pluginSettings?:array<string,array<string,array<string,mixed>>>} */
     protected array $settings = [
         'settings' => [
             'prefix' => 'dmf',
         ],
         'urls' => [
-        ],
-        'pluginSettings' => [
         ],
     ];
 
@@ -32,7 +30,7 @@ class FrontendJavaScriptSettingsUpdateEvent
     }
 
     /**
-     * @return array{settings:array<string,mixed>,urls:array<string,array<string,string>>,pluginSettings:array<string,array<string,array<string,mixed>>>}
+     * @return array{settings:array<string,mixed>,urls:array<string,array<string,string>>,pluginSettings?:array<string,array<string,array<string,mixed>>>}
      */
     public function getSettings(): array
     {
@@ -40,7 +38,7 @@ class FrontendJavaScriptSettingsUpdateEvent
     }
 
     /**
-     * @param array{settings:array<string,mixed>,urls:array<string,array<string,string>>,pluginSettings:array<string,array<string,array<string,mixed>>>} $settings
+     * @param array{settings:array<string,mixed>,urls:array<string,array<string,string>>,pluginSettings?:array<string,array<string,array<string,mixed>>>} $settings
      */
     public function setSettings(array $settings): void
     {
@@ -53,6 +51,13 @@ class FrontendJavaScriptSettingsUpdateEvent
     public function addJavaScriptPlugin(string $type, string $plugin, string $url, array $settings = []): void
     {
         $this->settings['urls'][$type][$plugin] = $url;
-        $this->settings['pluginSettings'][$type][$plugin] = $settings;
+        if ($settings !== []) {
+            $this->settings['pluginSettings'][$type][$plugin] = $settings;
+        }
+    }
+
+    public function addGlobalSettings(string $name, mixed $value): void
+    {
+        $this->settings['settings'][$name] = $value;
     }
 }

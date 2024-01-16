@@ -36,3 +36,9 @@ services:
     tags:
       - name: event.listener
         event: DigitalMarketingFramework\Typo3\Core\Registry\Event\CoreRegistryUpdateEvent
+
+  # frontend scripts updates
+  DigitalMarketingFramework\Typo3\Core\Controller\EventListener\FrontendJavaScriptUpdateEventListener:
+    tags:
+      - name: event.listener
+        event: DigitalMarketingFramework\Typo3\Core\Controller\Event\FrontendJavaScriptUpdateEvent

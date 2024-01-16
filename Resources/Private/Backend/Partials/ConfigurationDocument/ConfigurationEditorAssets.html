@@ -2,11 +2,11 @@
       xmlns:d="http://typo3.org/ns/DigitalMarketingFramework/Typo3/Core/ViewHelpers"
       data-namespace-typo3-fluid="true">
     <f:asset.script identifier="dmf-dce-script"
-                    src="{d:be.vendorAsset(package:'digital-marketing-framework/core', path:'/scripts/index.js')}"
+                    src="{d:be.vendorAsset(package:'digital-marketing-framework/core', path:'/config-editor/scripts/index.js')}"
                     additionalAttributes="{type:'module'}" />
-    {d:be.vendorAsset(package:'digital-marketing-framework/core', path:'/scripts/index.js.map', returnUrl:0)}
+    {d:be.vendorAsset(package:'digital-marketing-framework/core', path:'/config-editor/scripts/index.js.map', returnUrl:0)}
     <f:asset.css identifier="dmf-dce-styles"
-                 href="{d:be.vendorAsset(package:'digital-marketing-framework/core', path:'/styles/index.css')}" />
+                 href="{d:be.vendorAsset(package:'digital-marketing-framework/core', path:'/config-editor/styles/index.css')}" />
     <f:asset.css identifier="dmf-dce-inline-styles">
         @layer base {
         /* Caveat */
@@ -15,7 +15,7 @@
         font-display: swap;
         font-style: normal;
         font-weight: 700;
-        src: url("/{d:be.vendorAsset(package:'digital-marketing-framework/core',path:'/fonts/caveat/Caveat-Bold.ttf')}")
+        src: url("/{d:be.vendorAsset(package:'digital-marketing-framework/core',path:'/config-editor/fonts/caveat/Caveat-Bold.ttf')}")
         format("truetype");
         }
         @font-face {
@@ -24,7 +24,7 @@
         font-style: normal;
         font-weight: 600;
         src:
-        url("/{d:be.vendorAsset(package:'digital-marketing-framework/core',path:'/fonts/caveat/Caveat-SemiBold.ttf')}")
+        url("/{d:be.vendorAsset(package:'digital-marketing-framework/core',path:'/config-editor/fonts/caveat/Caveat-SemiBold.ttf')}")
         format("truetype");
         }
         @font-face {
@@ -33,7 +33,7 @@
         font-style: normal;
         font-weight: 500;
         src:
-        url("/{d:be.vendorAsset(package:'digital-marketing-framework/core',path:'/fonts/caveat/Caveat-Medium.ttf')}")
+        url("/{d:be.vendorAsset(package:'digital-marketing-framework/core',path:'/config-editor/fonts/caveat/Caveat-Medium.ttf')}")
         format("truetype");
         }
         @font-face {
@@ -42,7 +42,7 @@
         font-style: normal;
         font-weight: 400;
         src:
-        url("/{d:be.vendorAsset(package:'digital-marketing-framework/core',path:'/fonts/caveat/Caveat-Regular.ttf')}")
+        url("/{d:be.vendorAsset(package:'digital-marketing-framework/core',path:'/config-editor/fonts/caveat/Caveat-Regular.ttf')}")
         format("truetype");
         }
         }

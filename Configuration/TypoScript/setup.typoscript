@@ -22,3 +22,34 @@ module.tx_dmfcore_web_dmfcoremanager {
       }
     }
 }
+
+plugin.tx_dmf_core_frontendservice {
+  view {
+    templateRootPaths.0 = EXT:dmf_core/Resources/Private/Frontend/Templates/
+    templateRootPaths.1 = {$plugin.tx_dmf_core_frontendservice.view.templateRootPath}
+    partialRootPaths.0 = EXT:dmf_core/Resources/Private/Frontend/Partials/
+    partialRootPaths.1 = {$plugin.tx_dmf_core_frontendservice.view.partialRootPath}
+    layoutRootPaths.0 = EXT:dmf_core/Resources/Private/Frontend/Layouts/
+    layoutRootPaths.1 = {$plugin.tx_dmf_core_frontendservice.view.layoutRootPath}
+  }
+  settings {
+  }
+}
+
+lib.digitalMarketingFrameworkSettings = COA
+lib.digitalMarketingFrameworkSettings {
+  10 = USER
+  10 {
+    userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+    vendorName = DigitalMarketingFramework
+    extensionName = DmfCore
+    pluginName = FrontendService
+    controller = Frontend
+    view < plugin.tx_dmf_core_frontendservice.view
+    settings < plugin.tx_dmf_core_frontendservice.settings
+  }
+}
+
+[{$plugin.tx_dmf_core_frontendservice.settings.enabledFrontendApi}]
+page.headerData.1700731370 < lib.digitalMarketingFrameworkSettings
+[global]

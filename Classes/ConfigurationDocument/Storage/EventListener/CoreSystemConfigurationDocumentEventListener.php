@@ -2,13 +2,6 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\EventListener;
 
-use DigitalMarketingFramework\Core\ConfigurationDocument\ConfigurationDocumentManagerInterface;
-use DigitalMarketingFramework\Core\ConfigurationDocument\Parser\ConfigurationDocumentParserInterface;
-use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\SchemaDocument;
-use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Event\ConfigurationDocumentMetaDataUpdateEvent;
-use DigitalMarketingFramework\Typo3\Core\Registry\Registry;
-use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
-
 class CoreSystemConfigurationDocumentEventListener extends AbstractSystemConfigurationDocumentEventListener
 {
     /**

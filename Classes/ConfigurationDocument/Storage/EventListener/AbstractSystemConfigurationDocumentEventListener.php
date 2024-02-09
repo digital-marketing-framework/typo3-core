@@ -22,6 +22,9 @@ abstract class AbstractSystemConfigurationDocumentEventListener extends Abstract
         $this->parser = $registry->getConfigurationDocumentParser();
     }
 
+    /**
+     * @return array{metaData:array{name:string}}
+     */
     protected function buildMetaData(string $documentName): array
     {
         return [
@@ -46,14 +49,17 @@ abstract class AbstractSystemConfigurationDocumentEventListener extends Abstract
         return $this->getConfigurationDocumentMetaData()->getSchemaDocument();
     }
 
+    /**
+     * @param array<string,mixed> $metaData
+     * @param ?array<string,mixed> $config
+     */
     protected function buildDocument(array $metaData, ?array $config = null): string
     {
         $metaDataOnly = $config === null;
+
         return $this->parser->produceDocument(
             $metaDataOnly ? $metaData : $metaData + $config,
             $metaDataOnly ? null : $this->getSchemaDocument()
         );
-
-        return $this->parser->produceDocument($config, $this->getSchemaDocument());
     }
 }

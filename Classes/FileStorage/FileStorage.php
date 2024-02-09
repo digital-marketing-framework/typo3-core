@@ -52,7 +52,7 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
         return $identifier;
     }
 
-    protected function getResource(string $identifier): null|File|Folder
+    protected function getResource(string $identifier): File|Folder|null
     {
         $identifier = $this->sanitizeIdentifier($identifier);
         try {
@@ -214,7 +214,7 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
         return GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
     }
 
-    protected function getResourcePublicUrl(null|File|Folder $resource): string
+    protected function getResourcePublicUrl(File|Folder|null $resource): string
     {
         if ($resource === null) {
             return '';

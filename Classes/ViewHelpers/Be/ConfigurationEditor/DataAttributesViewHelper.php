@@ -14,6 +14,9 @@ class DataAttributesViewHelper extends AbstractBackendViewHelper
         $this->registerArgument('ready', 'bool', 'Markup is initialized already', false, true);
         $this->registerArgument('readonly', 'bool', 'Read-only document', false, false);
         $this->registerArgument('globalDocument', 'bool', 'Global document', false, false);
+
+        $this->registerArgument('baseRoute', 'string', 'Base route for ajax URLs', false, 'configuration');
+        $this->registerArgument('includes', 'bool', 'Configuration support includes', false, true);
     }
 
     /**
@@ -25,7 +28,9 @@ class DataAttributesViewHelper extends AbstractBackendViewHelper
             $this->arguments['ready'],
             $this->arguments['mode'],
             $this->arguments['readonly'],
-            $this->arguments['globalDocument']
+            $this->arguments['globalDocument'],
+            $this->arguments['baseRoute'],
+            $this->arguments['includes']
         );
     }
 }

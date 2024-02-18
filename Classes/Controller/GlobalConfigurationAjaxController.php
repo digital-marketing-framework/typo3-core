@@ -2,21 +2,20 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\Controller;
 
-use DigitalMarketingFramework\Core\ConfigurationDocument\Controller\InheritedDocumentConfigurationEditorController;
+use DigitalMarketingFramework\Core\ConfigurationDocument\Controller\FullDocumentConfigurationEditorController;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Event\ConfigurationDocumentMetaDataUpdateEvent;
 use DigitalMarketingFramework\Typo3\Core\Registry\Registry;
 use Psr\Http\Message\ResponseFactoryInterface;
 
-class ConfigurationDocumentAjaxController extends AbstractAjaxController
+class GlobalConfigurationAjaxController extends AbstractAjaxController
 {
     public function __construct(
         ResponseFactoryInterface $responseFactory,
         Registry $registry,
     ) {
         $parser = $registry->getConfigurationDocumentParser();
-        $configurationDocumentManager = $registry->getConfigurationDocumentManager();
-        $schemaDocument = $registry->getSchemaDocument(Registry::SCHEMA_KEY_CONFIGURATION_DOCUMENT);
-        $editorController = new InheritedDocumentConfigurationEditorController($schemaDocument, $configurationDocumentManager);
+        $schemaDocument = $registry->getSchemaDocument(Registry::SCHEMA_KEY_GLOBAL_CONFIGURATION);
+        $editorController = new FullDocumentConfigurationEditorController($schemaDocument);
 
         parent::__construct($responseFactory, $parser, $editorController);
     }

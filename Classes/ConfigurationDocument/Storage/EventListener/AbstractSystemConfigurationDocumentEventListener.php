@@ -13,11 +13,9 @@ abstract class AbstractSystemConfigurationDocumentEventListener extends Abstract
 {
     protected ConfigurationDocumentParserInterface $parser;
 
-    protected ?ConfigurationDocumentMetaDataUpdateEvent $configurationDocumentMetaData = null;
-
     public function __construct(
         protected EventDispatcher $eventDispatcher,
-        Registry $registry,
+        protected Registry $registry,
     ) {
         $this->parser = $registry->getConfigurationDocumentParser();
     }
@@ -34,19 +32,9 @@ abstract class AbstractSystemConfigurationDocumentEventListener extends Abstract
         ];
     }
 
-    protected function getConfigurationDocumentMetaData(): ConfigurationDocumentMetaDataUpdateEvent
-    {
-        if (!$this->configurationDocumentMetaData instanceof ConfigurationDocumentMetaDataUpdateEvent) {
-            $this->configurationDocumentMetaData = new ConfigurationDocumentMetaDataUpdateEvent();
-            $this->eventDispatcher->dispatch($this->configurationDocumentMetaData);
-        }
-
-        return $this->configurationDocumentMetaData;
-    }
-
     protected function getSchemaDocument(): SchemaDocument
     {
-        return $this->getConfigurationDocumentMetaData()->getSchemaDocument();
+        return $this->registry->getSchemaDocument(Registry::SCHEMA_KEY_CONFIGURATION_DOCUMENT);
     }
 
     /**

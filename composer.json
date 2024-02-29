@@ -28,7 +28,7 @@
         "typo3/cms-form": "^11.5 || ^12.4"
     },
     "require-dev": {
-        "mediatis/typo3-coding-standards": "^1.0"
+        "mediatis/typo3-coding-standards": "dev-feature/set-typo3-version-from-composer as 1.0"
     },
     "autoload": {
         "psr-4": {

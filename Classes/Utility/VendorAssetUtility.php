@@ -119,7 +119,8 @@ class VendorAssetUtility
             throw new DigitalMarketingFrameworkException(sprintf('source "%s" file does not seem to exist in package "%s"', $path, $composerName));
         }
 
-        if (!str_starts_with($source, static::getSourcePath($composerName, ''))) {
+        $sourceFolder = realpath(static::getSourcePath($composerName, ''));
+        if (!str_starts_with($source, $sourceFolder)) {
             throw new DigitalMarketingFrameworkException(sprintf('asset path "%s" seems to lead out of package assets folder', $path));
         }
     }

@@ -2,14 +2,7 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\EventListener;
 
-use DigitalMarketingFramework\Core\ConfigurationDocument\ConfigurationDocumentManagerInterface;
-use DigitalMarketingFramework\Core\ConfigurationDocument\Parser\ConfigurationDocumentParserInterface;
-use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\SchemaDocument;
-use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Event\ConfigurationDocumentMetaDataUpdateEvent;
-use DigitalMarketingFramework\Typo3\Core\Registry\Registry;
-use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
-
-class CoreSystemConfigurationDocumentEventListener extends AbstractStaticConfigurationDocumentEventListener
+class CoreSystemConfigurationDocumentEventListener extends AbstractSystemConfigurationDocumentEventListener
 {
     /**
      * @var string
@@ -21,17 +14,6 @@ class CoreSystemConfigurationDocumentEventListener extends AbstractStaticConfigu
      */
     public const ID_RESET = 'SYS:reset';
 
-    protected ConfigurationDocumentParserInterface $parser;
-
-    protected ?ConfigurationDocumentMetaDataUpdateEvent $configurationDocumentMetaData = null;
-
-    public function __construct(
-        protected EventDispatcher $eventDispatcher,
-        Registry $registry,
-    ) {
-        $this->parser = $registry->getConfigurationDocumentParser();
-    }
-
     /**
      * @return array<string>
      */
@@ -41,21 +23,6 @@ class CoreSystemConfigurationDocumentEventListener extends AbstractStaticConfigu
             static::ID_DEFAULTS,
             static::ID_RESET,
         ];
-    }
-
-    protected function getConfigurationDocumentMetaData(): ConfigurationDocumentMetaDataUpdateEvent
-    {
-        if (!$this->configurationDocumentMetaData instanceof ConfigurationDocumentMetaDataUpdateEvent) {
-            $this->configurationDocumentMetaData = new ConfigurationDocumentMetaDataUpdateEvent();
-            $this->eventDispatcher->dispatch($this->configurationDocumentMetaData);
-        }
-
-        return $this->configurationDocumentMetaData;
-    }
-
-    protected function getSchemaDocument(): SchemaDocument
-    {
-        return $this->getConfigurationDocumentMetaData()->getSchemaDocument();
     }
 
     /**
@@ -82,32 +49,18 @@ class CoreSystemConfigurationDocumentEventListener extends AbstractStaticConfigu
 
     protected function getResetDocument(bool $metaDataOnly = false): string
     {
-        $metaData = [
-            ConfigurationDocumentManagerInterface::KEY_META_DATA => [
-                ConfigurationDocumentManagerInterface::KEY_DOCUMENT_NAME => 'Reset',
-            ],
-        ];
-        $config = $metaDataOnly ? [] : $this->getResetConfig();
+        $metaData = $this->buildMetaData('Reset');
+        $config = $metaDataOnly ? null : $this->getResetConfig();
 
-        return $this->parser->produceDocument(
-            $metaData + $config,
-            $metaDataOnly ? null : $this->getSchemaDocument()
-        );
+        return $this->buildDocument($metaData, $config);
     }
 
     protected function getDefaultsDocument(bool $metaDataOnly = false): string
     {
-        $metaData = [
-            ConfigurationDocumentManagerInterface::KEY_META_DATA => [
-                ConfigurationDocumentManagerInterface::KEY_DOCUMENT_NAME => 'Defaults',
-            ],
-        ];
-        $config = $metaDataOnly ? [] : $this->getDefaults();
+        $metaData = $this->buildMetaData('Defaults');
+        $config = $metaDataOnly ? null : $this->getDefaults();
 
-        return $this->parser->produceDocument(
-            $metaData + $config,
-            $metaDataOnly ? null : $this->getSchemaDocument()
-        );
+        return $this->buildDocument($metaData, $config);
     }
 
     protected function getDocument(string $documentIdentifier, bool $metaDataOnly = false): ?string

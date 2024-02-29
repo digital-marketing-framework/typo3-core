@@ -7,6 +7,7 @@ use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\Components\Menu\Menu;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
@@ -34,6 +35,20 @@ class AbstractBackendController extends OriginalAbstractBackendController
     }
 
     /**
+     * @param ?array<string,mixed> $arguments
+     */
+    protected function redirectResponse(string $action, ?string $controller = null, ?array $arguments = null): RedirectResponse
+    {
+        $uri = $this->uriBuilder->reset()->uriFor(
+            actionName: $action,
+            controllerName: $controller,
+            controllerArguments: $arguments
+        );
+
+        return new RedirectResponse($uri);
+    }
+
+    /**
      * @param array{title:string,controller:string,action:string} $section
      */
     protected function sectionIsActive(array $section): bool
@@ -55,7 +70,11 @@ class AbstractBackendController extends OriginalAbstractBackendController
 
         foreach ($sections as $section) {
             $menuItem = $sectionMenu->makeMenuItem();
-            $menuItem->setHref($this->uriBuilder->uriFor(actionName: $section['action'], controllerName: $section['controller']));
+            $url = $this->uriBuilder->uriFor(
+                actionName: $section['action'],
+                controllerName: $section['controller']
+            );
+            $menuItem->setHref($url);
             $menuItem->setTitle($section['title']);
             if ($this->sectionIsActive($section)) {
                 $menuItem->setActive(true);

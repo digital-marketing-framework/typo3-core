@@ -1,10 +1,21 @@
 
 module.tx_dmfcore_web_dmfcoremanager {
-    view {
-        templateRootPath = EXT:dmf_core/Resources/Private/Backend/Templates/
-        partialRootPath = EXT:dmf_core/Resources/Private/Backend/Partials/
-        layoutRootPath = EXT:dmf_core/Resources/Private/Backend/Layouts/
-    }
-    settings {
-    }
+  view {
+    templateRootPath = EXT:dmf_core/Resources/Private/Backend/Templates/
+    partialRootPath = EXT:dmf_core/Resources/Private/Backend/Partials/
+    layoutRootPath = EXT:dmf_core/Resources/Private/Backend/Layouts/
+  }
+  settings {
+  }
+}
+
+plugin.tx_dmf_core_frontendservice {
+  view {
+    templateRootPath = EXT:dmf_core/Resources/Private/Frontend/Templates/
+    partialRootPath = EXT:dmf_core/Resources/Private/Frontend/Partials/
+    layoutRootPath = EXT:dmf_core/Resources/Private/Frontend/Layouts/
+  }
+  settings {
+    enabledFrontendApi = 1
+  }
 }

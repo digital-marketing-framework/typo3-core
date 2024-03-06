@@ -41,6 +41,10 @@
         }
     },
     "config": {
+        "preferred-install": {
+            "mediatis/typo3-coding-standards": "source",
+            "*": "dist"
+        },
         "allow-plugins": {
             "ergebnis/composer-normalize": true,
             "phpstan/extension-installer": true,

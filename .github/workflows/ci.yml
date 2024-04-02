@@ -64,13 +64,7 @@ jobs:
                 run: 'composer install --no-progress'
             -
                 name: 'Run command'
-                run:
-                    - 'composer:normalize'
-                    - 'composer:psr-verify'
-                    - 'json:lint'
-                    - 'php:rector'
-                    - 'php:cs-fixer'
-                    - 'php:stan'
+                run: "composer:normalize\ncomposer:psr-verify\njson:lint\nphp:rector\nphp:cs-fixer\nphp:stan"
         strategy:
             fail-fast: false
             matrix:

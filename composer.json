@@ -41,10 +41,6 @@
         }
     },
     "config": {
-        "preferred-install": {
-            "mediatis/typo3-coding-standards": "source",
-            "*": "dist"
-        },
         "allow-plugins": {
             "ergebnis/composer-normalize": true,
             "phpstan/extension-installer": true,
@@ -52,6 +48,10 @@
             "typo3/cms-composer-installers": true
         },
         "bin-dir": ".Build/bin",
+        "preferred-install": {
+            "mediatis/typo3-coding-standards": "source",
+            "*": "dist"
+        },
         "vendor-dir": ".Build/vendor"
     },
     "extra": {

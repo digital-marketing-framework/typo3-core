@@ -29,9 +29,10 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php_version:
-                    - '8.1'
-                    - '8.2'
+                -
+                    php_version:
+                        - '8.1'
+                        - '8.2'
     code-quality:
         name: 'Code quality checks'
         runs-on: ubuntu-22.04
@@ -56,18 +57,22 @@ jobs:
                 name: 'Cache dependencies installed with composer'
                 uses: actions/cache@v3
                 with:
-                    key: "php${{ matrix.php_version }}-composer-${{ hashFiles('**/composer.json') }}"
+                    key: 'php${{ matrix.php_version }}-typo3${{ matrix.php_version }}'
                     path: ~/.cache/composer
                     restore-keys: "php${{ matrix.php_version }}-composer-\n"
             -
                 name: 'Install Composer dependencies'
-                run: 'composer install --no-progress'
+                run: "composer require typo3/cms-core ^${{ matrix.typo3_version }} --no-progress\ncomposer install --no-progress\n"
             -
                 name: 'Run command'
-                run: "composer ci:composer:normalize\ncomposer ci:composer:psr-verify\ncomposer ci:json:lint\ncomposer ci:php:rector\ncomposer ci:php:cs-fixer\ncomposer ci:php:stan"
+                run: "composer ci:composer:psr-verify\ncomposer ci:json:lint\ncomposer ci:php:rector\ncomposer ci:php:cs-fixer\ncomposer ci:php:stan\n"
         strategy:
             fail-fast: false
             matrix:
-                php_version:
-                    - '8.1'
-                    - '8.2'
+                -
+                    php_version:
+                        - '8.1'
+                        - '8.2'
+                    typo3_version:
+                        - '11.5'
+                        - '12.4'

@@ -30,8 +30,8 @@ jobs:
             fail-fast: false
             matrix:
                 php_version:
-                    - '8.1'
-                    - '8.2'
+                    - 8.1
+                    - 8.2
     code-quality:
         name: 'Code quality checks'
         runs-on: ubuntu-22.04
@@ -69,8 +69,50 @@ jobs:
             fail-fast: false
             matrix:
                 php_version:
-                    - '8.1'
-                    - '8.2'
+                    - 8.1
+                    - 8.2
                 typo3_version:
-                    - '11.5'
-                    - '12.4'
+                    - 11.5
+                    - 12.4
+    code-tests:
+        name: 'Coverage tests'
+        runs-on: ubuntu-22.04
+        steps:
+            -
+                name: Checkout
+                uses: actions/checkout@v4
+            -
+                name: 'Install PHP'
+                uses: shivammathur/setup-php@v2
+                with:
+                    php_version: '${{ matrix.php_version }}'
+                    coverage: none
+                    tools: 'composer:v2.4'
+            -
+                name: 'Show Composer version'
+                run: 'composer --version'
+            -
+                name: 'Show the Composer configuration'
+                run: 'composer config --global --list'
+            -
+                name: 'Cache dependencies installed with composer'
+                uses: actions/cache@v3
+                with:
+                    key: 'php${{ matrix.php_version }}-typo3${{ matrix.php_version }}'
+                    path: ~/.cache/composer
+                    restore-keys: "php${{ matrix.php_version }}-composer-\n"
+            -
+                name: 'Install Composer dependencies'
+                run: "composer require typo3/cms-core ^${{ matrix.typo3_version }} --no-progress\ncomposer install --no-progress\n"
+            -
+                name: 'Run command'
+                run: "composer ci:coverage\n"
+        strategy:
+            fail-fast: false
+            matrix:
+                php_version:
+                    - 8.1
+                    - 8.2
+                typo3_version:
+                    - 11.5
+                    - 12.4

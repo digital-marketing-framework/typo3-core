@@ -4,7 +4,8 @@ namespace DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\Eve
 
 use DigitalMarketingFramework\Core\ConfigurationDocument\ConfigurationDocumentManagerInterface;
 use DigitalMarketingFramework\Core\ConfigurationDocument\Parser\ConfigurationDocumentParserInterface;
-use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\SchemaDocument;
+use DigitalMarketingFramework\Core\SchemaDocument\SchemaDocument;
+use DigitalMarketingFramework\Core\SchemaDocument\SchemaProcessor\SchemaProcessorInterface;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Event\ConfigurationDocumentMetaDataUpdateEvent;
 use DigitalMarketingFramework\Typo3\Core\Registry\Registry;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
@@ -13,6 +14,8 @@ abstract class AbstractSystemConfigurationDocumentEventListener extends Abstract
 {
     protected ConfigurationDocumentParserInterface $parser;
 
+    protected SchemaProcessorInterface $schemaProcessor;
+
     protected ?ConfigurationDocumentMetaDataUpdateEvent $configurationDocumentMetaData = null;
 
     public function __construct(
@@ -20,6 +23,7 @@ abstract class AbstractSystemConfigurationDocumentEventListener extends Abstract
         Registry $registry,
     ) {
         $this->parser = $registry->getConfigurationDocumentParser();
+        $this->schemaProcessor = $registry->getSchemaProcessor();
     }
 
     /**

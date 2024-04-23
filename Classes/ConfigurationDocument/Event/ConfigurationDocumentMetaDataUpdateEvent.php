@@ -2,7 +2,7 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Event;
 
-use DigitalMarketingFramework\Core\ConfigurationDocument\SchemaDocument\SchemaDocument;
+use DigitalMarketingFramework\Core\SchemaDocument\SchemaDocument;
 use DigitalMarketingFramework\Core\Registry\RegistryInterface;
 
 class ConfigurationDocumentMetaDataUpdateEvent
@@ -27,15 +27,6 @@ class ConfigurationDocumentMetaDataUpdateEvent
     public function getSchemaDocument(): SchemaDocument
     {
         return $this->configurationSchema;
-    }
-
-    /**
-     * @return array<string,mixed>
-     */
-    public function getDefaultConfiguration(): array
-    {
-        /** @var array<string,mixed> */
-        return $this->configurationSchema->getDefaultValue();
     }
 
     /**

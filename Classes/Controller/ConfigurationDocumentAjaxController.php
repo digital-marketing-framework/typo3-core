@@ -3,6 +3,7 @@
 namespace DigitalMarketingFramework\Typo3\Core\Controller;
 
 use DigitalMarketingFramework\Core\ConfigurationDocument\ConfigurationDocumentManagerInterface;
+use DigitalMarketingFramework\Core\SchemaDocument\SchemaProcessor\SchemaProcessorInterface;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Event\ConfigurationDocumentMetaDataUpdateEvent;
 use DigitalMarketingFramework\Typo3\Core\Registry\Registry;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -13,6 +14,7 @@ use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 class ConfigurationDocumentAjaxController
 {
     protected ConfigurationDocumentManagerInterface $configurationDocumentManager;
+    protected SchemaProcessorInterface $schemaProcessor;
 
     protected ?ConfigurationDocumentMetaDataUpdateEvent $configurationDocumentMetaData = null;
 
@@ -22,6 +24,7 @@ class ConfigurationDocumentAjaxController
         Registry $registry,
     ) {
         $this->configurationDocumentManager = $registry->getConfigurationDocumentManager();
+        $this->schemaProcessor = $registry->getSchemaProcessor();
     }
 
     /**
@@ -54,7 +57,7 @@ class ConfigurationDocumentAjaxController
     public function defaultsAction(ServerRequestInterface $request): ResponseInterface
     {
         $schemaDocument = $this->getConfigurationDocumentMetaData()->getSchemaDocument();
-        $defaults = $this->getConfigurationDocumentMetaData()->getDefaultConfiguration();
+        $defaults = $this->schemaProcessor->getDefaultValue($schemaDocument);
         $schemaDocument->preSaveDataTransform($defaults);
 
         return $this->jsonResponse($defaults);

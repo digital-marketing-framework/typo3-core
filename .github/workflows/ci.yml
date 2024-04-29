@@ -17,7 +17,7 @@ jobs:
                 name: 'Install PHP'
                 uses: shivammathur/setup-php@v2
                 with:
-                    php_version: '${{ matrix.php_version }}'
+                    php-version: '${{ matrix.php_version }}'
                     coverage: none
                     tools: 'composer:v2.4'
             -
@@ -43,7 +43,7 @@ jobs:
                 name: 'Install PHP'
                 uses: shivammathur/setup-php@v2
                 with:
-                    php_version: '${{ matrix.php_version }}'
+                    php-version: '${{ matrix.php_version }}'
                     coverage: none
                     tools: 'composer:v2.4'
             -

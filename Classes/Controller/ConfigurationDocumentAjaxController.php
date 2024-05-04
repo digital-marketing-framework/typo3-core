@@ -14,6 +14,7 @@ use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 class ConfigurationDocumentAjaxController
 {
     protected ConfigurationDocumentManagerInterface $configurationDocumentManager;
+
     protected SchemaProcessorInterface $schemaProcessor;
 
     protected ?ConfigurationDocumentMetaDataUpdateEvent $configurationDocumentMetaData = null;
@@ -58,7 +59,7 @@ class ConfigurationDocumentAjaxController
     {
         $schemaDocument = $this->getConfigurationDocumentMetaData()->getSchemaDocument();
         $defaults = $this->schemaProcessor->getDefaultValue($schemaDocument);
-        $schemaDocument->preSaveDataTransform($defaults);
+        $this->schemaProcessor->preSaveDataTransform($schemaDocument, $defaults);
 
         return $this->jsonResponse($defaults);
     }
@@ -72,8 +73,8 @@ class ConfigurationDocumentAjaxController
         $mergedConfiguration = $this->configurationDocumentManager->mergeConfiguration($configuration);
         $mergedInheritedConfiguration = $this->configurationDocumentManager->mergeConfiguration($configuration, inheritedConfigurationOnly: true);
 
-        $schemaDocument->preSaveDataTransform($mergedConfiguration);
-        $schemaDocument->preSaveDataTransform($mergedInheritedConfiguration);
+        $this->schemaProcessor->preSaveDataTransform($schemaDocument, $mergedConfiguration);
+        $this->schemaProcessor->preSaveDataTransform($schemaDocument, $mergedInheritedConfiguration);
 
         return $this->jsonResponse([
             'configuration' => $mergedConfiguration,
@@ -107,8 +108,8 @@ class ConfigurationDocumentAjaxController
             inheritedConfigurationOnly: true
         );
 
-        $schemaDocument->preSaveDataTransform($mergedConfiguration);
-        $schemaDocument->preSaveDataTransform($mergedInheritedConfiguration);
+        $this->schemaProcessor->preSaveDataTransform($schemaDocument, $mergedConfiguration);
+        $this->schemaProcessor->preSaveDataTransform($schemaDocument, $mergedInheritedConfiguration);
 
         return $this->jsonResponse([
             'configuration' => $mergedConfiguration,

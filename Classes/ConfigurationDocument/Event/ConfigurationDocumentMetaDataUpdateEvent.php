@@ -2,8 +2,8 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Event;
 
-use DigitalMarketingFramework\Core\SchemaDocument\SchemaDocument;
 use DigitalMarketingFramework\Core\Registry\RegistryInterface;
+use DigitalMarketingFramework\Core\SchemaDocument\SchemaDocument;
 
 class ConfigurationDocumentMetaDataUpdateEvent
 {

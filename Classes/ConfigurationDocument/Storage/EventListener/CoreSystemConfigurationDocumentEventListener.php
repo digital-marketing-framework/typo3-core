@@ -30,7 +30,9 @@ class CoreSystemConfigurationDocumentEventListener extends AbstractSystemConfigu
      */
     protected function getDefaults(): array
     {
-        return $this->getConfigurationDocumentMetaData()->getDefaultConfiguration();
+        $schemaDocument = $this->getConfigurationDocumentMetaData()->getSchemaDocument();
+
+        return $this->schemaProcessor->getDefaultValue($schemaDocument);
     }
 
     /**

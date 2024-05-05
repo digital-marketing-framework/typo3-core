@@ -3,6 +3,7 @@
 namespace DigitalMarketingFramework\Typo3\Core\Controller;
 
 use DigitalMarketingFramework\Core\ConfigurationDocument\ConfigurationDocumentManagerInterface;
+use DigitalMarketingFramework\Core\SchemaDocument\SchemaProcessor\SchemaProcessorInterface;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Event\ConfigurationDocumentMetaDataUpdateEvent;
 use DigitalMarketingFramework\Typo3\Core\Registry\Registry;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -14,6 +15,8 @@ class ConfigurationDocumentAjaxController
 {
     protected ConfigurationDocumentManagerInterface $configurationDocumentManager;
 
+    protected SchemaProcessorInterface $schemaProcessor;
+
     protected ?ConfigurationDocumentMetaDataUpdateEvent $configurationDocumentMetaData = null;
 
     public function __construct(
@@ -22,6 +25,7 @@ class ConfigurationDocumentAjaxController
         Registry $registry,
     ) {
         $this->configurationDocumentManager = $registry->getConfigurationDocumentManager();
+        $this->schemaProcessor = $registry->getSchemaProcessor();
     }
 
     /**
@@ -54,8 +58,8 @@ class ConfigurationDocumentAjaxController
     public function defaultsAction(ServerRequestInterface $request): ResponseInterface
     {
         $schemaDocument = $this->getConfigurationDocumentMetaData()->getSchemaDocument();
-        $defaults = $this->getConfigurationDocumentMetaData()->getDefaultConfiguration();
-        $schemaDocument->preSaveDataTransform($defaults);
+        $defaults = $this->schemaProcessor->getDefaultValue($schemaDocument);
+        $this->schemaProcessor->preSaveDataTransform($schemaDocument, $defaults);
 
         return $this->jsonResponse($defaults);
     }
@@ -69,8 +73,8 @@ class ConfigurationDocumentAjaxController
         $mergedConfiguration = $this->configurationDocumentManager->mergeConfiguration($configuration);
         $mergedInheritedConfiguration = $this->configurationDocumentManager->mergeConfiguration($configuration, inheritedConfigurationOnly: true);
 
-        $schemaDocument->preSaveDataTransform($mergedConfiguration);
-        $schemaDocument->preSaveDataTransform($mergedInheritedConfiguration);
+        $this->schemaProcessor->preSaveDataTransform($schemaDocument, $mergedConfiguration);
+        $this->schemaProcessor->preSaveDataTransform($schemaDocument, $mergedInheritedConfiguration);
 
         return $this->jsonResponse([
             'configuration' => $mergedConfiguration,
@@ -104,8 +108,8 @@ class ConfigurationDocumentAjaxController
             inheritedConfigurationOnly: true
         );
 
-        $schemaDocument->preSaveDataTransform($mergedConfiguration);
-        $schemaDocument->preSaveDataTransform($mergedInheritedConfiguration);
+        $this->schemaProcessor->preSaveDataTransform($schemaDocument, $mergedConfiguration);
+        $this->schemaProcessor->preSaveDataTransform($schemaDocument, $mergedInheritedConfiguration);
 
         return $this->jsonResponse([
             'configuration' => $mergedConfiguration,

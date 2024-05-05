@@ -1,0 +1,99 @@
+stages:
+    - php-lint
+    - code-quality
+    - code-tests
+php-lint:
+    cache:
+        key:
+            files:
+                - composer.lock
+            prefix: 'php${php_version}-'
+        paths:
+            - ./cache/composer
+    before_script:
+        - 'set -xe'
+        - 'apt-get update -yqq'
+        - 'apt-get install git libzip-dev unzip parallel libxml2-utils wget wait-for-it libicu-dev -yqq'
+        - 'php -r "readfile(''http://getcomposer.org/installer'');" | php -- --install-dir=/usr/local/bin/ --filename=composer'
+        - 'chmod +x /usr/local/bin/composer'
+        - 'composer config cache-dir ./cache/composer'
+        - 'cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini'
+        - 'awk ''/^error_reporting = E_ALL/{print "error_reporting = E_ALL & ~E_DEPRECATED"; next}1'' /usr/local/etc/php/php.ini > temp.ini && mv temp.ini /usr/local/etc/php/php.ini'
+    image: 'php:${php_version}'
+    stage: php-lint
+    script:
+        - 'composer ci:php:lint'
+    parallel:
+        matrix:
+            -
+                php_version:
+                    - 8.1
+                    - 8.2
+code-quality:
+    cache:
+        key:
+            files:
+                - composer.lock
+            prefix: 'php${php_version}-typo3{typo3_version}-'
+        paths:
+            - ./cache/composer
+    before_script:
+        - 'set -xe'
+        - 'apt-get update -yqq'
+        - 'apt-get install git libzip-dev unzip parallel libxml2-utils wget wait-for-it libicu-dev -yqq'
+        - 'php -r "readfile(''http://getcomposer.org/installer'');" | php -- --install-dir=/usr/local/bin/ --filename=composer'
+        - 'chmod +x /usr/local/bin/composer'
+        - 'composer config cache-dir ./cache/composer'
+        - 'cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini'
+        - 'awk ''/^error_reporting = E_ALL/{print "error_reporting = E_ALL & ~E_DEPRECATED"; next}1'' /usr/local/etc/php/php.ini > temp.ini && mv temp.ini /usr/local/etc/php/php.ini'
+        - 'composer require typo3/cms-core ^${typo3_version} --no-progress --ignore-platform-req=ext-intl'
+        - 'composer install --no-progress --ignore-platform-req=ext-intl'
+    image: 'php:${php_version}'
+    stage: code-quality
+    script:
+        - 'composer ci:composer:psr-verify'
+        - 'composer ci:json:lint'
+        - 'composer ci:php:rector'
+        - 'composer ci:php:cs-fixer'
+        - 'composer ci:php:stan'
+    parallel:
+        matrix:
+            -
+                php_version:
+                    - 8.1
+                    - 8.2
+                typo3_version:
+                    - 11.5
+                    - 12.4
+code-tests:
+    cache:
+        key:
+            files:
+                - composer.lock
+            prefix: 'php${php_version}-typo3{typo3_version}-'
+        paths:
+            - ./cache/composer
+    before_script:
+        - 'set -xe'
+        - 'apt-get update -yqq'
+        - 'apt-get install git libzip-dev unzip parallel libxml2-utils wget wait-for-it libicu-dev -yqq'
+        - 'php -r "readfile(''http://getcomposer.org/installer'');" | php -- --install-dir=/usr/local/bin/ --filename=composer'
+        - 'chmod +x /usr/local/bin/composer'
+        - 'composer config cache-dir ./cache/composer'
+        - 'cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini'
+        - 'awk ''/^error_reporting = E_ALL/{print "error_reporting = E_ALL & ~E_DEPRECATED"; next}1'' /usr/local/etc/php/php.ini > temp.ini && mv temp.ini /usr/local/etc/php/php.ini'
+        - 'composer require typo3/cms-core ^${typo3_version} --no-progress --ignore-platform-req=ext-intl'
+        - 'composer install --no-progress --ignore-platform-req=ext-intl'
+    image: 'php:${php_version}'
+    stage: code-tests
+    script:
+        - 'composer ci:coverage'
+    parallel:
+        matrix:
+            -
+                php_version:
+                    - 8.1
+                    - 8.2
+                typo3_version:
+                    - 11.5
+                    - 12.4

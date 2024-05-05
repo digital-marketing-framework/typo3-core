@@ -16,7 +16,7 @@ class ConfigurationDocumentMetaDataUpdateEvent
 
     public function processRegistry(RegistryInterface $registry): void
     {
-        $registry->addConfigurationSchema($this->configurationSchema);
+        $registry->addConfigurationSchemaDocument($this->configurationSchema);
     }
 
     public function reset(): void

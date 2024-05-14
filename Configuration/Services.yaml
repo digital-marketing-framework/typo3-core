@@ -7,6 +7,12 @@ services:
   DigitalMarketingFramework\Typo3\Core\:
     resource: '../Classes/*'
 
+  # registry collection
+  DigitalMarketingFramework\Typo3\Core\Registry\EventListener\RegistryCollectionEventListener:
+    tags:
+      - name: event.listener
+        event: DigitalMarketingFramework\Core\Registry\RegistryCollection
+
   # REST API
   DigitalMarketingFramework\Typo3\Core\Middleware\RestMiddleware:
     public: true
@@ -40,9 +46,3 @@ services:
     tags:
       - name: event.listener
         event: DigitalMarketingFramework\Typo3\Core\Registry\Event\CoreRegistryUpdateEvent
-
-  # frontend scripts updates
-  DigitalMarketingFramework\Typo3\Core\Api\EventListener\FrontendJavaScriptUpdateEventListener:
-    tags:
-      - name: event.listener
-        event: DigitalMarketingFramework\Typo3\Core\Api\Event\FrontendJavaScriptUpdateEvent

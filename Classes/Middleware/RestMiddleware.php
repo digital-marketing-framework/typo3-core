@@ -5,7 +5,8 @@ namespace DigitalMarketingFramework\Typo3\Core\Middleware;
 use DigitalMarketingFramework\Core\Api\Response\ApiResponseInterface;
 use DigitalMarketingFramework\Core\Api\RouteResolver\EntryRouteResolver;
 use DigitalMarketingFramework\Core\Api\RouteResolver\EntryRouteResolverInterface;
-use DigitalMarketingFramework\Typo3\Core\Api\Event\ApiRouteResolversUpdateEvent;
+use DigitalMarketingFramework\Core\Registry\RegistryCollection;
+use DigitalMarketingFramework\Core\Registry\RegistryCollectionInterface;
 use DigitalMarketingFramework\Typo3\Core\Registry\Registry;
 use JsonException;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -18,6 +19,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class RestMiddleware implements MiddlewareInterface
 {
+    protected RegistryCollectionInterface $registryCollection;
     protected EntryRouteResolverInterface $routeResolver;
 
     public function __construct(
@@ -28,14 +30,20 @@ class RestMiddleware implements MiddlewareInterface
     ) {
     }
 
+    protected function getRegistryCollection(): RegistryCollectionInterface
+    {
+        if (!isset($this->registryCollection)) {
+            $this->registryCollection = new RegistryCollection();
+            $this->eventDispatcher->dispatch($this->registryCollection);
+        }
+        return $this->registryCollection;
+    }
+
     protected function getRouteResolver(): EntryRouteResolverInterface
     {
         if (!isset($this->routeResolver)) {
-            $event = new ApiRouteResolversUpdateEvent(
-                $this->registry->createObject(EntryRouteResolver::class)
-            );
-            $this->eventDispatcher->dispatch($event);
-            $this->routeResolver = $event->getResolver();
+            $this->routeResolver = $this->registry->createObject(EntryRouteResolver::class);
+            $this->getRegistryCollection()->addApiRouteResolvers($this->routeResolver);
         }
         return $this->routeResolver;
     }

@@ -3,8 +3,9 @@
 namespace DigitalMarketingFramework\Typo3\Core\Controller;
 
 use DigitalMarketingFramework\Core\ConfigurationDocument\ConfigurationDocumentManagerInterface;
+use DigitalMarketingFramework\Core\Registry\RegistryCollection;
+use DigitalMarketingFramework\Core\Registry\RegistryCollectionInterface;
 use DigitalMarketingFramework\Core\SchemaDocument\SchemaProcessor\SchemaProcessorInterface;
-use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Event\ConfigurationDocumentMetaDataUpdateEvent;
 use DigitalMarketingFramework\Typo3\Core\Registry\Registry;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -17,7 +18,7 @@ class ConfigurationDocumentAjaxController
 
     protected SchemaProcessorInterface $schemaProcessor;
 
-    protected ?ConfigurationDocumentMetaDataUpdateEvent $configurationDocumentMetaData = null;
+    protected RegistryCollectionInterface $registryCollection;
 
     public function __construct(
         protected ResponseFactoryInterface $responseFactory,
@@ -26,6 +27,15 @@ class ConfigurationDocumentAjaxController
     ) {
         $this->configurationDocumentManager = $registry->getConfigurationDocumentManager();
         $this->schemaProcessor = $registry->getSchemaProcessor();
+    }
+
+    protected function getRegistryCollection(): RegistryCollectionInterface
+    {
+        if (!isset($this->registryCollection)) {
+            $this->registryCollection = new RegistryCollection();
+            $this->eventDispatcher->dispatch($this->registryCollection);
+        }
+        return $this->registryCollection;
     }
 
     /**
@@ -40,24 +50,14 @@ class ConfigurationDocumentAjaxController
         return $response;
     }
 
-    protected function getConfigurationDocumentMetaData(): ConfigurationDocumentMetaDataUpdateEvent
-    {
-        if (!$this->configurationDocumentMetaData instanceof ConfigurationDocumentMetaDataUpdateEvent) {
-            $this->configurationDocumentMetaData = new ConfigurationDocumentMetaDataUpdateEvent();
-            $this->eventDispatcher->dispatch($this->configurationDocumentMetaData);
-        }
-
-        return $this->configurationDocumentMetaData;
-    }
-
     public function schemaAction(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->jsonResponse($this->getConfigurationDocumentMetaData()->getConfigurationSchema());
+        return $this->jsonResponse($this->getRegistryCollection()->getConfigurationSchemaDocument()->toArray());
     }
 
     public function defaultsAction(ServerRequestInterface $request): ResponseInterface
     {
-        $schemaDocument = $this->getConfigurationDocumentMetaData()->getSchemaDocument();
+        $schemaDocument = $this->getRegistryCollection()->getConfigurationSchemaDocument();
         $defaults = $this->schemaProcessor->getDefaultValue($schemaDocument);
         $this->schemaProcessor->preSaveDataTransform($schemaDocument, $defaults);
 
@@ -66,8 +66,8 @@ class ConfigurationDocumentAjaxController
 
     public function mergeAction(ServerRequestInterface $request): ResponseInterface
     {
-        $schemaDocument = $this->getConfigurationDocumentMetaData()->getSchemaDocument();
-        $document = json_decode((string)$request->getBody(), true, 512, JSON_THROW_ON_ERROR)['document'] ?? '';
+        $schemaDocument = $this->getRegistryCollection()->getConfigurationSchemaDocument();
+        $document = json_decode((string)$request->getBody(), associative: true, flags: JSON_THROW_ON_ERROR)['document'] ?? '';
         $configuration = $this->configurationDocumentManager->getParser()->parseDocument($document);
 
         $mergedConfiguration = $this->configurationDocumentManager->mergeConfiguration($configuration);
@@ -84,7 +84,7 @@ class ConfigurationDocumentAjaxController
 
     public function splitAction(ServerRequestInterface $request): ResponseInterface
     {
-        $schemaDocument = $this->getConfigurationDocumentMetaData()->getSchemaDocument();
+        $schemaDocument = $this->getRegistryCollection()->getConfigurationSchemaDocument();
         $mergedConfiguration = json_decode((string)$request->getBody(), true, 512, JSON_THROW_ON_ERROR);
         $splitConfiguration = $this->configurationDocumentManager->splitConfiguration($mergedConfiguration);
         $splitDocument = $this->configurationDocumentManager->getParser()->produceDocument($splitConfiguration, $schemaDocument);
@@ -94,7 +94,7 @@ class ConfigurationDocumentAjaxController
 
     public function updateIncludesAction(ServerRequestInterface $request): ResponseInterface
     {
-        $schemaDocument = $this->getConfigurationDocumentMetaData()->getSchemaDocument();
+        $schemaDocument = $this->getRegistryCollection()->getConfigurationSchemaDocument();
         $data = json_decode((string)$request->getBody(), true, 512, JSON_THROW_ON_ERROR);
 
         $mergedConfiguration = $this->configurationDocumentManager->processIncludesChange(

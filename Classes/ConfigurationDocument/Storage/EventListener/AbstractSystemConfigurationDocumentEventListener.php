@@ -4,9 +4,9 @@ namespace DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\Eve
 
 use DigitalMarketingFramework\Core\ConfigurationDocument\ConfigurationDocumentManagerInterface;
 use DigitalMarketingFramework\Core\ConfigurationDocument\Parser\ConfigurationDocumentParserInterface;
-use DigitalMarketingFramework\Core\SchemaDocument\SchemaDocument;
+use DigitalMarketingFramework\Core\Registry\RegistryCollection;
+use DigitalMarketingFramework\Core\Registry\RegistryCollectionInterface;
 use DigitalMarketingFramework\Core\SchemaDocument\SchemaProcessor\SchemaProcessorInterface;
-use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Event\ConfigurationDocumentMetaDataUpdateEvent;
 use DigitalMarketingFramework\Typo3\Core\Registry\Registry;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 
@@ -16,7 +16,7 @@ abstract class AbstractSystemConfigurationDocumentEventListener extends Abstract
 
     protected SchemaProcessorInterface $schemaProcessor;
 
-    protected ?ConfigurationDocumentMetaDataUpdateEvent $configurationDocumentMetaData = null;
+    protected RegistryCollectionInterface $registryCollection;
 
     public function __construct(
         protected EventDispatcher $eventDispatcher,
@@ -24,6 +24,15 @@ abstract class AbstractSystemConfigurationDocumentEventListener extends Abstract
     ) {
         $this->parser = $registry->getConfigurationDocumentParser();
         $this->schemaProcessor = $registry->getSchemaProcessor();
+    }
+
+    protected function getRegistryCollection(): RegistryCollectionInterface
+    {
+        if (!isset($this->registryCollection)) {
+            $this->registryCollection = new RegistryCollection();
+            $this->eventDispatcher->dispatch($this->registryCollection);
+        }
+        return $this->registryCollection;
     }
 
     /**
@@ -38,21 +47,6 @@ abstract class AbstractSystemConfigurationDocumentEventListener extends Abstract
         ];
     }
 
-    protected function getConfigurationDocumentMetaData(): ConfigurationDocumentMetaDataUpdateEvent
-    {
-        if (!$this->configurationDocumentMetaData instanceof ConfigurationDocumentMetaDataUpdateEvent) {
-            $this->configurationDocumentMetaData = new ConfigurationDocumentMetaDataUpdateEvent();
-            $this->eventDispatcher->dispatch($this->configurationDocumentMetaData);
-        }
-
-        return $this->configurationDocumentMetaData;
-    }
-
-    protected function getSchemaDocument(): SchemaDocument
-    {
-        return $this->getConfigurationDocumentMetaData()->getSchemaDocument();
-    }
-
     /**
      * @param array<string,mixed> $metaData
      * @param ?array<string,mixed> $config
@@ -63,7 +57,7 @@ abstract class AbstractSystemConfigurationDocumentEventListener extends Abstract
 
         return $this->parser->produceDocument(
             $metaDataOnly ? $metaData : $metaData + $config,
-            $metaDataOnly ? null : $this->getSchemaDocument()
+            $metaDataOnly ? null : $this->getRegistryCollection()->getConfigurationSchemaDocument()
         );
     }
 }

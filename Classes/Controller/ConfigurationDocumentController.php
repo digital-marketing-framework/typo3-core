@@ -3,8 +3,8 @@
 namespace DigitalMarketingFramework\Typo3\Core\Controller;
 
 use DigitalMarketingFramework\Core\ConfigurationDocument\ConfigurationDocumentManagerInterface;
+use DigitalMarketingFramework\Core\Registry\RegistryCollection;
 use DigitalMarketingFramework\Core\SchemaDocument\SchemaDocument;
-use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Event\ConfigurationDocumentMetaDataUpdateEvent;
 use DigitalMarketingFramework\Typo3\Core\Registry\Registry;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
@@ -26,9 +26,9 @@ class ConfigurationDocumentController extends AbstractBackendController
     ) {
         parent::__construct($moduleTemplateFactory, $iconFactory);
         $this->configurationDocumentManager = $registry->getConfigurationDocumentManager();
-        $event = new ConfigurationDocumentMetaDataUpdateEvent();
-        $eventDispatcher->dispatch($event);
-        $this->schemaDocument = $event->getSchemaDocument();
+        $registryCollection = new RegistryCollection();
+        $eventDispatcher->dispatch($registryCollection);
+        $this->schemaDocument = $registryCollection->getConfigurationSchemaDocument();
     }
 
     protected function addActionButtons(ButtonBar $buttonBar): void

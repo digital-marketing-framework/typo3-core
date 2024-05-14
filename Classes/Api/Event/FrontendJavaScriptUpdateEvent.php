@@ -1,6 +1,6 @@
 <?php
 
-namespace DigitalMarketingFramework\Typo3\Core\Controller\Event;
+namespace DigitalMarketingFramework\Typo3\Core\Api\Event;
 
 use DigitalMarketingFramework\Core\Registry\RegistryInterface;
 

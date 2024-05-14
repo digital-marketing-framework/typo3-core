@@ -1,0 +1,3 @@
+routeEnhancers:
+  DMF:
+    type: DmfResourceEnhancer

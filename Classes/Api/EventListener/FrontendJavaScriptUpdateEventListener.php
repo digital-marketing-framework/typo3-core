@@ -1,8 +1,8 @@
 <?php
 
-namespace DigitalMarketingFramework\Typo3\Core\Controller\EventListener;
+namespace DigitalMarketingFramework\Typo3\Core\Api\EventListener;
 
-use DigitalMarketingFramework\Typo3\Core\Controller\Event\FrontendJavaScriptUpdateEvent;
+use DigitalMarketingFramework\Typo3\Core\Api\Event\FrontendJavaScriptUpdateEvent;
 use DigitalMarketingFramework\Typo3\Core\Registry\Registry;
 
 class FrontendJavaScriptUpdateEventListener

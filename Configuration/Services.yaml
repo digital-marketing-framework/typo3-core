@@ -7,6 +7,10 @@ services:
   DigitalMarketingFramework\Typo3\Core\:
     resource: '../Classes/*'
 
+  # REST API
+  DigitalMarketingFramework\Typo3\Core\Middleware\RestMiddleware:
+    public: true
+
   DigitalMarketingFramework\Typo3\Core\Controller\ConfigurationDocumentAjaxController:
     public: true
 
@@ -38,7 +42,7 @@ services:
         event: DigitalMarketingFramework\Typo3\Core\Registry\Event\CoreRegistryUpdateEvent
 
   # frontend scripts updates
-  DigitalMarketingFramework\Typo3\Core\Controller\EventListener\FrontendJavaScriptUpdateEventListener:
+  DigitalMarketingFramework\Typo3\Core\Api\EventListener\FrontendJavaScriptUpdateEventListener:
     tags:
       - name: event.listener
-        event: DigitalMarketingFramework\Typo3\Core\Controller\Event\FrontendJavaScriptUpdateEvent
+        event: DigitalMarketingFramework\Typo3\Core\Api\Event\FrontendJavaScriptUpdateEvent

@@ -10,5 +10,13 @@ configurationStorage {
     allowSaveToExtensionPaths = 0
 }
 
+api {
+    # cat=API; type=boolean; label=API enabled
+    enabled = 0
+
+    # cat=API; type=string; label=API base path
+    basePath = digital-marketing-framework/api
+}
+
 # cat=Debug; type=boolean; label=Debug Mode
 debug = 0

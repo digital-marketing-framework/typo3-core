@@ -54,6 +54,7 @@ class RestMiddleware implements MiddlewareInterface
         $code = $apiResponse->getStatusCode();
         return $this->responseFactory->createResponse($code, $message ?? '')
             ->withHeader('Content-Type', 'application/json; charset=utf-8')
+            ->withHeader('Cache-Control', 'no-store, must-revalidate')
             ->withBody($this->streamFactory->createStream($apiResponse->getContent()));
     }
 

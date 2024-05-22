@@ -7,45 +7,6 @@
     {d:be.vendorAsset(package:'digital-marketing-framework/core', path:'/config-editor/scripts/index.js.map', returnUrl:0)}
     <f:asset.css identifier="dmf-dce-styles"
                  href="{d:be.vendorAsset(package:'digital-marketing-framework/core', path:'/config-editor/styles/index.css')}" />
-    <f:asset.css identifier="dmf-dce-inline-styles">
-        @layer base {
-        /* Caveat */
-        @font-face {
-        font-family: "Caveat";
-        font-display: swap;
-        font-style: normal;
-        font-weight: 700;
-        src: url("/{d:be.vendorAsset(package:'digital-marketing-framework/core',path:'/config-editor/fonts/caveat/Caveat-Bold.ttf')}")
-        format("truetype");
-        }
-        @font-face {
-        font-family: "Caveat";
-        font-display: swap;
-        font-style: normal;
-        font-weight: 600;
-        src:
-        url("/{d:be.vendorAsset(package:'digital-marketing-framework/core',path:'/config-editor/fonts/caveat/Caveat-SemiBold.ttf')}")
-        format("truetype");
-        }
-        @font-face {
-        font-family: "Caveat";
-        font-display: swap;
-        font-style: normal;
-        font-weight: 500;
-        src:
-        url("/{d:be.vendorAsset(package:'digital-marketing-framework/core',path:'/config-editor/fonts/caveat/Caveat-Medium.ttf')}")
-        format("truetype");
-        }
-        @font-face {
-        font-family: "Caveat";
-        font-display: swap;
-        font-style: normal;
-        font-weight: 400;
-        src:
-        url("/{d:be.vendorAsset(package:'digital-marketing-framework/core',path:'/config-editor/fonts/caveat/Caveat-Regular.ttf')}")
-        format("truetype");
-        }
-        }
-    </f:asset.css>
-
+    <f:asset.css identifier="dmf-dce-font-styles"
+                 href="{d:be.vendorAsset(package:'digital-marketing-framework/core', path:'/config-editor/styles/type.css', folders:{0:'fonts'})}" />
 </html>

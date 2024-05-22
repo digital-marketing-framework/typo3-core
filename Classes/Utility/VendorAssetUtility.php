@@ -76,7 +76,7 @@ class VendorAssetUtility
         }
     }
 
-    protected static function copyFile(string $composerName, string $path): void
+    protected static function copyFile(string $composerName, string $path, array $replacements = []): void
     {
         $source = static::getSourcePath($composerName, $path);
         $target = static::getTargetPath($composerName, $path);
@@ -85,14 +85,31 @@ class VendorAssetUtility
             throw new DigitalMarketingFrameworkException(sprintf('Asset "%s" does not seem to exist.', $source));
         }
 
+        $copy = false;
         if (file_exists($target)) {
             if (static::getCacheHash($source) !== static::getCacheHash($target)) {
                 unlink($target);
-                copy($source, $target);
+                $copy = true;
             }
         } else {
             static::updateTargetFolder($target);
+            $copy = true;
+        }
+
+        if ($copy) {
             copy($source, $target);
+
+            if ($replacements !== []) {
+                $contents = file_get_contents($target);
+                foreach ($replacements as $searchBasePath => $replacementBasePath) {
+                    $searchBasePath = preg_quote($searchBasePath, '/');
+                    $contents = preg_replace_callback('/"' . $searchBasePath . '([^"]+)"/', function($match) use ($composerName, $replacementBasePath) {
+                        $relativePath = $replacementBasePath . $match[1];
+                        return '"/' . static::makeVendorAssetAvailable($composerName, $relativePath) . '"';
+                    }, $contents);
+                }
+                file_put_contents($target, $contents);
+            }
         }
     }
 
@@ -125,11 +142,11 @@ class VendorAssetUtility
         }
     }
 
-    public static function makeVendorAssetAvailable(string $composerName, string $path): string
+    public static function makeVendorAssetAvailable(string $composerName, string $path, array $replacements = []): string
     {
         $path = ltrim($path, '/');
         static::checkFile($composerName, $path);
-        static::copyFile($composerName, $path);
+        static::copyFile($composerName, $path, $replacements);
 
         return static::getPublicUrl($composerName, $path);
     }

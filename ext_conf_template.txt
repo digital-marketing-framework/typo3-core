@@ -16,6 +16,9 @@ api {
 
     # cat=API; type=string; label=API base path
     basePath = digital-marketing-framework/api
+
+    # cat=API; type=integer; label=Storage Page ID
+    pid = 0
 }
 
 # cat=Debug; type=boolean; label=Debug Mode

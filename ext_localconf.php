@@ -2,6 +2,7 @@
 
 use DigitalMarketingFramework\Typo3\Core\Backend\DataHandler\JsonDataHandler;
 use DigitalMarketingFramework\Typo3\Core\Controller\FrontendController;
+use DigitalMarketingFramework\Typo3\Core\Form\Element\ConfigurationEditorTextFieldElement;
 use DigitalMarketingFramework\Typo3\Core\Form\Element\JsonFieldElement;
 use DigitalMarketingFramework\Typo3\Core\Routing\Enhancer\ResourceEnhancer;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
@@ -18,6 +19,14 @@ call_user_func(static function () {
         'class' => JsonFieldElement::class,
     ];
 
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1694775399] = [
+        'nodeName' => ConfigurationEditorTextFieldElement::RENDER_TYPE,
+        'priority' => 40,
+        'class' => ConfigurationEditorTextFieldElement::class,
+    ];
+
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['routing']['enhancers'][ResourceEnhancer::ENHANCER_NAME] = ResourceEnhancer::class;
+
     ExtensionUtility::configurePlugin(
         'DmfCore',
         'FrontendService',
@@ -28,6 +37,4 @@ call_user_func(static function () {
         [
         ]
     );
-
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['routing']['enhancers'][ResourceEnhancer::ENHANCER_NAME] = ResourceEnhancer::class;
 });

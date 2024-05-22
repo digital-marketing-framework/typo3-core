@@ -14,6 +14,7 @@ class VendorAssetViewHelper extends AbstractViewHelper
         parent::initializeArguments();
         $this->registerArgument('package', 'string', 'composer package name');
         $this->registerArgument('path', 'string', 'package path to asset');
+        $this->registerArgument('folders', 'array', 'path replacements for the assets\' contents', false, []);
         $this->registerArgument('returnUrl', 'bool', 'return the url of the resulting asset', false, true);
     }
 
@@ -22,7 +23,12 @@ class VendorAssetViewHelper extends AbstractViewHelper
         Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
     ): string {
-        $url = VendorAssetUtility::makeVendorAssetAvailable($arguments['package'], $arguments['path']);
+        $replacements = [];
+        foreach ($arguments['folders'] as $folder) {
+            $replacements['/' . $folder . '/'] = '/config-editor/' . $folder . '/';
+        }
+        $url = VendorAssetUtility::makeVendorAssetAvailable($arguments['package'], $arguments['path'], $replacements);
+
         if ((bool)$arguments['returnUrl']) {
             return $url;
         }

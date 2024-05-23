@@ -99,6 +99,9 @@ class VendorAssetUtility
         if ($copy) {
             copy($source, $target);
 
+            // TODO updating paths in the target file will change its cache hash
+            //      which will cause the file to be copied every time
+            //      even if the contents did not change
             if ($replacements !== []) {
                 $contents = file_get_contents($target);
                 foreach ($replacements as $searchBasePath => $replacementBasePath) {

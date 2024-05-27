@@ -2,6 +2,7 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\Form\Element;
 
+use DigitalMarketingFramework\Core\Utility\GeneralUtility;
 use DigitalMarketingFramework\Typo3\Core\Utility\ConfigurationEditorRenderUtility;
 use DigitalMarketingFramework\Typo3\Core\Utility\VendorAssetUtility;
 use DOMDocument;
@@ -21,12 +22,18 @@ class ConfigurationEditorTextFieldElement extends TextElement
         $readonly = $config['readOnly'] ?? false;
         $mode = $config['mode'] ?? 'modal';
         $globalDocument = $config['globalDocument'] ?? false;
+        $baseRoute = $this->getControllerBaseRoute($config);
+        $includes = $this->controllerSupportsIncludes($config);
+        $parameters = $this->getAdditionalControllerParameters($config);
 
         $dataAttributes = ConfigurationEditorRenderUtility::getTextAreaDataAttributes(
             ready: true,
             mode: $mode,
             readonly: $readonly,
-            globalDocument: $globalDocument
+            globalDocument: $globalDocument,
+            baseRoute: $baseRoute,
+            includes: $includes,
+            parameters: $parameters,
         );
 
         $class = $textArea->getAttribute('class');
@@ -42,13 +49,36 @@ class ConfigurationEditorTextFieldElement extends TextElement
         }
     }
 
+    protected function controllerSupportsIncludes(array $config): bool
+    {
+        return (bool)($config['ajaxControllerSupportsIncludes'] ?? true);
+    }
+
+    protected function getControllerBaseRoute(array $config): string
+    {
+        return $config['ajaxControllerBaseRoute'] ?? 'configuration';
+    }
+
+    protected function getAdditionalControllerParameters(array $config): array
+    {
+        $parameters = [];
+        $fields = GeneralUtility::castValueToArray($config['additionalFlexFormSettingsAjaxControllerParameters'] ?? '');
+        foreach ($fields as $field) {
+            $value = $this->data['flexFormRowData']['settings.' . $field]['vDEF'][0] ?? '';
+            if ($value !== '') {
+                $parameters[$field] = $value;
+            }
+        }
+
+        return $parameters;
+    }
+
     public function render(): array
     {
         $resultArray = parent::render();
 
         $parameterArray = $this->data['parameterArray'];
         $config = $parameterArray['fieldConf']['config'];
-
 
         $scriptUrl = VendorAssetUtility::makeVendorAssetAvailable('digital-marketing-framework/core', '/config-editor/scripts/index.js');
         $stylesUrl = VendorAssetUtility::makeVendorAssetAvailable('digital-marketing-framework/core', '/config-editor/styles/index.css');

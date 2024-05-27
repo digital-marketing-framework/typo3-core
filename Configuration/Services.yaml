@@ -20,6 +20,9 @@ services:
   DigitalMarketingFramework\Typo3\Core\Controller\ConfigurationDocumentAjaxController:
     public: true
 
+  DigitalMarketingFramework\Typo3\Core\Controller\GlobalConfigurationAjaxController:
+    public: true
+
   # backend module controllers
   DigitalMarketingFramework\Typo3\Core\Controller\EventListener\BackendControllerUpdateEventListener:
     tags:

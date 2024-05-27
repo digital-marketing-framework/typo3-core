@@ -2,13 +2,13 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\Controller;
 
-use DigitalMarketingFramework\Core\ConfigurationDocument\Controller\InheritedDocumentConfigurationEditorController;
+use DigitalMarketingFramework\Core\ConfigurationDocument\Controller\FullDocumentConfigurationEditorController;
 use DigitalMarketingFramework\Core\Registry\RegistryCollection;
 use DigitalMarketingFramework\Typo3\Core\Registry\Registry;
 use Psr\Http\Message\ResponseFactoryInterface;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 
-class ConfigurationDocumentAjaxController extends AbstractAjaxController
+class GlobalConfigurationAjaxController extends AbstractAjaxController
 {
     public function __construct(
         ResponseFactoryInterface $responseFactory,
@@ -18,8 +18,8 @@ class ConfigurationDocumentAjaxController extends AbstractAjaxController
         $registryCollection = new RegistryCollection();
         $eventDispatcher->dispatch($registryCollection);
 
-        $schemaDocument = $registryCollection->getConfigurationSchemaDocument();
-        $editorController = $registry->createObject(InheritedDocumentConfigurationEditorController::class);
+        $schemaDocument = $registryCollection->getGlobalConfigurationSchemaDocument();
+        $editorController = $registry->createObject(FullDocumentConfigurationEditorController::class);
         $editorController->setSchemaDocument($schemaDocument);
 
         parent::__construct($responseFactory, $editorController);

@@ -15,7 +15,7 @@ class GlobalConfiguration extends DefaultGlobalConfiguration
         parent::__construct();
     }
 
-    public function get(string $key = '', mixed $default = null): mixed
+    public function get(string $key, mixed $default = null): mixed
     {
         try {
             $key = $this->packageAliases->resolveAlias($key);
@@ -24,5 +24,11 @@ class GlobalConfiguration extends DefaultGlobalConfiguration
         } catch (ExtensionConfigurationExtensionNotConfiguredException|ExtensionConfigurationPathDoesNotExistException) {
             return parent::get($key, $default);
         }
+    }
+
+    public function set(string $key, mixed $value): void
+    {
+        $key = $this->packageAliases->resolveAlias($key);
+        $this->extensionConfiguration->set($key, $value);
     }
 }

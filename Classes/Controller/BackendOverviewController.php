@@ -8,6 +8,8 @@ class BackendOverviewController extends AbstractBackendController
 {
     public function showAction(): ResponseInterface
     {
+        $this->view->assign('sections', $this->getSections());
+
         return $this->backendHtmlResponse();
     }
 }

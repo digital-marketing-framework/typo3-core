@@ -2,8 +2,8 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\Domain\Repository\Api;
 
-use DigitalMarketingFramework\Core\Exception\DigitalMarketingFrameworkException;
 use DigitalMarketingFramework\Core\Api\EndPoint\EndPointStorageInterface;
+use DigitalMarketingFramework\Core\Exception\DigitalMarketingFrameworkException;
 use DigitalMarketingFramework\Core\Model\Api\EndPointInterface;
 use DigitalMarketingFramework\Typo3\Core\Domain\Model\Api\EndPoint;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
@@ -51,6 +51,7 @@ class EndPointRepository extends Repository implements EndPointStorageInterface
         $query = $this->createQuery();
         $query->getQuerySettings()->setRespectStoragePage(true);
         $query->getQuerySettings()->setStoragePageIds([$this->getPid()]);
+
         return $query->execute()->toArray();
     }
 
@@ -64,13 +65,14 @@ class EndPointRepository extends Repository implements EndPointStorageInterface
         $query->setLimit(1);
 
         $result = $query->execute()->toArray();
+
         return $result[0] ?? null;
     }
 
     public function addEndPoint(EndPointInterface $endPoint): void
     {
         if (!$endPoint instanceof EndPoint) {
-            throw new DigitalMarketingFrameworkException(sprintf('Unknown type of API end point record "%s".', get_class($endPoint)));
+            throw new DigitalMarketingFrameworkException(sprintf('Unknown type of API end point record "%s".', $endPoint::class));
         }
 
         $endPoint->setPid($this->getPid());
@@ -80,18 +82,20 @@ class EndPointRepository extends Repository implements EndPointStorageInterface
 
     public function removeEndPoint(EndPointInterface $endPoint): void
     {
-        if (!$endPoint instanceof static) {
-            throw new DigitalMarketingFrameworkException(sprintf('Unknown type of API end point record "%s".', get_class($endPoint)));
+        if (!$endPoint instanceof EndPoint) {
+            throw new DigitalMarketingFrameworkException(sprintf('Unknown type of API end point record "%s".', $endPoint::class));
         }
+
         $this->remove($endPoint);
         $this->persistenceManager->persistAll();
     }
 
     public function updateEndPoint(EndPointInterface $endPoint): void
     {
-        if (!$endPoint instanceof static) {
-            throw new DigitalMarketingFrameworkException(sprintf('Unknown type of API end point record "%s".', get_class($endPoint)));
+        if (!$endPoint instanceof EndPoint) {
+            throw new DigitalMarketingFrameworkException(sprintf('Unknown type of API end point record "%s".', $endPoint::class));
         }
+
         $this->update($endPoint);
     }
 }

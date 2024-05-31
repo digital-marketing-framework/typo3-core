@@ -2,11 +2,7 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\Domain\Model\Api;
 
-use DateTime;
-use DigitalMarketingFramework\Core\Model\Queue\JobInterface;
-use DigitalMarketingFramework\Core\Queue\QueueInterface;
 use DigitalMarketingFramework\Core\Model\Api\EndPointInterface;
-use JsonException;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 class EndPoint extends AbstractEntity implements EndPointInterface

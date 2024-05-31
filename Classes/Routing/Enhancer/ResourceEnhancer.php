@@ -18,10 +18,16 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class ResourceEnhancer extends AbstractEnhancer implements RoutingEnhancerInterface
 {
+    /**
+     * @var string
+     */
     public const ENHANCER_NAME = 'DmfResourceEnhancer';
 
     protected EntryRouteResolverInterface $entryRouteResolver;
 
+    /**
+     * @param array<string,mixed> $configuration
+     */
     public function __construct(
         protected array $configuration
     ) {
@@ -46,6 +52,9 @@ class ResourceEnhancer extends AbstractEnhancer implements RoutingEnhancerInterf
         }
     }
 
+    /**
+     * @param array<mixed> $parameters
+     */
     public function enhanceForGeneration(RouteCollection $collection, array $parameters): void
     {
     }

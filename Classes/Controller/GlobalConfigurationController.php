@@ -44,6 +44,7 @@ class GlobalConfigurationController extends AbstractBackendController
         foreach (array_keys($properties) as $key) {
             $data[$key] = $this->globalConfiguration->get($key) ?? [];
         }
+
         $this->schemaProcessor->convertValueTypes($this->schemaDocument, $data);
         $document = $this->parser->produceDocument($data, $this->schemaDocument);
         $this->view->assign('document', $document);

@@ -10,7 +10,7 @@ class RegistryCollectionEventListener
 {
     public function __construct(
         protected Registry $registry,
-    ){
+    ) {
     }
 
     public function __invoke(RegistryCollectionInterface $collection): void

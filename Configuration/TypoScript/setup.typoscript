@@ -61,6 +61,6 @@ lib.digitalMarketingFrameworkSettings {
   }
 }
 
-[{$plugin.tx_dmf_core_frontendservice.settings.enabledFrontendApi}]
-page.headerData.1700731370 < lib.digitalMarketingFrameworkSettings
+[digitalMarketingFramework.apiEnabled()]
+  page.headerData.1700731370 < lib.digitalMarketingFrameworkSettings
 [global]

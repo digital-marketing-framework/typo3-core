@@ -34,6 +34,7 @@ abstract class AbstractAjaxController
     public function schemaAction(ServerRequestInterface $request): ResponseInterface
     {
         $this->prepareAction($request);
+
         return $this->jsonResponse($this->editorController->getSchemaDocumentAsArray());
     }
 

@@ -37,6 +37,7 @@ class RestMiddleware implements MiddlewareInterface
             $this->routeResolver = $this->registry->createObject(EntryRouteResolver::class);
             $this->registryCollection->addApiRouteResolvers($this->routeResolver);
         }
+
         return $this->routeResolver;
     }
 
@@ -44,6 +45,7 @@ class RestMiddleware implements MiddlewareInterface
     {
         $message = $apiResponse->getStatusMessage();
         $code = $apiResponse->getStatusCode();
+
         return $this->responseFactory->createResponse($code, $message ?? '')
             ->withHeader('Content-Type', 'application/json; charset=utf-8')
             ->withHeader('Cache-Control', 'no-store, must-revalidate')
@@ -52,7 +54,7 @@ class RestMiddleware implements MiddlewareInterface
 
     protected function processRequest(EntryRouteResolverInterface $resolver, ServerRequestInterface $request): ApiResponseInterface
     {
-        $body = (string) $request->getBody();
+        $body = (string)$request->getBody();
         try {
             $data = $body === '' ? null : json_decode($body, true, flags: JSON_THROW_ON_ERROR);
         } catch (JsonException) {
@@ -70,7 +72,7 @@ class RestMiddleware implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if (is_array($request->getQueryParams()) && array_key_exists('dmfResource', $request->getQueryParams())) {
+        if (array_key_exists('dmfResource', $request->getQueryParams())) {
             $resolver = $this->getRouteResolver();
             if ($resolver->enabled()) {
                 $apiResponse = $this->processRequest($resolver, $request);

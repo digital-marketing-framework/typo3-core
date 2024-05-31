@@ -10,10 +10,19 @@ use DigitalMarketingFramework\Typo3\Core\Registry\Event\CoreRegistryUpdateEvent;
 
 abstract class AbstractCoreRegistryUpdateEventListener
 {
+    /**
+     * @var string
+     */
     protected const TEMPLATE_PATH_PATTERN = 'EXT:%s/Resources/Private/TwigTemplates';
 
+    /**
+     * @var string
+     */
     protected const PARTIAL_PATH_PATTERN = 'EXT:%s/Resources/Private/TwigPartials';
 
+    /**
+     * @var string
+     */
     protected const CONFIGURATION_DOCUMENTS_PATH_PATTERN = 'EXT:%s/Resources/Private/ConfigurationDocuments';
 
     public function __construct(

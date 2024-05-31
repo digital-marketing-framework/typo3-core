@@ -18,6 +18,16 @@ class ConfigurationEditorTextFieldElement extends TextElement
      */
     public const RENDER_TYPE = 'digitalMarketingFrameworkConfigurationEditorTextFieldElement';
 
+    /**
+     * @param array{
+     *   readOnly?:bool,
+     *   mode?:string,
+     *   globalDocument?:bool,
+     *   ajaxControllerBaseRoute?:string,
+     *   additionalFlexFormSettingsAjaxControllerParameters?:string,
+     *   ajaxControllerSupportsIncludes?:bool
+     * } $config
+     */
     protected function updateTextArea(DOMElement $textArea, array $config): void
     {
         $readonly = $config['readOnly'] ?? false;
@@ -50,16 +60,27 @@ class ConfigurationEditorTextFieldElement extends TextElement
         }
     }
 
+    /**
+     * @param array{ajaxControllerSupportsIncludes?:bool} $config
+     */
     protected function controllerSupportsIncludes(array $config): bool
     {
-        return (bool)($config['ajaxControllerSupportsIncludes'] ?? true);
+        return $config['ajaxControllerSupportsIncludes'] ?? true;
     }
 
+    /**
+     * @param array{ajaxControllerBaseRoute?:string} $config
+     */
     protected function getControllerBaseRoute(array $config): string
     {
         return $config['ajaxControllerBaseRoute'] ?? 'configuration';
     }
 
+    /**
+     * @param array{additionalFlexFormSettingsAjaxControllerParameters?:string} $config
+     *
+     * @return array<string,string>
+     */
     protected function getAdditionalControllerParameters(array $config): array
     {
         $parameters = [];
@@ -74,6 +95,9 @@ class ConfigurationEditorTextFieldElement extends TextElement
         return $parameters;
     }
 
+    /**
+     * @return array<string,mixed>
+     */
     public function render(): array
     {
         $resultArray = parent::render();
@@ -86,7 +110,7 @@ class ConfigurationEditorTextFieldElement extends TextElement
 
         $scriptUrl = $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/scripts/index.js');
         $stylesUrl = $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/styles/index.css');
-        $fontStylesUrl = $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/styles/type.css',);
+        $fontStylesUrl = $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/styles/type.css');
         $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/fonts/caveat/Caveat-Bold.ttf');
         $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/fonts/caveat/Caveat-Medium.ttf');
         $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/fonts/caveat/Caveat-Regular.ttf');
@@ -94,6 +118,7 @@ class ConfigurationEditorTextFieldElement extends TextElement
 
         $doc = new DOMDocument();
         $doc->loadHTML($resultArray['html'], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
         $textAreas = $doc->getElementsByTagName('textarea');
         if ($textAreas->length === 1) {
             /** @var DOMElement $textArea */

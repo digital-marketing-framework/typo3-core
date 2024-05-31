@@ -33,7 +33,7 @@ class ExtensionResourceService extends ResourceService
 
     public function getFileIdentifiersInResourceFolder(string $folderIdentifier): array|false
     {
-        return $this->getResourcePath($folderIdentifier);
+        return $this->getResourcePath($folderIdentifier) ?? false;
     }
 
     public function getResourceRootIdentifier(string $identifier): ?string

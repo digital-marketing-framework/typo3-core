@@ -8,6 +8,7 @@ use DigitalMarketingFramework\Typo3\Core\Utility\ConfigurationEditorRenderUtilit
 use DOMDocument;
 use DOMElement;
 use TYPO3\CMS\Backend\Form\Element\TextElement;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -95,6 +96,16 @@ class ConfigurationEditorTextFieldElement extends TextElement
         return $parameters;
     }
 
+    protected function createJavaScriptModuleInstruction(string $name): JavaScriptModuleInstruction
+    {
+        $typo3Version = new Typo3Version();
+        if ($typo3Version->getMajorVersion() <= 11) {
+            return JavaScriptModuleInstruction::forRequireJS($name); // @phpstan-ignore-line TYPO3 version switch
+        } else {
+            return JavaScriptModuleInstruction::create($name); // @phpstan-ignore-line TYPO3 version switch
+        }
+    }
+
     /**
      * @return array<string,mixed>
      */
@@ -128,7 +139,7 @@ class ConfigurationEditorTextFieldElement extends TextElement
 
         $resultArray['stylesheetFiles'][] = '/' . $stylesUrl;
         $resultArray['stylesheetFiles'][] = '/' . $fontStylesUrl;
-        $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create('/' . $scriptUrl);
+        $resultArray['javaScriptModules'][] = $this->createJavaScriptModuleInstruction('/' . $scriptUrl);
         $resultArray['html'] = $doc->saveHTML();
 
         return $resultArray;

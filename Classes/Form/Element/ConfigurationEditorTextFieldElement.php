@@ -2,13 +2,14 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\Form\Element;
 
-use DigitalMarketingFramework\Core\Utility\GeneralUtility;
+use DigitalMarketingFramework\Core\Utility\GeneralUtility as DmfGeneralUtility;
+use DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection;
 use DigitalMarketingFramework\Typo3\Core\Utility\ConfigurationEditorRenderUtility;
-use DigitalMarketingFramework\Typo3\Core\Utility\VendorAssetUtility;
 use DOMDocument;
 use DOMElement;
 use TYPO3\CMS\Backend\Form\Element\TextElement;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ConfigurationEditorTextFieldElement extends TextElement
 {
@@ -62,7 +63,7 @@ class ConfigurationEditorTextFieldElement extends TextElement
     protected function getAdditionalControllerParameters(array $config): array
     {
         $parameters = [];
-        $fields = GeneralUtility::castValueToArray($config['additionalFlexFormSettingsAjaxControllerParameters'] ?? '');
+        $fields = DmfGeneralUtility::castValueToArray($config['additionalFlexFormSettingsAjaxControllerParameters'] ?? '');
         foreach ($fields as $field) {
             $value = $this->data['flexFormRowData']['settings.' . $field]['vDEF'][0] ?? '';
             if ($value !== '') {
@@ -77,18 +78,19 @@ class ConfigurationEditorTextFieldElement extends TextElement
     {
         $resultArray = parent::render();
 
+        $registryCollection = GeneralUtility::makeInstance(RegistryCollection::class);
+        $assetService = $registryCollection->getRegistry()->getAssetService();
+
         $parameterArray = $this->data['parameterArray'];
         $config = $parameterArray['fieldConf']['config'];
 
-        $scriptUrl = VendorAssetUtility::makeVendorAssetAvailable('digital-marketing-framework/core', '/config-editor/scripts/index.js');
-        $stylesUrl = VendorAssetUtility::makeVendorAssetAvailable('digital-marketing-framework/core', '/config-editor/styles/index.css');
-        $fontStylesUrl = VendorAssetUtility::makeVendorAssetAvailable(
-            'digital-marketing-framework/core',
-            '/config-editor/styles/type.css',
-            [
-                '/fonts/' => '/config-editor/fonts/',
-            ]
-        );
+        $scriptUrl = $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/scripts/index.js');
+        $stylesUrl = $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/styles/index.css');
+        $fontStylesUrl = $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/styles/type.css',);
+        $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/fonts/caveat/Caveat-Bold.ttf');
+        $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/fonts/caveat/Caveat-Medium.ttf');
+        $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/fonts/caveat/Caveat-Regular.ttf');
+        $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/fonts/caveat/Caveat-SemiBold.ttf');
 
         $doc = new DOMDocument();
         $doc->loadHTML($resultArray['html'], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);

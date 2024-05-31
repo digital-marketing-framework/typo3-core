@@ -5,9 +5,8 @@ namespace DigitalMarketingFramework\Typo3\Core\Middleware;
 use DigitalMarketingFramework\Core\Api\Response\ApiResponseInterface;
 use DigitalMarketingFramework\Core\Api\RouteResolver\EntryRouteResolver;
 use DigitalMarketingFramework\Core\Api\RouteResolver\EntryRouteResolverInterface;
-use DigitalMarketingFramework\Core\Registry\RegistryCollection;
-use DigitalMarketingFramework\Core\Registry\RegistryCollectionInterface;
-use DigitalMarketingFramework\Typo3\Core\Registry\Registry;
+use DigitalMarketingFramework\Core\Registry\RegistryInterface;
+use DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection;
 use JsonException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -19,31 +18,24 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class RestMiddleware implements MiddlewareInterface
 {
-    protected RegistryCollectionInterface $registryCollection;
     protected EntryRouteResolverInterface $routeResolver;
+
+    protected RegistryInterface $registry;
 
     public function __construct(
         protected StreamFactoryInterface $streamFactory,
         protected ResponseFactoryInterface $responseFactory,
         protected EventDispatcherInterface $eventDispatcher,
-        protected Registry $registry,
+        protected RegistryCollection $registryCollection,
     ) {
-    }
-
-    protected function getRegistryCollection(): RegistryCollectionInterface
-    {
-        if (!isset($this->registryCollection)) {
-            $this->registryCollection = new RegistryCollection();
-            $this->eventDispatcher->dispatch($this->registryCollection);
-        }
-        return $this->registryCollection;
+        $this->registry = $this->registryCollection->getRegistryByClass(RegistryInterface::class);
     }
 
     protected function getRouteResolver(): EntryRouteResolverInterface
     {
         if (!isset($this->routeResolver)) {
             $this->routeResolver = $this->registry->createObject(EntryRouteResolver::class);
-            $this->getRegistryCollection()->addApiRouteResolvers($this->routeResolver);
+            $this->registryCollection->addApiRouteResolvers($this->routeResolver);
         }
         return $this->routeResolver;
     }

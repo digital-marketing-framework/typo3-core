@@ -8,10 +8,19 @@ services:
     resource: '../Classes/*'
 
   # registry collection
+  DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection:
+    public: true
+
   DigitalMarketingFramework\Typo3\Core\Registry\EventListener\RegistryCollectionEventListener:
     tags:
       - name: event.listener
-        event: DigitalMarketingFramework\Core\Registry\RegistryCollection
+        event: DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection
+
+  # registry
+  DigitalMarketingFramework\Typo3\Core\Registry\EventListener\CoreRegistryUpdateEventListener:
+    tags:
+      - name: event.listener
+        event: DigitalMarketingFramework\Typo3\Core\Registry\Event\CoreRegistryUpdateEvent
 
   # REST API
   DigitalMarketingFramework\Typo3\Core\Middleware\RestMiddleware:
@@ -28,24 +37,3 @@ services:
     tags:
       - name: event.listener
         event: DigitalMarketingFramework\Typo3\Core\Controller\Event\BackendControllerUpdateEvent
-
-  # static configuration document update
-  DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\EventListener\CoreSystemConfigurationDocumentEventListener:
-    tags:
-      - name: event.listener
-        event: DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\Event\StaticConfigurationDocumentIdentifierCollectionEvent
-      - name: event.listener
-        event: DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\Event\StaticConfigurationDocumentLoadEvent
-
-  DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\EventListener\CoreStaticConfigurationDocumentEventListener:
-    tags:
-      - name: event.listener
-        event: DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\Event\StaticConfigurationDocumentIdentifierCollectionEvent
-      - name: event.listener
-        event: DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\Event\StaticConfigurationDocumentLoadEvent
-
-  # registry updates
-  DigitalMarketingFramework\Typo3\Core\Registry\EventListener\CoreRegistryUpdateEventListener:
-    tags:
-      - name: event.listener
-        event: DigitalMarketingFramework\Typo3\Core\Registry\Event\CoreRegistryUpdateEvent

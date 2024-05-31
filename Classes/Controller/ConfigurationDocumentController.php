@@ -3,13 +3,12 @@
 namespace DigitalMarketingFramework\Typo3\Core\Controller;
 
 use DigitalMarketingFramework\Core\ConfigurationDocument\ConfigurationDocumentManagerInterface;
-use DigitalMarketingFramework\Core\Registry\RegistryCollection;
+use DigitalMarketingFramework\Core\Registry\RegistryInterface;
 use DigitalMarketingFramework\Core\SchemaDocument\SchemaDocument;
-use DigitalMarketingFramework\Typo3\Core\Registry\Registry;
+use DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
-use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 
 class ConfigurationDocumentController extends AbstractBackendController
@@ -21,13 +20,11 @@ class ConfigurationDocumentController extends AbstractBackendController
     public function __construct(
         ModuleTemplateFactory $moduleTemplateFactory,
         IconFactory $iconFactory,
-        Registry $registry,
-        EventDispatcher $eventDispatcher,
+        RegistryCollection $registryCollection,
     ) {
         parent::__construct($moduleTemplateFactory, $iconFactory);
+        $registry = $registryCollection->getRegistryByClass(RegistryInterface::class);
         $this->configurationDocumentManager = $registry->getConfigurationDocumentManager();
-        $registryCollection = new RegistryCollection();
-        $eventDispatcher->dispatch($registryCollection);
         $this->schemaDocument = $registryCollection->getConfigurationSchemaDocument();
     }
 

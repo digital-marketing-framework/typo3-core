@@ -2,19 +2,21 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\Controller;
 
-use DigitalMarketingFramework\Core\Registry\RegistryCollection;
+use DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 class FrontendController extends ActionController
 {
+    public function __construct(
+        protected RegistryCollection $registryCollection,
+    ) {
+    }
+
     public function javaScriptSettingsAction(): ResponseInterface
     {
-        $registryCollection = new RegistryCollection();
-        $this->eventDispatcher->dispatch($registryCollection);
-
-        $this->view->assign('DMF', $registryCollection->getFrontendSettings());
-        $this->view->assign('scripts', $registryCollection->getFrontendScripts());
+        $this->view->assign('DMF', $this->registryCollection->getFrontendSettings());
+        $this->view->assign('scripts', $this->registryCollection->getFrontendScripts());
 
         return $this->htmlResponse();
     }

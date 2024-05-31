@@ -3,7 +3,8 @@
 namespace DigitalMarketingFramework\Typo3\Core\Routing\Enhancer;
 
 use DigitalMarketingFramework\Core\Api\RouteResolver\EntryRouteResolverInterface;
-use DigitalMarketingFramework\Typo3\Core\Registry\Registry;
+use DigitalMarketingFramework\Core\Registry\RegistryInterface;
+use DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection;
 use TYPO3\CMS\Core\Routing\Enhancer\AbstractEnhancer;
 use TYPO3\CMS\Core\Routing\Enhancer\RoutingEnhancerInterface;
 use TYPO3\CMS\Core\Routing\Route;
@@ -24,7 +25,8 @@ class ResourceEnhancer extends AbstractEnhancer implements RoutingEnhancerInterf
     public function __construct(
         protected array $configuration
     ) {
-        $registry = GeneralUtility::makeInstance(Registry::class);
+        $registryCollection = GeneralUtility::makeInstance(RegistryCollection::class);
+        $registry = $registryCollection->getRegistryByClass(RegistryInterface::class);
         $this->entryRouteResolver = $registry->getApiEntryRouteResolver();
     }
 

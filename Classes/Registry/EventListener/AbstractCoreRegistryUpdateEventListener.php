@@ -10,6 +10,12 @@ use DigitalMarketingFramework\Typo3\Core\Registry\Event\CoreRegistryUpdateEvent;
 
 abstract class AbstractCoreRegistryUpdateEventListener
 {
+    protected const TEMPLATE_PATH_PATTERN = 'EXT:%s/Resources/Private/TwigTemplates';
+
+    protected const PARTIAL_PATH_PATTERN = 'EXT:%s/Resources/Private/TwigPartials';
+
+    protected const CONFIGURATION_DOCUMENTS_PATH_PATTERN = 'EXT:%s/Resources/Private/ConfigurationDocuments';
+
     public function __construct(
         protected InitializationInterface $initialization
     ) {
@@ -23,6 +29,13 @@ abstract class AbstractCoreRegistryUpdateEventListener
     protected function initServices(RegistryInterface $registry): void
     {
         $this->initialization->initServices(RegistryDomain::CORE, $registry);
+
+        $extKey = $this->initialization->getPackageAlias();
+        if ($extKey !== '') {
+            $registry->getTemplateService()->addTemplateFolder(sprintf(static::TEMPLATE_PATH_PATTERN, $extKey));
+            $registry->getTemplateService()->addPartialFolder(sprintf(static::PARTIAL_PATH_PATTERN, $extKey));
+            $registry->addStaticConfigurationDocumentFolderIdentifier(sprintf(static::CONFIGURATION_DOCUMENTS_PATH_PATTERN, $extKey));
+        }
     }
 
     protected function initPlugins(RegistryInterface $registry): void

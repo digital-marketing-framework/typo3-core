@@ -101,9 +101,9 @@ class ConfigurationEditorTextFieldElement extends TextElement
         $typo3Version = new Typo3Version();
         if ($typo3Version->getMajorVersion() <= 11) {
             return JavaScriptModuleInstruction::forRequireJS($name); // @phpstan-ignore-line TYPO3 version switch
-        } else {
-            return JavaScriptModuleInstruction::create($name); // @phpstan-ignore-line TYPO3 version switch
         }
+
+        return JavaScriptModuleInstruction::create($name); // @phpstan-ignore-line TYPO3 version switch
     }
 
     /**

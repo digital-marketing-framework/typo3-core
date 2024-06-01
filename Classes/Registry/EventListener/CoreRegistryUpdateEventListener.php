@@ -10,6 +10,7 @@ use DigitalMarketingFramework\Typo3\Core\Context\Typo3RequestContext;
 use DigitalMarketingFramework\Typo3\Core\Domain\Repository\Api\EndPointRepository;
 use DigitalMarketingFramework\Typo3\Core\FileStorage\FileStorage;
 use DigitalMarketingFramework\Typo3\Core\GlobalConfiguration\GlobalConfiguration;
+use DigitalMarketingFramework\Typo3\Core\GlobalConfiguration\Schema\CoreGlobalConfigurationSchema;
 use DigitalMarketingFramework\Typo3\Core\Log\LoggerFactory;
 use DigitalMarketingFramework\Typo3\Core\Resource\ExtensionResourceService;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -26,7 +27,9 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
         protected EventDispatcherInterface $eventDispatcher,
         protected EndPointRepository $endPointStorage,
     ) {
-        parent::__construct(new CoreInitialization('dmf_core'));
+        $initialization = new CoreInitialization('dmf_core');
+        $initialization->setGlobalConfigurationSchema(new CoreGlobalConfigurationSchema());
+        parent::__construct($initialization);
     }
 
     protected function initGlobalConfiguration(RegistryInterface $registry): void

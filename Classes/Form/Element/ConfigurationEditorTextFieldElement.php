@@ -130,6 +130,15 @@ class ConfigurationEditorTextFieldElement extends TextElement
         $doc = new DOMDocument();
         $doc->loadHTML($resultArray['html'], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
+        $typo3Version = new Typo3Version();
+        if ($typo3Version->getMajorVersion() <= 11) {
+            $javaScriptModulesField = 'requireJsModules';
+            $javaScriptModuleInstruction = JavaScriptModuleInstruction::forRequireJS('/' . $scriptUrl); // @phpstan-ignore-line TYPO3 version switch
+        } else {
+            $javaScriptModulesField = 'javaScriptModules';
+            $javaScriptModuleInstruction = JavaScriptModuleInstruction::create('/' . $scriptUrl); // @phpstan-ignore-line TYPO3 version switch
+        }
+
         $textAreas = $doc->getElementsByTagName('textarea');
         if ($textAreas->length === 1) {
             /** @var DOMElement $textArea */
@@ -139,7 +148,7 @@ class ConfigurationEditorTextFieldElement extends TextElement
 
         $resultArray['stylesheetFiles'][] = '/' . $stylesUrl;
         $resultArray['stylesheetFiles'][] = '/' . $fontStylesUrl;
-        $resultArray['javaScriptModules'][] = $this->createJavaScriptModuleInstruction('/' . $scriptUrl);
+        $resultArray[$javaScriptModulesField][] = $javaScriptModuleInstruction;
         $resultArray['html'] = $doc->saveHTML();
 
         return $resultArray;

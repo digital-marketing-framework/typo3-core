@@ -2,20 +2,29 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage;
 
-class YamlFileConfigurationDocumentStorage extends FileConfigurationDocumentStorage
-{
-    protected function getFileExtension(): string
-    {
-        return 'yaml';
-    }
+use DigitalMarketingFramework\Core\ConfigurationDocument\Storage\YamlFileConfigurationDocumentStorage as OriginalYamlFileConfigurationDocumentStorage;
+use Exception;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-    protected function checkFileValidity(string $fileIdentifier): bool
+class YamlFileConfigurationDocumentStorage extends OriginalYamlFileConfigurationDocumentStorage
+{
+    /**
+     * @var string
+     */
+    protected const ACCESS_FILE_PATH = 'EXT:dmf_core/Resources/Private/StaticTemplates/.htaccess';
+
+    public function initializeConfigurationDocumentStorage(): void
     {
-        return parent::checkFileValidity($fileIdentifier)
-            && in_array(
-                strtolower($this->fileStorage->getFileExtension($fileIdentifier)),
-                ['yml', 'yaml'],
-                true
-            );
+        parent::initializeConfigurationDocumentStorage();
+        $accessFileIdentifier = $this->getStorageFolderIdentifier() . '/.htaccess';
+        if (!$this->fileStorage->fileExists($accessFileIdentifier)) {
+            try {
+                $accessFileSourcePath = GeneralUtility::getFileAbsFileName(static::ACCESS_FILE_PATH);
+                $accessFileContents = file_get_contents($accessFileSourcePath);
+                $this->fileStorage->putFileContents($accessFileIdentifier, $accessFileContents);
+            } catch (Exception) {
+                $this->logger->warning(sprintf('Unable to create .htaccess file "%s"', $accessFileIdentifier));
+            }
+        }
     }
 }

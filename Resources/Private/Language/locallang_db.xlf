@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+  <file datatype="plaintext" date="2021-12-01T09:11:39Z" original="messages" product-name="dmf_core" source-language="en">
+    <header/>
+    <body>
+      <trans-unit id="tx_dmfcore_domain_model_api_endpoint" xml:space="preserve">
+		<source>Digital Marketing Framework - API EndPoint</source>
+	  </trans-unit>
+	  <trans-unit id="tx_dmfcore_domain_model_api_endpoint.name" xml:space="preserve">
+	    <source>Name</source>
+	  </trans-unit>
+	  <trans-unit id="tx_dmfcore_domain_model_api_endpoint.enabled" xml:space="preserve">
+	    <source>Enabled</source>
+	  </trans-unit>
+	  <trans-unit id="tx_dmfcore_domain_model_api_endpoint.push_enabled" xml:space="preserve">
+	    <source>Enabled</source>
+	  </trans-unit>
+	  <trans-unit id="tx_dmfcore_domain_model_api_endpoint.pull_enabled" xml:space="preserve">
+	    <source>Enabled</source>
+	  </trans-unit>
+	  <trans-unit id="tx_dmfcore_domain_model_api_endpoint.disable_context" xml:space="preserve">
+	    <source>Disable Context Processing</source>
+	  </trans-unit>
+	  <trans-unit id="tx_dmfcore_domain_model_api_endpoint.allow_context_override" xml:space="preserve">
+	    <source>Allow Client to override Context</source>
+	  </trans-unit>
+	  <trans-unit id="tx_dmfcore_domain_model_api_endpoint.expose_to_frontend" xml:space="preserve">
+	    <source>Expose End Point to Frontend</source>
+	  </trans-unit>
+	  <trans-unit id="tx_dmfcore_domain_model_api_endpoint.configuration_document" xml:space="preserve">
+	    <source>Configuration Document</source>
+	  </trans-unit>
+    </body>
+  </file>
+</xliff>

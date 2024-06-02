@@ -15,6 +15,11 @@ use TYPO3\CMS\Form\Controller\AbstractBackendController as OriginalAbstractBacke
 
 class AbstractBackendController extends OriginalAbstractBackendController
 {
+    /**
+     * @var int
+     */
+    public const SECTION_DEFAULT_WEIGHT = 50;
+
     public function __construct(
         protected ModuleTemplateFactory $moduleTemplateFactory,
         protected IconFactory $iconFactory,
@@ -41,8 +46,8 @@ class AbstractBackendController extends OriginalAbstractBackendController
     {
         $uri = $this->uriBuilder->reset()->uriFor(
             actionName: $action,
-            controllerName: $controller,
-            controllerArguments: $arguments
+            controllerArguments: $arguments,
+            controllerName: $controller
         );
 
         return new RedirectResponse($uri);
@@ -56,12 +61,25 @@ class AbstractBackendController extends OriginalAbstractBackendController
         return $this->request->getControllerName() === $section['controller'];
     }
 
+    /**
+     * @return array<array{title:string,controller:string,action:string,weight?:int}>
+     */
+    protected function getSections(): array
+    {
+        $sections = $this->settings['sections'] ?? [];
+        usort($sections, static function (array $section1, array $section2) {
+            return ($section1['weight'] ?? static::SECTION_DEFAULT_WEIGHT) <=> ($section2['weight'] ?? static::SECTION_DEFAULT_WEIGHT);
+        });
+
+        return $sections;
+    }
+
     protected function buildSectionMenu(Menu $sectionMenu): void
     {
         $sectionMenu->setIdentifier('dmfSectionMenu');
         $sectionMenu->setLabel('');
 
-        $sections = $this->settings['sections'] ?? [];
+        $sections = $this->getSections();
         array_unshift($sections, [
             'title' => 'Overview',
             'controller' => 'BackendOverview',

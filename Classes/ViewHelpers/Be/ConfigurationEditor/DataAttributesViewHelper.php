@@ -14,6 +14,9 @@ class DataAttributesViewHelper extends AbstractBackendViewHelper
         $this->registerArgument('ready', 'bool', 'Markup is initialized already', false, true);
         $this->registerArgument('readonly', 'bool', 'Read-only document', false, false);
         $this->registerArgument('globalDocument', 'bool', 'Global document', false, false);
+        $this->registerArgument('baseRoute', 'string', 'Base route for ajax URLs', false, 'configuration');
+        $this->registerArgument('includes', 'bool', 'Configuration support includes', false, true);
+        $this->registerArgument('routeParameters', 'array', 'Additional AJAX route parameters', false, []);
     }
 
     /**
@@ -22,10 +25,13 @@ class DataAttributesViewHelper extends AbstractBackendViewHelper
     public function render(): array
     {
         return ConfigurationEditorRenderUtility::getTextAreaDataAttributes(
-            $this->arguments['ready'],
-            $this->arguments['mode'],
-            $this->arguments['readonly'],
-            $this->arguments['globalDocument']
+            ready: $this->arguments['ready'],
+            mode: $this->arguments['mode'],
+            readonly: $this->arguments['readonly'],
+            globalDocument: $this->arguments['globalDocument'],
+            baseRoute: $this->arguments['baseRoute'],
+            includes: $this->arguments['includes'],
+            parameters: $this->arguments['routeParameters']
         );
     }
 }

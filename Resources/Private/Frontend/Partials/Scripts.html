@@ -5,7 +5,7 @@
     <f:for each="{domainScripts}" as="scripts" key="package">
         <f:for each="{scripts}" as="script">
             <f:asset.script identifier="dmf-script-{domain}-{package}-{script}"
-                    src="{d:be.vendorAsset(package:package, path:script)}" />
+                    src="{d:be.vendorAsset(path:script)}" />
         </f:for>
     </f:for>
 </f:for>

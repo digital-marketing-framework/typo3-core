@@ -10,7 +10,7 @@ module.tx_dmfcore_web_dmfcoremanager {
     }
     settings {
       sections {
-        configuration {
+        configurationDocuments {
           title = Configuration
           subtitle = CORE
           controller = ConfigurationDocument
@@ -18,6 +18,17 @@ module.tx_dmfcore_web_dmfcoremanager {
           actionLabel = Show
           description = Manage Configuration Documents
           icon =
+          weight = 100
+        }
+        globalSettings {
+          title = Global Settings
+          subtitle = CORE
+          controller = GlobalConfiguration
+          action = edit
+          actionLabel = Show
+          description = Manage Global Settings
+          icon =
+          weight = 50
         }
       }
     }
@@ -50,6 +61,6 @@ lib.digitalMarketingFrameworkSettings {
   }
 }
 
-[{$plugin.tx_dmf_core_frontendservice.settings.enabledFrontendApi}]
-page.headerData.1700731370 < lib.digitalMarketingFrameworkSettings
+[digitalMarketingFramework.apiEnabled()]
+  page.headerData.1700731370 < lib.digitalMarketingFrameworkSettings
 [global]

@@ -3,7 +3,8 @@
 namespace DigitalMarketingFramework\Typo3\Core\ViewHelpers\Be;
 
 use Closure;
-use DigitalMarketingFramework\Typo3\Core\Utility\VendorAssetUtility;
+use DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
@@ -12,7 +13,6 @@ class VendorAssetViewHelper extends AbstractViewHelper
     public function initializeArguments(): void
     {
         parent::initializeArguments();
-        $this->registerArgument('package', 'string', 'composer package name');
         $this->registerArgument('path', 'string', 'package path to asset');
         $this->registerArgument('returnUrl', 'bool', 'return the url of the resulting asset', false, true);
     }
@@ -22,7 +22,12 @@ class VendorAssetViewHelper extends AbstractViewHelper
         Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
     ): string {
-        $url = VendorAssetUtility::makeVendorAssetAvailable($arguments['package'], $arguments['path']);
+        $registryCollection = GeneralUtility::makeInstance(RegistryCollection::class);
+        $registry = $registryCollection->getRegistry();
+        $assetService = $registry->getAssetService();
+
+        $url = $assetService->makeAssetPublic($arguments['path']);
+
         if ((bool)$arguments['returnUrl']) {
             return $url;
         }

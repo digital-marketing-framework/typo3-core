@@ -20,28 +20,16 @@ class RestMiddleware implements MiddlewareInterface
 {
     protected EntryRouteResolverInterface $routeResolver;
 
-    protected RegistryInterface $registry;
-
     public function __construct(
         protected StreamFactoryInterface $streamFactory,
         protected ResponseFactoryInterface $responseFactory,
         protected EventDispatcherInterface $eventDispatcher,
         protected RegistryCollection $registryCollection,
     ) {
-        $this->registry = $this->registryCollection->getRegistryByClass(RegistryInterface::class);
+        $this->routeResolver = $this->registryCollection->getApiEntryRouteResolver();
     }
 
-    protected function getRouteResolver(): EntryRouteResolverInterface
-    {
-        if (!isset($this->routeResolver)) {
-            $this->routeResolver = $this->registry->createObject(EntryRouteResolver::class);
-            $this->registryCollection->addApiRouteResolvers($this->routeResolver);
-        }
-
-        return $this->routeResolver;
-    }
-
-    protected function buildResponse(ServerRequestInterface $request, ApiResponseInterface $apiResponse): ResponseInterface
+    protected function buildResponse(ApiResponseInterface $apiResponse): ResponseInterface
     {
         $message = $apiResponse->getStatusMessage();
         $code = $apiResponse->getStatusCode();
@@ -52,7 +40,7 @@ class RestMiddleware implements MiddlewareInterface
             ->withBody($this->streamFactory->createStream($apiResponse->getContent()));
     }
 
-    protected function processRequest(EntryRouteResolverInterface $resolver, ServerRequestInterface $request): ApiResponseInterface
+    protected function processRequest(ServerRequestInterface $request): ApiResponseInterface
     {
         $body = (string)$request->getBody();
         try {
@@ -61,23 +49,22 @@ class RestMiddleware implements MiddlewareInterface
             $data = null;
         }
 
-        $apiRequest = $resolver->buildRequest(
+        $apiRequest = $this->routeResolver->buildRequest(
             $request->getQueryParams()['dmfResource'] ?? '',
             $request->getMethod(),
             $data
         );
 
-        return $resolver->resolveRequest($apiRequest);
+        return $this->routeResolver->resolveRequest($apiRequest);
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if (array_key_exists('dmfResource', $request->getQueryParams())) {
-            $resolver = $this->getRouteResolver();
-            if ($resolver->enabled()) {
-                $apiResponse = $this->processRequest($resolver, $request);
+            if ($this->routeResolver->enabled()) {
+                $apiResponse = $this->processRequest($request);
 
-                return $this->buildResponse($request, $apiResponse);
+                return $this->buildResponse($apiResponse);
             }
         }
 

@@ -32,8 +32,7 @@ class ResourceEnhancer extends AbstractEnhancer implements RoutingEnhancerInterf
         protected array $configuration
     ) {
         $registryCollection = GeneralUtility::makeInstance(RegistryCollection::class);
-        $registry = $registryCollection->getRegistryByClass(RegistryInterface::class);
-        $this->entryRouteResolver = $registry->getApiEntryRouteResolver();
+        $this->entryRouteResolver = $registryCollection->getApiEntryRouteResolver();
     }
 
     /**

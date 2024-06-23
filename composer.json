@@ -28,9 +28,8 @@
         "typo3/cms-form": "^11.5 || ^12.4"
     },
     "require-dev": {
-        "mediatis/typo3-coding-standards": "dev-feature/standardize"
+        "mediatis/typo3-coding-standards": "^2.1"
     },
-    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "DigitalMarketingFramework\\Typo3\\Core\\": "Classes"

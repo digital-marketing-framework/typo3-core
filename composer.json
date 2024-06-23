@@ -21,6 +21,7 @@
         }
     ],
     "homepage": "https://www.mediatis.de",
+    "minimum-stability": "dev",
     "require": {
         "php": "^8.1",
         "digital-marketing-framework/core": "^2.2",
@@ -28,7 +29,7 @@
         "typo3/cms-form": "^11.5 || ^12.4"
     },
     "require-dev": {
-        "mediatis/typo3-coding-standards": "^2.0"
+        "mediatis/typo3-coding-standards": "dev-feature/standardize"
     },
     "autoload": {
         "psr-4": {

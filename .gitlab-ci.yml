@@ -7,8 +7,8 @@ workflow:
         -
             if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
 stages:
-    - coding-standards
-coding-standards:
+    - code-quality
+code-quality:
     parallel:
         matrix:
             -
@@ -37,6 +37,6 @@ coding-standards:
         - 'composer require typo3/cms-core ^${typo3_version} --no-progress --ignore-platform-req=ext-intl'
         - 'composer install --no-progress --ignore-platform-req=ext-intl'
     image: 'php:${php_version}'
-    stage: coding-standards
+    stage: code-quality
     script:
         - 'composer ci'

@@ -57,9 +57,7 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
         $identifier = $this->sanitizeIdentifier($identifier);
         try {
             return $this->resourceFactory->retrieveFileOrFolderObject($identifier);
-        } catch (ResourceDoesNotExistException $e) {
-            $this->logger->error(sprintf('Resource with ID "%s" does not exist: %s', $identifier, $e->getMessage()));
-
+        } catch (ResourceDoesNotExistException) {
             return null;
         }
     }

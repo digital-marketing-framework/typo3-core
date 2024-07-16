@@ -25,8 +25,8 @@ class ConfigurationEditorTextFieldElement extends TextElement
      *   mode?:string,
      *   globalDocument?:bool,
      *   ajaxControllerBaseRoute?:string,
-     *   additionalFlexFormSettingsAjaxControllerParameters?:string,
-     *   ajaxControllerSupportsIncludes?:bool
+     *   ajaxControllerSupportsIncludes?:bool,
+     *   ajaxControllerAdditionalParameters?:array<string,string>
      * } $config
      */
     protected function updateTextArea(DOMElement $textArea, array $config): void
@@ -78,22 +78,13 @@ class ConfigurationEditorTextFieldElement extends TextElement
     }
 
     /**
-     * @param array{additionalFlexFormSettingsAjaxControllerParameters?:string} $config
+     * @param array{ajaxControllerAdditionalParameters?:array<string,string>} $config
      *
      * @return array<string,string>
      */
     protected function getAdditionalControllerParameters(array $config): array
     {
-        $parameters = [];
-        $fields = DmfGeneralUtility::castValueToArray($config['additionalFlexFormSettingsAjaxControllerParameters'] ?? '');
-        foreach ($fields as $field) {
-            $value = $this->data['flexFormRowData']['settings.' . $field]['vDEF'][0] ?? '';
-            if ($value !== '') {
-                $parameters[$field] = $value;
-            }
-        }
-
-        return $parameters;
+        return $config['ajaxControllerAdditionalParameters'] ?? [];
     }
 
     protected function createJavaScriptModuleInstruction(string $name): JavaScriptModuleInstruction

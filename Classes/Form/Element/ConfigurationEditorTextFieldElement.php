@@ -2,7 +2,6 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\Form\Element;
 
-use DigitalMarketingFramework\Core\Utility\GeneralUtility as DmfGeneralUtility;
 use DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection;
 use DigitalMarketingFramework\Typo3\Core\Utility\ConfigurationEditorRenderUtility;
 use DOMDocument;

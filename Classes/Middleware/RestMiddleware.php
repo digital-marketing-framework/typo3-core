@@ -47,9 +47,14 @@ class RestMiddleware implements MiddlewareInterface
             $data = null;
         }
 
+        $arguments = $request->getQueryParams();
+        $resource = $arguments['dmfResource'] ?? '';
+        unset($arguments['dmfResource']);
+
         $apiRequest = $this->routeResolver->buildRequest(
-            $request->getQueryParams()['dmfResource'] ?? '',
+            $resource,
             $request->getMethod(),
+            $arguments,
             $data
         );
 

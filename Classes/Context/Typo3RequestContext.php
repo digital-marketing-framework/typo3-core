@@ -11,4 +11,14 @@ class Typo3RequestContext extends RequestContext
     {
         return GeneralUtility::getIndpEnv($name);
     }
+
+    public function getRequestArgument(string $name): mixed
+    {
+        return GeneralUtility::_GET($name);
+    }
+
+    public function getRequestArguments(): array
+    {
+        return GeneralUtility::_GET();
+    }
 }

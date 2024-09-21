@@ -9,7 +9,7 @@ class CoreRegistryUpdateEvent
 {
     public function __construct(
         protected RegistryInterface $registry,
-        protected RegistryUpdateType $type
+        protected RegistryUpdateType $type,
     ) {
     }
 

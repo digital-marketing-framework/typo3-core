@@ -6,8 +6,9 @@ use DigitalMarketingFramework\Core\Registry\Registry as CoreRegistry;
 use DigitalMarketingFramework\Core\Registry\RegistryUpdateType;
 use DigitalMarketingFramework\Typo3\Core\Registry\Event\CoreRegistryUpdateEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use TYPO3\CMS\Core\SingletonInterface;
 
-class Registry extends CoreRegistry implements RegistryInterface
+class Registry extends CoreRegistry implements SingletonInterface
 {
     public function __construct(
         protected EventDispatcherInterface $eventDispatcher,

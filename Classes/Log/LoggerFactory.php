@@ -9,7 +9,7 @@ use TYPO3\CMS\Core\Log\LogManagerInterface;
 class LoggerFactory implements LoggerFactoryInterface
 {
     public function __construct(
-        protected LogManagerInterface $logManager
+        protected LogManagerInterface $logManager,
     ) {
     }
 

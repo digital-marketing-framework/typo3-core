@@ -20,7 +20,7 @@ class VendorAssetViewHelper extends AbstractViewHelper
     public static function renderStatic(
         array $arguments,
         Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
+        RenderingContextInterface $renderingContext,
     ): string {
         $registryCollection = GeneralUtility::makeInstance(RegistryCollection::class);
         $registry = $registryCollection->getRegistry();

@@ -36,7 +36,7 @@ abstract class AbstractCoreRegistryUpdateEventListener
     protected const CONFIGURATION_DOCUMENTS_PATH_PATTERN = 'EXT:%s/Resources/Private/ConfigurationDocuments';
 
     public function __construct(
-        protected InitializationInterface $initialization
+        protected InitializationInterface $initialization,
     ) {
     }
 

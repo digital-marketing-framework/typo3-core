@@ -35,7 +35,7 @@ class ConfigurationEditorRenderUtility
         bool $globalDocument,
         string $baseRoute = 'configuration',
         bool $includes = true,
-        array $parameters = []
+        array $parameters = [],
     ): array {
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
 

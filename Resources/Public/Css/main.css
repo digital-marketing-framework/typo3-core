@@ -1,3 +1,4 @@
+.web_DmfCoreManager_GlobalConfiguration .module-body,
 .web_DmfCoreManager_ConfigurationDocument .module-body {
     height: calc(100vh - var(--module-docheader-height));
     padding: 0;

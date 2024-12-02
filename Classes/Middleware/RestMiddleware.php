@@ -48,7 +48,8 @@ class RestMiddleware implements MiddlewareInterface
         }
 
         $arguments = $request->getQueryParams();
-        $resource = $arguments['dmfResource'] ?? '';
+        // $resource = $arguments['dmfResource'] ?? '';
+        $resource = substr(ltrim($request->getUri()->getPath(), '/'), strlen($this->routeResolver->getBasePath()));
         unset($arguments['dmfResource']);
 
         $apiRequest = $this->routeResolver->buildRequest(
@@ -63,10 +64,27 @@ class RestMiddleware implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if (array_key_exists('dmfResource', $request->getQueryParams()) && $this->routeResolver->enabled()) {
-            $apiResponse = $this->processRequest($request);
+//        print('<pre>');
+//        print_r([
+//            'requestPath' => $request->getUri()->getPath(),
+//            'requestParams' => $request->getQueryParams(),
+//            'apiEnabled' => $this->routeResolver->enabled(),
+//            'apiBasePath' => $this->routeResolver->getBasePath(),
+//        ]);
+//        exit;
+        $requestPath = ltrim($request->getUri()->getPath(), '/');
+        if ($this->routeResolver->enabled() && str_starts_with($requestPath, $this->routeResolver->getBasePath())) {
+        // if (array_key_exists('dmfResource', $request->getQueryParams()) && $this->routeResolver->enabled()) {
+        // if (array_key_exists('dmfResource', $request->getQueryParams())) {
+            return $this->responseFactory->createResponse(200, '')
+                ->withHeader('Content-Type', 'application/json; charset=utf-8')
+                ->withHeader('Cache-Control', 'no-store, must-revalidate')
+                ->withBody($this->streamFactory->createStream('true'));
 
-            return $this->buildResponse($apiResponse);
+
+//            $apiResponse = $this->processRequest($request);
+//
+//            return $this->buildResponse($apiResponse);
         }
 
         return $handler->handle($request);

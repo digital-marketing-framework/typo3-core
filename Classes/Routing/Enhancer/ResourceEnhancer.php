@@ -3,7 +3,6 @@
 namespace DigitalMarketingFramework\Typo3\Core\Routing\Enhancer;
 
 use DigitalMarketingFramework\Core\Api\RouteResolver\EntryRouteResolverInterface;
-use DigitalMarketingFramework\Core\Api\RouteResolver\RouteResolverInterface;
 use DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection;
 use TYPO3\CMS\Core\Routing\Enhancer\AbstractEnhancer;
 use TYPO3\CMS\Core\Routing\Enhancer\RoutingEnhancerInterface;

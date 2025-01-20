@@ -27,7 +27,7 @@ class ResourceEnhancer extends AbstractEnhancer implements RoutingEnhancerInterf
 
     public function getEntryRouteResolver(): ?EntryRouteResolverInterface
     {
-        if ($this->entryRouteResolver === null) {
+        if (!$this->entryRouteResolver instanceof EntryRouteResolverInterface) {
             $registryCollection = GeneralUtility::makeInstance(RegistryCollection::class);
             $this->entryRouteResolver = $registryCollection->getApiEntryRouteResolver();
         }

@@ -27,6 +27,7 @@ dataPrivacy {
 }
 
 notifications {
+    # cat=Notifications; type=boolean; label=Enable notifications
     enabled = 0
 }
 

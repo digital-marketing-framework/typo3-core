@@ -13,13 +13,14 @@ use DigitalMarketingFramework\Typo3\Core\GlobalConfiguration\Schema\CoreGlobalCo
 use DigitalMarketingFramework\Typo3\Core\Log\LoggerFactory;
 use DigitalMarketingFramework\Typo3\Core\Resource\ExtensionResourceService;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 
 class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventListener
 {
     public function __construct(
-        protected GlobalConfiguration $globalConfiguration,
+        protected ExtensionConfiguration $extensionConfiguration,
         protected LoggerFactory $loggerFactory,
         protected ResourceFactory $resourceFactory,
         protected EventDispatcherInterface $eventDispatcher,
@@ -33,7 +34,9 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
     protected function initGlobalConfiguration(RegistryInterface $registry): void
     {
         parent::initGlobalConfiguration($registry);
-        $registry->setGlobalConfiguration($this->globalConfiguration);
+
+        $globalConfiguration = new GlobalConfiguration($registry, $this->extensionConfiguration);
+        $registry->setGlobalConfiguration($globalConfiguration);
     }
 
     protected function initServices(RegistryInterface $registry): void

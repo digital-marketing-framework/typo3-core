@@ -13,7 +13,7 @@ class BackendOverviewController extends AbstractBackendController
     public function __construct(
         ModuleTemplateFactory $moduleTemplateFactory,
         IconFactory $iconFactory,
-        protected RegistryCollection $registryCollection
+        protected RegistryCollection $registryCollection,
     ) {
         parent::__construct($moduleTemplateFactory, $iconFactory);
     }
@@ -34,7 +34,7 @@ class BackendOverviewController extends AbstractBackendController
                     AlertInterface::TYPE_WARNING => 1,
                     AlertInterface::TYPE_ERROR => 2,
                     default => 0,
-                }
+                },
             ];
         }
 

@@ -9,6 +9,16 @@
     <f:section name="Content">
         <h1>Digital Marketing</h1>
 
+        <f:if condition="{alerts}">
+            <div>
+                <f:for each="{alerts}" as="alert">
+                    <f:be.infobox title="{alert.title}" state="{alert.state}">
+                        {alert.content}
+                    </f:be.infobox>
+                </f:for>
+            </div>
+        </f:if>
+
         <div class="card-container">
             <f:for each="{sections}"
                    as="section">

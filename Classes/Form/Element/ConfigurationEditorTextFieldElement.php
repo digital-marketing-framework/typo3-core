@@ -118,7 +118,7 @@ class ConfigurationEditorTextFieldElement extends TextElement
         $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/fonts/caveat/Caveat-SemiBold.ttf');
 
         $doc = new DOMDocument();
-        $doc->loadHTML($resultArray['html'], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $doc->loadHTML($resultArray['html'], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOWARNING | LIBXML_NOERROR);
 
         $typo3Version = new Typo3Version();
         if ($typo3Version->getMajorVersion() <= 11) {

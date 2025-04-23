@@ -7,6 +7,10 @@ services:
   DigitalMarketingFramework\Typo3\Core\:
     resource: '../Classes/*'
 
+  DigitalMarketingFramework\Typo3\Core\Tca\:
+    resource: '../Classes/Tca/*'
+    public: true
+
   # registry collection
   DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection:
     public: true

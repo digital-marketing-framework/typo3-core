@@ -7,6 +7,7 @@ use DigitalMarketingFramework\Core\CoreInitialization;
 use DigitalMarketingFramework\Core\Registry\RegistryInterface;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\YamlFileConfigurationDocumentStorage;
 use DigitalMarketingFramework\Typo3\Core\Domain\Repository\Api\EndPointRepository;
+use DigitalMarketingFramework\Typo3\Core\Domain\Repository\TestCase\TestCaseRepository;
 use DigitalMarketingFramework\Typo3\Core\FileStorage\FileStorage;
 use DigitalMarketingFramework\Typo3\Core\GlobalConfiguration\GlobalConfiguration;
 use DigitalMarketingFramework\Typo3\Core\GlobalConfiguration\Schema\CoreGlobalConfigurationSchema;
@@ -25,6 +26,7 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
         protected ResourceFactory $resourceFactory,
         protected EventDispatcherInterface $eventDispatcher,
         protected EndPointRepository $endPointStorage,
+        protected TestCaseRepository $testCaseRepository,
     ) {
         $initialization = new CoreInitialization('dmf_core');
         $initialization->setGlobalConfigurationSchema(new CoreGlobalConfigurationSchema());
@@ -41,11 +43,10 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
 
     protected function initServices(RegistryInterface $registry): void
     {
-        parent::initServices($registry);
-
         $registry->setLoggerFactory($this->loggerFactory);
 
         $registry->setEndPointStorage($this->endPointStorage);
+        $registry->setTestCaseStorage($this->testCaseRepository);
 
         $registry->setFileStorage(
             $registry->createObject(FileStorage::class, [$this->resourceFactory])
@@ -71,5 +72,7 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
 
         $extensionResourceService = $registry->createObject(ExtensionResourceService::class);
         $registry->registerResourceService($extensionResourceService);
+
+        parent::initServices($registry);
     }
 }

@@ -41,3 +41,10 @@ services:
     tags:
       - name: event.listener
         event: DigitalMarketingFramework\Typo3\Core\Controller\Event\BackendControllerUpdateEvent
+
+  #
+  DigitalMarketingFramework\Typo3\Core\Command\TestCaseCommand:
+      tags:
+          - name: console.command
+            command: 'anyrel:runtests'
+            description: 'Run all Anyrel test cases.'

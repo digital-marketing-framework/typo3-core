@@ -1,0 +1,14 @@
+.web_DmfCoreManager_GlobalConfiguration .module-body,
+.web_DmfCoreManager_ConfigurationDocument .module-body {
+    height: calc(100vh - var(--module-docheader-height));
+    padding: 0;
+}
+
+.dmf-be-content {
+    position: relative;
+    height: 100%;
+}
+
+.dmf-be-content:not(.dmf-be-content--fullwidth) {
+    padding: var(--module-body-padding);
+}

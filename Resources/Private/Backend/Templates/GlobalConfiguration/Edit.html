@@ -8,32 +8,40 @@
 <f:section name="Buttons"></f:section>
 
 <f:section name="Content">
-    <f:comment></f:comment>
     <f:render partial="ConfigurationDocument/ConfigurationEditorAssets" />
 
-    <f:form action="save">
-        <div>
-            <p>
-                <button class="btn btn-default btn-sm t3-form-element-save-form-button"
-                        value="save"
-                        title="Save"
-                        type="submit">
-                    <core:icon identifier="actions-document-save"
-                               size="small" />
-                    Save
-                </button>
-            </p>
-        </div>
+    <h1>Global Settings</h1>
 
-        <h1>Global Settings</h1>
+    <p><em>Loading <strong>Global Settings UI</strong>, this might take a few seconds...</em></p>
 
-        <div>
-            <f:form.textarea name="document"
-                             value="{document}"
-                             class="dmf-configuration-document"
-                             style="width:60%;min-height:400px;"
-                             data="{d:be.configurationEditor.dataAttributes(mode:'embedded', ready:1, readonly:0, globalDocument:0,baseRoute:'globalconfiguration',includes:0)}" />
+    <details>
+        <summary>Click to show raw text configuration below.<br>You can try editing the settings manually, useful when something goes terribly wrong:</summary>
+        <div style="padding-top: 1rem">
+            <f:form action="save">
+                <div>
+                    <p>
+                        <button class="btn btn-default btn-sm t3-form-element-save-form-button"
+                                value="save"
+                                title="Save"
+                                type="submit">
+                            <core:icon identifier="actions-document-save"
+                                    size="small" />
+                            Save
+                        </button>
+                    </p>
+                </div>
+
+                <div>
+                    <f:form.textarea name="document"
+                                    value="{document}"
+                                    class="dmf-configuration-document"
+                                    style="width:60%;min-height:400px;"
+                                    data="{d:be.configurationEditor.dataAttributes(mode:'embedded', ready:1, readonly:0, globalDocument:0,baseRoute:'globalconfiguration',includes:0)}" />
+                </div>
+            </f:form>
         </div>
-    </f:form>
+    </details>
+
+    <div id="stage-container"></div>
 </f:section>
 </html>

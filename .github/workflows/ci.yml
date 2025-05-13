@@ -48,4 +48,65 @@ jobs:
                 run: "composer require typo3/cms-core ^${{ matrix.typo3_version }} --no-progress\ncomposer install --no-progress\n"
             -
                 name: 'Run command'
-                run: "composer ci\n"
+                run: "composer ci:static\n"
+    code-tests:
+        name: 'Coverage tests'
+        runs-on: ubuntu-22.04
+        env:
+            DB_DATABASE: typo3
+            DB_USER: root
+            DB_PASSWORD: root
+            DB_HOST: localhost
+        steps:
+            -
+                name: Checkout
+                uses: actions/checkout@v4
+            -
+                name: 'Install PHP'
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '${{ matrix.php_version }}'
+                    coverage: none
+                    tools: 'composer:v2.4'
+                    extensions: mysqli
+            -
+                name: 'Show Composer version'
+                run: 'composer --version'
+            -
+                name: 'Show the Composer configuration'
+                run: 'composer config --global --list'
+            -
+                name: 'Cache dependencies installed with composer'
+                uses: actions/cache@v3
+                with:
+                    key: 'php${{ matrix.php_version }}-typo3${{ matrix.php_version }}'
+                    path: ~/.cache/composer
+                    restore-keys: "php${{ matrix.php_version }}-composer-\n"
+            -
+                name: 'Install Composer dependencies'
+                run: "composer require typo3/cms-core ^${{ matrix.typo3_version }} --no-progress\ncomposer install --no-progress\n"
+            -
+                name: 'Start MySQL'
+                run: 'sudo /etc/init.d/mysql start'
+            -
+                run: "export typo3DatabaseName=\"$DB_DATABASE\";\nexport typo3DatabaseHost=\"$DB_HOST\";\nexport typo3DatabaseUsername=\"$DB_USER\";\nexport typo3DatabasePassword=\"$DB_PASSWORD\";\ncomposer ci:coverage\n"
+        strategy:
+            fail-fast: false
+            matrix:
+                php_version:
+                    - '8.1'
+                    - '8.2'
+                typo3_version:
+                    - '11.5'
+                    - '12.4'
+    semgrep:
+        name: semgrep
+        runs-on: ubuntu-latest
+        container:
+            image: semgrep/semgrep
+        if: "(github.actor != 'dependabot[bot]')"
+        steps:
+            -
+                uses: actions/checkout@v4
+            -
+                run: 'semgrep scan --config auto --error'

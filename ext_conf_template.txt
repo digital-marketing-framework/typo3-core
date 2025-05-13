@@ -26,5 +26,10 @@ dataPrivacy {
     enableUnregulated = 0
 }
 
+notifications {
+    # cat=Notifications; type=boolean; label=Enable notifications
+    enabled = 0
+}
+
 # cat=Debug; type=boolean; label=Debug Mode
 debug = 0

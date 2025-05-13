@@ -22,16 +22,16 @@ class ResourceEnhancer extends AbstractEnhancer implements RoutingEnhancerInterf
      */
     public const ENHANCER_NAME = 'DmfResourceEnhancer';
 
-    protected EntryRouteResolverInterface $entryRouteResolver;
+    protected ?EntryRouteResolverInterface $entryRouteResolver = null;
 
-    /**
-     * @param array<string,mixed> $configuration
-     */
-    public function __construct(
-        protected array $configuration,
-    ) {
-        $registryCollection = GeneralUtility::makeInstance(RegistryCollection::class);
-        $this->entryRouteResolver = $registryCollection->getApiEntryRouteResolver();
+    public function getEntryRouteResolver(): ?EntryRouteResolverInterface
+    {
+        if (!$this->entryRouteResolver instanceof EntryRouteResolverInterface) {
+            $registryCollection = GeneralUtility::makeInstance(RegistryCollection::class);
+            $this->entryRouteResolver = $registryCollection->getApiEntryRouteResolver();
+        }
+
+        return $this->entryRouteResolver;
     }
 
     /**
@@ -39,9 +39,10 @@ class ResourceEnhancer extends AbstractEnhancer implements RoutingEnhancerInterf
      */
     public function enhanceForMatching(RouteCollection $collection): void
     {
-        $enabled = $this->entryRouteResolver->enabled();
+        $entryRouteResolver = $this->getEntryRouteResolver();
+        $enabled = $entryRouteResolver->enabled();
         if ($enabled) {
-            $basePath = $this->entryRouteResolver->getBasePath();
+            $basePath = $entryRouteResolver->getBasePath();
             /** @var Route $variant */
             $variant = clone $collection->get('default');
             $variant->setPath($basePath . '/{dmfResource?}');
@@ -59,6 +60,6 @@ class ResourceEnhancer extends AbstractEnhancer implements RoutingEnhancerInterf
 
     protected function getBasePath(): string
     {
-        return $this->entryRouteResolver->getBasePath();
+        return $this->getEntryRouteResolver()->getBasePath();
     }
 }

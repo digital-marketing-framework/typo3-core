@@ -10,44 +10,53 @@
     <f:section name="Content">
         <f:render partial="ConfigurationDocument/ConfigurationEditorAssets" />
 
-        <f:form action="save">
-            <div>
-                <p>
-                    <f:link.action action="list"
-                                   class="btn btn-default btn-sm t3-form-element-close-form-button"
-                                   title="Close"
-                                   additionalAttributes="{'data-role':'close'}">
-                        <core:icon identifier="actions-close"
-                                   size="small" />
-                        Close
-                    </f:link.action>
+        <h1>{document.name}</h1>
+        <p><em>Loading <strong>{document.name} UI</strong>, this might take a few seconds...</em></p>
 
-                    <f:if condition="!{document.readonly}">
-                        <button class="btn btn-default btn-sm t3-form-element-save-form-button"
-                                value="save"
-                                title="Save"
-                                type="submit">
-                            <core:icon identifier="actions-document-save"
-                                       size="small" />
-                            Save
-                        </button>
-                    </f:if>
-                </p>
+        <details>
+            <summary>Click to show raw text configuration below.<br>You can try editing the settings manually, useful when something goes terribly wrong:</summary>
+            <div style="padding-top: 1rem">
+
+                <f:form action="save">
+                    <div>
+                        <p>
+                            <f:link.action action="list"
+                                        class="btn btn-default btn-sm t3-form-element-close-form-button"
+                                        title="Close"
+                                        additionalAttributes="{'data-role':'close'}">
+                                <core:icon identifier="actions-close"
+                                        size="small" />
+                                Close
+                            </f:link.action>
+
+                            <f:if condition="!{document.readonly}">
+                                <button class="btn btn-default btn-sm t3-form-element-save-form-button"
+                                        value="save"
+                                        title="Save"
+                                        type="submit">
+                                    <core:icon identifier="actions-document-save"
+                                            size="small" />
+                                    Save
+                                </button>
+                            </f:if>
+                        </p>
+                    </div>
+
+                    <div>
+                        <f:form.hidden name="documentIdentifier"
+                                    value="{document.id}" />
+                        <f:form.textarea name="document"
+                                        value="{document.content}"
+                                        class="dmf-configuration-document"
+                                        style="width:60%;min-height:400px;"
+                                        disabled="{f:if(condition:document.readonly, then:'disabled', else:'')}"
+                                        data="{d:be.configurationEditor.dataAttributes(mode:'embedded', ready:1, readonly:document.readonly, globalDocument:1)}" />
+                    </div>
+                </f:form>
             </div>
+        </details>
 
-            <h1>{document.name}</h1>
-
-            <div>
-                <f:form.hidden name="documentIdentifier"
-                               value="{document.id}" />
-                <f:form.textarea name="document"
-                                 value="{document.content}"
-                                 class="dmf-configuration-document"
-                                 style="width:60%;min-height:400px;"
-                                 disabled="{f:if(condition:document.readonly, then:'disabled', else:'')}"
-                                 data="{d:be.configurationEditor.dataAttributes(mode:'embedded', ready:1, readonly:document.readonly, globalDocument:1)}" />
-            </div>
-        </f:form>
+        <div id="stage-container"></div>
     </f:section>
 
 </html>

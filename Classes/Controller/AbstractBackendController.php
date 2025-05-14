@@ -11,9 +11,9 @@ use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
-use TYPO3\CMS\Form\Controller\AbstractBackendController as OriginalAbstractBackendController;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
-class AbstractBackendController extends OriginalAbstractBackendController
+class AbstractBackendController extends ActionController
 {
     /**
      * @var int
@@ -34,9 +34,11 @@ class AbstractBackendController extends OriginalAbstractBackendController
         $moduleTemplate->setModuleClass($this->request->getPluginName() . '_' . $this->request->getControllerName());
         $moduleTemplate->setFlashMessageQueue($this->getFlashMessageQueue());
         $moduleTemplate->setTitle($this->getLanguageService()->sL($title));
-        $moduleTemplate->setContent($this->view->render());
+        // $moduleTemplate->setContent($this->view->render());
 
-        return $this->htmlResponse($moduleTemplate->renderContent());
+        // return $this->htmlResponse($moduleTemplate->renderContent());
+
+        return $moduleTemplate->renderResponse('Show');
     }
 
     /**

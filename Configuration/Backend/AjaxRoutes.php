@@ -1,9 +1,15 @@
 <?php
 
+use DigitalMarketingFramework\Typo3\Core\Controller\BackendModuleController;
 use DigitalMarketingFramework\Typo3\Core\Controller\ConfigurationDocumentAjaxController;
 use DigitalMarketingFramework\Typo3\Core\Controller\GlobalConfigurationAjaxController;
 
 return [
+    'digitalmarketingframework_json' => [
+        'path' => '/digital-marketing-framework-backend/json',
+        'target' => BackendModuleController::class . '::handleRequest',
+    ],
+
     // configuration document
     'digitalmarketingframework_configuration_schema' => [
         'path' => '/digital-marketing-framework-backend/configuration-document/schema',

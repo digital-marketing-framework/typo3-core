@@ -7,6 +7,12 @@ services:
   DigitalMarketingFramework\Typo3\Core\:
     resource: '../Classes/*'
 
+  DigitalMarketingFramework\Typo3\Core\Controller\BackendOverviewController:
+    tags: ['backend.controller']
+
+  DigitalMarketingFramework\Typo3\Core\Controller\BackendModuleController:
+    tags: ['backend.controller']
+
   # registry collection
   DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection:
     public: true

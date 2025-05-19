@@ -78,7 +78,7 @@
         "ci:coverage:functional": [
             "@ci:tests:create-directories",
             "@coverage:create-directories",
-            ".Build/bin/phpunit -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml --coverage-filter Classes --coverage-php=.Build/coverage/functional.cov Tests/Functional"
+            ".Build/bin/phpunit -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml --include-path Classes --coverage-php=.Build/coverage/functional.cov Tests/Functional"
         ],
         "ci:coverage:merge": [
             "@coverage:create-directories",
@@ -86,7 +86,7 @@
         ],
         "ci:coverage:unit": [
             "@coverage:create-directories",
-            ".Build/bin/phpunit -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml --coverage-filter Classes --coverage-php=.Build/coverage/unit.cov Tests/Unit"
+            ".Build/bin/phpunit -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml --include-path Classes --coverage-php=.Build/coverage/unit.cov Tests/Unit"
         ],
         "ci:dynamic": [
             "@ci:tests"

@@ -21,6 +21,7 @@
         }
     ],
     "homepage": "https://www.mediatis.de",
+    "minimum-stability": "dev",
     "require": {
         "php": "^8.1",
         "digital-marketing-framework/core": "dev-feature/MFR-136-t3-13",

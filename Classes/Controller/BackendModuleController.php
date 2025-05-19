@@ -80,8 +80,9 @@ class BackendModuleController
         $route = $params['route'] ?? '';
         $arguments = $params['arguments'] ?? [];
         $body = $this->getBodyData($request);
+        $method = $request->getMethod();
 
-        $req = new Request($route, $arguments, $body);
+        $req = new Request($route, $arguments, $body, $method);
         $result = $this->registryCollection->getRegistry()->getBackendManager()->getResponse($req);
 
         if ($result instanceof RedirectResponse) {

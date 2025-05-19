@@ -1,6 +1,6 @@
 {
     "name": "digital-marketing-framework/typo3-core",
-    "description": "Digital Marketing Framework is a data distribution and collection framework.",
+    "description": "Anyrel is a data distribution and collection framework.",
     "license": "GPL-2.0-or-later",
     "type": "typo3-cms-extension",
     "keywords": [

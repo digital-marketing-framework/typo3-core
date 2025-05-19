@@ -1,8 +1,8 @@
 <?php
 
 $EM_CONF[$_EXTKEY] = [
-    'title' => 'Digital Marketing Framework - Core',
-    'description' => 'Digital Marketing Framework is a data distribution and collection framework.',
+    'title' => 'Anyrel - Core',
+    'description' => 'Anyrel is a data distribution and collection framework.',
     'category' => 'be',
     'author_email' => 'info@mediatis.de',
     'author_company' => 'Mediatis AG',
@@ -10,7 +10,7 @@ $EM_CONF[$_EXTKEY] = [
     'version' => '2.5.0',
     'constraints' => [
         'depends' => [
-            'typo3' => '11.5.0-12.4.99',
+            'typo3' => '12.4.0-13.4.99',
         ],
         'conflicts' => [
         ],

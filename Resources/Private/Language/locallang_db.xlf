@@ -4,7 +4,7 @@
     <header/>
     <body>
       <trans-unit id="tx_dmfcore_domain_model_api_endpoint" xml:space="preserve">
-		<source>Digital Marketing Framework - API EndPoint</source>
+		<source>Anyrel - API EndPoint</source>
 	  </trans-unit>
 	  <trans-unit id="tx_dmfcore_domain_model_api_endpoint.name" xml:space="preserve">
 	    <source>Name</source>

@@ -2,6 +2,7 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\Form\Element;
 
+use DigitalMarketingFramework\Core\ConfigurationEditor\MetaData;
 use DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection;
 use DigitalMarketingFramework\Typo3\Core\Utility\ConfigurationEditorRenderUtility;
 use DOMDocument;
@@ -23,7 +24,7 @@ class ConfigurationEditorTextFieldElement extends TextElement
      *   readOnly?:bool,
      *   mode?:string,
      *   globalDocument?:bool,
-     *   ajaxControllerBaseRoute?:string,
+     *   ajaxControllerDocumentType?:string,
      *   ajaxControllerSupportsIncludes?:bool,
      *   ajaxControllerAdditionalParameters?:array<string,string>
      * } $config
@@ -33,7 +34,7 @@ class ConfigurationEditorTextFieldElement extends TextElement
         $readonly = $config['readOnly'] ?? false;
         $mode = $config['mode'] ?? 'modal';
         $globalDocument = $config['globalDocument'] ?? false;
-        $baseRoute = $this->getControllerBaseRoute($config);
+        $documentType = $this->getControllerDocumentType($config);
         $includes = $this->controllerSupportsIncludes($config);
         $parameters = $this->getAdditionalControllerParameters($config);
 
@@ -42,7 +43,7 @@ class ConfigurationEditorTextFieldElement extends TextElement
             mode: $mode,
             readonly: $readonly,
             globalDocument: $globalDocument,
-            baseRoute: $baseRoute,
+            documentType: $documentType,
             includes: $includes,
             parameters: $parameters,
         );
@@ -69,11 +70,11 @@ class ConfigurationEditorTextFieldElement extends TextElement
     }
 
     /**
-     * @param array{ajaxControllerBaseRoute?:string} $config
+     * @param array{ajaxControllerDocumentType?:string} $config
      */
-    protected function getControllerBaseRoute(array $config): string
+    protected function getControllerDocumentType(array $config): string
     {
-        return $config['ajaxControllerBaseRoute'] ?? 'configuration';
+        return $config['ajaxControllerDocumentType'] ?? MetaData::DEFAULT_DOCUMENT_TYPE;
     }
 
     /**
@@ -84,16 +85,6 @@ class ConfigurationEditorTextFieldElement extends TextElement
     protected function getAdditionalControllerParameters(array $config): array
     {
         return $config['ajaxControllerAdditionalParameters'] ?? [];
-    }
-
-    protected function createJavaScriptModuleInstruction(string $name): JavaScriptModuleInstruction
-    {
-        $typo3Version = new Typo3Version();
-        if ($typo3Version->getMajorVersion() <= 11) {
-            return JavaScriptModuleInstruction::forRequireJS($name); // @phpstan-ignore-line TYPO3 version switch
-        }
-
-        return JavaScriptModuleInstruction::create($name); // @phpstan-ignore-line TYPO3 version switch
     }
 
     /**
@@ -109,36 +100,28 @@ class ConfigurationEditorTextFieldElement extends TextElement
         $parameterArray = $this->data['parameterArray'];
         $config = $parameterArray['fieldConf']['config'];
 
-        $scriptUrl = $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/scripts/index.js');
-        $stylesUrl = $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/styles/index.css');
-        $fontStylesUrl = $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/styles/type.css');
-        $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/fonts/caveat/Caveat-Bold.ttf');
-        $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/fonts/caveat/Caveat-Medium.ttf');
-        $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/fonts/caveat/Caveat-Regular.ttf');
-        $assetService->makeAssetPublic('PKG:digital-marketing-framework/core/res/assets/config-editor/fonts/caveat/Caveat-SemiBold.ttf');
+        $scripts = [];
+        foreach (MetaData::SCRIPTS as $path) {
+            $script = $assetService->makeAssetPublic($path);
+            $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create('/' . $script);
+        }
+
+        foreach (MetaData::STYLES as $path) {
+            $resultArray['stylesheetFiles'][] = '/' . $assetService->makeAssetPublic($path);
+        }
+
+        foreach (MetaData::ASSETS as $path) {
+            $assetService->makeAssetPublic($path);
+        }
 
         $doc = new DOMDocument();
         $doc->loadHTML($resultArray['html'], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOWARNING | LIBXML_NOERROR);
-
-        $typo3Version = new Typo3Version();
-        if ($typo3Version->getMajorVersion() <= 11) {
-            $javaScriptModulesField = 'requireJsModules';
-            $javaScriptModuleInstruction = JavaScriptModuleInstruction::forRequireJS('/' . $scriptUrl); // @phpstan-ignore-line TYPO3 version switch
-        } else {
-            $javaScriptModulesField = 'javaScriptModules';
-            $javaScriptModuleInstruction = JavaScriptModuleInstruction::create('/' . $scriptUrl); // @phpstan-ignore-line TYPO3 version switch
-        }
-
         $textAreas = $doc->getElementsByTagName('textarea');
         if ($textAreas->length === 1) {
             /** @var DOMElement $textArea */
             $textArea = $textAreas->item(0);
             $this->updateTextArea($textArea, $config);
         }
-
-        $resultArray['stylesheetFiles'][] = '/' . $stylesUrl;
-        $resultArray['stylesheetFiles'][] = '/' . $fontStylesUrl;
-        $resultArray[$javaScriptModulesField][] = $javaScriptModuleInstruction;
         $resultArray['html'] = $doc->saveHTML();
 
         return $resultArray;

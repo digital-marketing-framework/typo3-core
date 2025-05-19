@@ -7,9 +7,6 @@ services:
   DigitalMarketingFramework\Typo3\Core\:
     resource: '../Classes/*'
 
-  DigitalMarketingFramework\Typo3\Core\Controller\BackendOverviewController:
-    tags: ['backend.controller']
-
   DigitalMarketingFramework\Typo3\Core\Controller\BackendModuleController:
     tags: ['backend.controller']
 
@@ -31,15 +28,3 @@ services:
   # REST API
   DigitalMarketingFramework\Typo3\Core\Middleware\RestMiddleware:
     public: true
-
-  DigitalMarketingFramework\Typo3\Core\Controller\ConfigurationDocumentAjaxController:
-    public: true
-
-  DigitalMarketingFramework\Typo3\Core\Controller\GlobalConfigurationAjaxController:
-    public: true
-
-  # backend module controllers
-  DigitalMarketingFramework\Typo3\Core\Controller\EventListener\BackendControllerUpdateEventListener:
-    tags:
-      - name: event.listener
-        event: DigitalMarketingFramework\Typo3\Core\Controller\Event\BackendControllerUpdateEvent

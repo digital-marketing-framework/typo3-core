@@ -18,7 +18,7 @@ class VendorAssetViewHelper extends AbstractViewHelper
     }
 
     /**
-     * @param array{path:string,returnUrl:bool|int} $arguments
+     * @param array<string,mixed> $arguments
      */
     public static function renderStatic(
         array $arguments,

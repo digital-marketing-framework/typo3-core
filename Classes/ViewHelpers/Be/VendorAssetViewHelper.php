@@ -17,6 +17,9 @@ class VendorAssetViewHelper extends AbstractViewHelper
         $this->registerArgument('returnUrl', 'bool', 'return the url of the resulting asset', false, true);
     }
 
+    /**
+     * @param array{path:string,returnUrl:bool|int} $arguments
+     */
     public static function renderStatic(
         array $arguments,
         Closure $renderChildrenClosure,

@@ -31,7 +31,7 @@ class Typo3RequestContext extends RequestContext
 
     public function getRequestArgument(string $name): mixed
     {
-        $this->getServerRequest()->getQueryParams()[$name] ?? null;
+        return $this->getServerRequest()->getQueryParams()[$name] ?? null;
     }
 
     public function getRequestArguments(): array

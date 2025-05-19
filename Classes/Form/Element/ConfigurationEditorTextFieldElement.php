@@ -8,7 +8,6 @@ use DigitalMarketingFramework\Typo3\Core\Utility\ConfigurationEditorRenderUtilit
 use DOMDocument;
 use DOMElement;
 use TYPO3\CMS\Backend\Form\Element\TextElement;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -99,8 +98,6 @@ class ConfigurationEditorTextFieldElement extends TextElement
 
         $parameterArray = $this->data['parameterArray'];
         $config = $parameterArray['fieldConf']['config'];
-
-        $scripts = [];
         foreach (MetaData::SCRIPTS as $path) {
             $script = $assetService->makeAssetPublic($path);
             $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create('/' . $script);
@@ -116,12 +113,14 @@ class ConfigurationEditorTextFieldElement extends TextElement
 
         $doc = new DOMDocument();
         $doc->loadHTML($resultArray['html'], LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOWARNING | LIBXML_NOERROR);
+
         $textAreas = $doc->getElementsByTagName('textarea');
         if ($textAreas->length === 1) {
             /** @var DOMElement $textArea */
             $textArea = $textAreas->item(0);
             $this->updateTextArea($textArea, $config);
         }
+
         $resultArray['html'] = $doc->saveHTML();
 
         return $resultArray;

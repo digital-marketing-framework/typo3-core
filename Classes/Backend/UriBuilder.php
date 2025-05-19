@@ -19,8 +19,8 @@ class UriBuilder implements UriBuilderInterface
         ];
         if (str_starts_with($route, 'page')) {
             return (string)$uriBuilder->buildUriFromRoute('digitalmarketingframework_admin', $parameters);
-        } else {
-            return (string)$uriBuilder->buildUriFromRoute('ajax_digitalmarketingframework_json', $parameters);
         }
+
+        return (string)$uriBuilder->buildUriFromRoute('ajax_digitalmarketingframework_json', $parameters);
     }
 }

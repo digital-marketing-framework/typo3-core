@@ -17,7 +17,6 @@ jobs:
                     - '8.1'
                     - '8.2'
                 typo3_version:
-                    - '11.5'
                     - '12.4'
         steps:
             -
@@ -93,12 +92,8 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php_version:
-                    - '8.1'
-                    - '8.2'
-                typo3_version:
-                    - '11.5'
-                    - '12.4'
+                php_version: {  }
+                typo3_version: {  }
     semgrep:
         name: semgrep
         runs-on: ubuntu-latest

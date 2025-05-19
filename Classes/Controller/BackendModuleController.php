@@ -7,6 +7,7 @@ use DigitalMarketingFramework\Core\Backend\Response\JsonResponse;
 use DigitalMarketingFramework\Core\Backend\Response\RedirectResponse;
 use DigitalMarketingFramework\Typo3\Core\Backend\UriBuilder;
 use DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection;
+use JsonException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\HtmlResponse as Typo3HtmlResponse;
@@ -53,6 +54,9 @@ class BackendModuleController
     ) {
     }
 
+    /**
+     * @return array<string,mixed>
+     */
     protected function getBodyData(ServerRequestInterface $request): array
     {
         // for POST form submissions
@@ -62,7 +66,7 @@ class BackendModuleController
             try {
                 // for POST AJAX requests with a JSON body
                 $body = json_decode($request->getBody(), true, flags: JSON_THROW_ON_ERROR);
-            } catch (\JsonException $e) {
+            } catch (JsonException) {
                 $body = [];
             }
         }
@@ -89,8 +93,8 @@ class BackendModuleController
             return new Typo3RedirectResponse($result->getRedirectLocation());
         } elseif ($result instanceof JsonResponse) {
             return new Typo3JsonResponse($result->getData());
-        } else {
-            return new Typo3HtmlResponse($result->getContent());
         }
+
+        return new Typo3HtmlResponse($result->getContent());
     }
 }

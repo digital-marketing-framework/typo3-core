@@ -5,6 +5,8 @@ namespace DigitalMarketingFramework\Typo3\Core\Registry\EventListener;
 use DigitalMarketingFramework\Core\ConfigurationDocument\Parser\YamlConfigurationDocumentParser;
 use DigitalMarketingFramework\Core\CoreInitialization;
 use DigitalMarketingFramework\Core\Registry\RegistryInterface;
+use DigitalMarketingFramework\Typo3\Core\Backend\AssetUriBuilder;
+use DigitalMarketingFramework\Typo3\Core\Backend\UriBuilder;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\YamlFileConfigurationDocumentStorage;
 use DigitalMarketingFramework\Typo3\Core\Domain\Repository\Api\EndPointRepository;
 use DigitalMarketingFramework\Typo3\Core\FileStorage\FileStorage;
@@ -71,5 +73,8 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
 
         $extensionResourceService = $registry->createObject(ExtensionResourceService::class);
         $registry->registerResourceService($extensionResourceService);
+
+        $registry->setBackendUriBuilder(new UriBuilder());
+        $registry->setBackendAssetUriBuilder(new AssetUriBuilder($registry));
     }
 }

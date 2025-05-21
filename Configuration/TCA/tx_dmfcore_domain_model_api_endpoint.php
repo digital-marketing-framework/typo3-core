@@ -17,9 +17,6 @@ $GLOBALS['TCA']['tx_dmfcore_domain_model_api_endpoint'] = [
         'iconfile' => 'EXT:dmf_core/Resources/Public/Icons/ApiEndPoint.svg',
         'default_sortby' => 'changed DESC',
     ],
-    'interface' => [
-        'showRecordFieldList' => 'name,enabled,expose_to_frontend,disable_context,allow_context_override,configuration_document',
-    ],
     'types' => [
         '0' => [
             'showitem' => '--div--;General,name,enabled,expose_to_frontend,configuration_document,--div--;Push,push_enabled,disable_context,allow_context_override,--div--;Pull,pull_enabled',

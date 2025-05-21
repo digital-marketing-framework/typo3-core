@@ -33,7 +33,7 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
         if ($this->defaultStorageUid === null) {
             $defaultStorage = $this->resourceFactory->getDefaultStorage();
             if (!$defaultStorage instanceof ResourceStorage) {
-                throw new DigitalMarketingFrameworkException('No default resource storage found');
+                throw new DigitalMarketingFrameworkException('No default resource storage found', 5349599510);
             }
 
             $this->defaultStorageUid = $defaultStorage->getUid();
@@ -178,12 +178,12 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
     {
         $file = $this->getFile($fileIdentifier);
         if (!$file instanceof File) {
-            throw new DigitalMarketingFrameworkException(sprintf('File "%s" not found', $fileIdentifier));
+            throw new DigitalMarketingFrameworkException(sprintf('File "%s" not found', $fileIdentifier), 5280807608);
         }
 
         $folder = $this->getFolder($folderIdentifier);
         if (!$folder instanceof Folder) {
-            throw new DigitalMarketingFrameworkException(sprintf('Folder "%s" not found', $folderIdentifier));
+            throw new DigitalMarketingFrameworkException(sprintf('Folder "%s" not found', $folderIdentifier), 5791461439);
         }
 
         $copiedFile = $file->copyTo($folder);

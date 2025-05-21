@@ -72,7 +72,7 @@ class EndPointRepository extends Repository implements EndPointStorageInterface
     public function addEndPoint(EndPointInterface $endPoint): void
     {
         if (!$endPoint instanceof EndPoint) {
-            throw new DigitalMarketingFrameworkException(sprintf('Unknown type of API end point record "%s".', $endPoint::class));
+            throw new DigitalMarketingFrameworkException(sprintf('Unknown type of API end point record "%s".', $endPoint::class), 2932987763);
         }
 
         $endPoint->setPid($this->getPid());
@@ -83,7 +83,7 @@ class EndPointRepository extends Repository implements EndPointStorageInterface
     public function removeEndPoint(EndPointInterface $endPoint): void
     {
         if (!$endPoint instanceof EndPoint) {
-            throw new DigitalMarketingFrameworkException(sprintf('Unknown type of API end point record "%s".', $endPoint::class));
+            throw new DigitalMarketingFrameworkException(sprintf('Unknown type of API end point record "%s".', $endPoint::class), 3531287185);
         }
 
         $this->remove($endPoint);
@@ -93,7 +93,7 @@ class EndPointRepository extends Repository implements EndPointStorageInterface
     public function updateEndPoint(EndPointInterface $endPoint): void
     {
         if (!$endPoint instanceof EndPoint) {
-            throw new DigitalMarketingFrameworkException(sprintf('Unknown type of API end point record "%s".', $endPoint::class));
+            throw new DigitalMarketingFrameworkException(sprintf('Unknown type of API end point record "%s".', $endPoint::class), 3516553498);
         }
 
         $this->update($endPoint);

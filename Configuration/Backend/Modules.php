@@ -6,7 +6,7 @@ return [
     'digitalmarketingframework_admin' => [
         'parent' => 'web',
         'inheritNavigationComponentFromMainModule' => false,
-        'position' => ['top'],
+        'position' => ['after' => 'web_FormFormbuilder'],
         'access' => 'admin',
         'workspaces' => 'live',
         'path' => '/module/web/digital-marketing-framework',

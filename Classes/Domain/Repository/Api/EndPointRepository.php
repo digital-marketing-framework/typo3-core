@@ -46,6 +46,22 @@ class EndPointRepository extends Repository implements EndPointStorageInterface
         return $this->pid;
     }
 
+    public function getEndPointsFiltered(array $navigation): array
+    {
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setRespectStoragePage(true);
+        $query->getQuerySettings()->setStoragePageIds([$this->getPid()]);
+
+        if ($navigation['itemsPerPage'] > 0) {
+            $query->setLimit($navigation['itemsPerPage']);
+            if ($navigation['page'] > 0) {
+                $query->setOffset($navigation['itemsPerPage'] * $navigation['page']);
+            }
+        }
+
+        return $query->execute()->toArray();
+    }
+
     public function getAllEndPoints(): array
     {
         $query = $this->createQuery();
@@ -53,6 +69,15 @@ class EndPointRepository extends Repository implements EndPointStorageInterface
         $query->getQuerySettings()->setStoragePageIds([$this->getPid()]);
 
         return $query->execute()->toArray();
+    }
+
+    public function getEndPointCount(): int
+    {
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setRespectStoragePage(true);
+        $query->getQuerySettings()->setStoragePageIds([$this->getPid()]);
+
+        return $query->count();
     }
 
     public function getEndPointByName(string $name): ?EndPointInterface
@@ -67,6 +92,20 @@ class EndPointRepository extends Repository implements EndPointStorageInterface
         $result = $query->execute()->toArray();
 
         return $result[0] ?? null;
+    }
+
+    public function fetchByIdList(array $ids): array
+    {
+        $query = $this->createQuery();
+        $query->getQuerySettings()->setRespectStoragePage(false);
+        $query->matching($query->in('uid', $ids));
+
+        return $query->execute()->toArray();
+    }
+
+    public function createEndPoint(string $name): EndPointInterface
+    {
+        return new EndPoint($name);
     }
 
     public function addEndPoint(EndPointInterface $endPoint): void

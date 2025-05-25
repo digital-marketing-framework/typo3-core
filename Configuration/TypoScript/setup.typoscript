@@ -1,39 +1,4 @@
 
-#module.tx_dmfcore_web_dmfcoremanager {
-#    view {
-#        templateRootPaths.0 = EXT:dmf_core/Resources/Private/Backend/Templates/
-#        templateRootPaths.1 = {$module.tx_dmfcore_web_dmfcoremanager.view.templateRootPath}
-#        partialRootPaths.0 = EXT:dmf_core/Resources/Private/Backend/Partials/
-#        partialRootPaths.1 = {$module.tx_dmfcore_web_dmfcoremanager.view.partialRootPath}
-#        layoutRootPaths.0 = EXT:dmf_core/Resources/Private/Backend/Layouts/
-#        layoutRootPaths.1 = {$module.tx_dmfcore_web_dmfcoremanager.view.layoutRootPath}
-#    }
-#    settings {
-#      sections {
-#        configurationDocuments {
-#          title = Configuration
-#          subtitle = CORE
-#          controller = ConfigurationDocument
-#          action = list
-#          actionLabel = Show
-#          description = Manage Configuration Documents
-#          icon =
-#          weight = 100
-#        }
-#        globalSettings {
-#          title = Global Settings
-#          subtitle = CORE
-#          controller = GlobalConfiguration
-#          action = edit
-#          actionLabel = Show
-#          description = Manage Global Settings
-#          icon =
-#          weight = 50
-#        }
-#      }
-#    }
-#}
-
 plugin.tx_dmf_core_frontendservice {
   view {
     templateRootPaths.0 = EXT:dmf_core/Resources/Private/Frontend/Templates/

@@ -4,7 +4,7 @@
         <header/>
         <body>
             <trans-unit id="module.shortcut_name" resname="module.shortcut_name" xml:space="preserve">
-                <source>Digital Marketing</source>
+                <source>Anyrel</source>
             </trans-unit>
 
         </body>

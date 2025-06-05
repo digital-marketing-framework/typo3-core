@@ -7,5 +7,5 @@ use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void
 {
-    Typo3RectorSetup::setup($rectorConfig, __DIR__, 11);
+    Typo3RectorSetup::setup($rectorConfig, __DIR__);
 };

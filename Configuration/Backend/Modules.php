@@ -1,25 +1,21 @@
 <?php
 
-use DigitalMarketingFramework\Typo3\Core\Controller\BackendOverviewController;
-use DigitalMarketingFramework\Typo3\Core\Controller\Event\BackendControllerUpdateEvent;
-use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-
-$eventDispatcher = GeneralUtility::makeInstance(EventDispatcher::class);
-$controllerEvent = new BackendControllerUpdateEvent();
-$controllerEvent->addControllerActions(BackendOverviewController::class, ['show']);
-$eventDispatcher->dispatch($controllerEvent);
+use DigitalMarketingFramework\Typo3\Core\Controller\BackendModuleController;
 
 return [
-    'web_DmfCoreManager' => [
+    'digitalmarketingframework_admin' => [
         'parent' => 'web',
         'inheritNavigationComponentFromMainModule' => false,
+        'position' => ['after' => 'web_FormFormbuilder'],
         'access' => 'admin',
         'workspaces' => 'live',
-        'icon'   => 'EXT:dmf_core/Resources/Public/Icons/Extension.svg',
-        'path' => '/module/web/DmfCoreManager',
+        'path' => '/module/web/digital-marketing-framework',
         'labels' => 'LLL:EXT:dmf_core/Resources/Private/Language/locallang_manager.xlf',
-        'extensionName' => 'DmfCore',
-        'controllerActions' => $controllerEvent->getControllersAndActions(),
+        'icon'   => 'EXT:dmf_core/Resources/Public/Icons/Extension.svg',
+        'routes' => [
+            '_default' => [
+                'target' => BackendModuleController::class . '::handleRequest',
+            ],
+        ],
     ],
 ];

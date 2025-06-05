@@ -19,6 +19,21 @@ class EndPoint extends AbstractEntity implements EndPointInterface
     ) {
     }
 
+    public function getLabel(): string
+    {
+        return $this->getName();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->uid;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->uid = $id;
+    }
+
     public function getName(): string
     {
         return $this->name;

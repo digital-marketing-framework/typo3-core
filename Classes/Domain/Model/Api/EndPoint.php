@@ -5,6 +5,9 @@ namespace DigitalMarketingFramework\Typo3\Core\Domain\Model\Api;
 use DigitalMarketingFramework\Core\Model\Api\EndPointInterface;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
+/**
+ * @implements EndPointInterface<int>
+ */
 class EndPoint extends AbstractEntity implements EndPointInterface
 {
     public function __construct(
@@ -19,19 +22,19 @@ class EndPoint extends AbstractEntity implements EndPointInterface
     ) {
     }
 
-    public function getLabel(): string
-    {
-        return $this->getName();
-    }
-
-    public function getId(): ?int
+    public function getId()
     {
         return $this->uid;
     }
 
-    public function setId(int $id): void
+    public function setId($id): void
     {
         $this->uid = $id;
+    }
+
+    public function getLabel(): string
+    {
+        return $this->getName();
     }
 
     public function getName(): string

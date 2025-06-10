@@ -13,20 +13,20 @@ $GLOBALS['TCA']['tx_dmfcore_domain_model_test_case'] = [
         'crdate' => 'created',
         'title' => $ll . 'tx_dmfcore_domain_model_test_case',
         'origUid' => 't3_origuid',
-        'searchFields' => 'name,type,created,changed',
+        'searchFields' => 'name,description,type,created,changed',
         'iconfile' => 'EXT:dmf_core/Resources/Public/Icons/TestCase.svg',
         'default_sortby' => 'changed DESC',
     ],
     'interface' => [
-        'showRecordFieldList' => 'label,name,type,hash,created,changed,serialized_input,serialized_expected_output',
+        'showRecordFieldList' => 'label,name,description,type,hash,created,changed,serialized_input,serialized_expected_output',
     ],
     'types' => [
         '0' => [
-            'showitem' => 'label,name,type,hash,created,changed,serialized_input,serialized_expected_output',
+            'showitem' => 'label,name,description,type,hash,created,changed,serialized_input,serialized_expected_output',
         ],
     ],
     'palettes' => [
-        '0' => ['showitem' => 'label,name,type,hash,created,changed,serialized_input,serialized_expected_output'],
+        '0' => ['showitem' => 'label,name,description,type,hash,created,changed,serialized_input,serialized_expected_output'],
     ],
     'columns' => [
         'label' => [
@@ -43,11 +43,19 @@ $GLOBALS['TCA']['tx_dmfcore_domain_model_test_case'] = [
                 'type' => 'input',
             ],
         ],
+        'description' => [
+            'exclude' => 1,
+            'label' => $ll . 'tx_dmfcore_domain_model_test_case.description',
+            'config' => [
+                'type' => 'text',
+                'cols' => 40,
+                'rows' => 15,
+            ],
+        ],
         'type' => [
             'exclude' => 1,
             'label' => $ll . 'tx_dmfcore_domain_model_test_case.type',
             'config' => [
-                // 'type' => 'input',
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'itemsProcFunc' => 'DigitalMarketingFramework\Typo3\Core\Tca\TestCaseItemsProcFunc->getAllTestCaseTypes',

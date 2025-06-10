@@ -32,7 +32,7 @@
 	  </trans-unit>
 
 	  <trans-unit id="tx_dmfcore_domain_model_test_case" xml:space="preserve">
-		<source>Digital Marketing Framework - Test Case</source>
+		<source>Anyrel - Test Case</source>
 	  </trans-unit>
 	  <trans-unit id="tx_dmfcore_domain_model_test_case.label" xml:space="preserve">
 		  <source>Label</source>

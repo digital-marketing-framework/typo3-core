@@ -13,6 +13,7 @@ CREATE TABLE tx_dmfcore_domain_model_api_endpoint (
 CREATE TABLE tx_dmfcore_domain_model_test_case (
 	label varchar(256) DEFAULT '',
 	name varchar(256) DEFAULT '',
+	description text DEFAULT '',
 	type varchar(64) DEFAULT '',
 	hash varchar(64) DEFAULT '',
  	serialized_input mediumtext DEFAULT '',

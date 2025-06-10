@@ -7,6 +7,7 @@ use DigitalMarketingFramework\Core\CoreInitialization;
 use DigitalMarketingFramework\Core\Registry\RegistryInterface;
 use DigitalMarketingFramework\Typo3\Core\Backend\AssetUriBuilder;
 use DigitalMarketingFramework\Typo3\Core\Backend\Controller\SectionController\ApiEditSectionController;
+use DigitalMarketingFramework\Typo3\Core\Backend\Controller\SectionController\TestsEditSectionController;
 use DigitalMarketingFramework\Typo3\Core\Backend\UriBuilder;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\YamlFileConfigurationDocumentStorage;
 use DigitalMarketingFramework\Typo3\Core\Domain\Repository\Api\EndPointRepository;
@@ -16,6 +17,7 @@ use DigitalMarketingFramework\Typo3\Core\GlobalConfiguration\GlobalConfiguration
 use DigitalMarketingFramework\Typo3\Core\GlobalConfiguration\Schema\CoreGlobalConfigurationSchema;
 use DigitalMarketingFramework\Typo3\Core\Log\LoggerFactory;
 use DigitalMarketingFramework\Typo3\Core\Resource\ExtensionResourceService;
+use DigitalMarketingFramework\Typo3\Core\TestCase\GlobalConfiguration\Settings\TestCaseSettings;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
@@ -48,9 +50,6 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
     {
         $registry->setLoggerFactory($this->loggerFactory);
 
-        $registry->setEndPointStorage($this->endPointStorage);
-        $registry->setTestCaseStorage($this->testCaseRepository);
-
         $registry->setFileStorage(
             $registry->createObject(FileStorage::class, [$this->resourceFactory])
         );
@@ -62,6 +61,11 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
         $registry->setConfigurationDocumentParser(
             $registry->createObject(YamlConfigurationDocumentParser::class)
         );
+
+        $registry->setEndPointStorage($this->endPointStorage);
+
+        $this->testCaseRepository->setGlobalConfiguration($registry->getGlobalConfiguration());
+        $registry->setTestCaseStorage($this->testCaseRepository);
 
         $vendorResourceService = $registry->getVendorResourceService();
         $vendorResourceService->setVendorPath(Environment::getProjectPath() . '/vendor');
@@ -86,5 +90,6 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
     {
         parent::initPlugins($registry);
         $registry->registerBackendSectionController(ApiEditSectionController::class);
+        $registry->registerBackendSectionController(TestsEditSectionController::class);
     }
 }

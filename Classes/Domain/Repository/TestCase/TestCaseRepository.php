@@ -2,70 +2,58 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\Domain\Repository\TestCase;
 
+use DigitalMarketingFramework\Core\GlobalConfiguration\GlobalConfigurationInterface;
+use DigitalMarketingFramework\Core\Model\TestCase\TestCase;
+use DigitalMarketingFramework\Core\SchemaDocument\Schema\ContainerSchema;
+use DigitalMarketingFramework\Core\TestCase\TestCaseSchema;
 use DigitalMarketingFramework\Core\TestCase\TestCaseStorageInterface;
-use DigitalMarketingFramework\Typo3\Core\GlobalConfiguration\Schema\CoreGlobalConfigurationSchema;
-use DigitalMarketingFramework\Typo3\Core\Domain\Model\TestCase\TestCase;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Information\Typo3Version;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Persistence\QueryInterface;
-use TYPO3\CMS\Extbase\Persistence\Repository;
+use DigitalMarketingFramework\Typo3\Core\Domain\Repository\ItemStorageRepository;
+use DigitalMarketingFramework\Typo3\Core\TestCase\GlobalConfiguration\Settings\TestCaseSettings;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 
 /**
- * @extends Repository<TestCase>
+ * @extends ItemStorageRepository<TestCase>
+ * @implements TestCaseStorageInterface<TestCase,int>
  */
-class TestCaseRepository extends Repository implements TestCaseStorageInterface
+class TestCaseRepository extends ItemStorageRepository implements TestCaseStorageInterface
 {
-    protected int $pid;
-
-    public function __construct(
-        protected ExtensionConfiguration $extensionConfiguration,
-    ) {
-        $typo3Version = new Typo3Version();
-        if ($typo3Version->getMajorVersion() <= 11) {
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class); // @phpstan-ignore-line TYPO3 version switch
-            parent::__construct($objectManager); // @phpstan-ignore-line TYPO3 version switch
-        } else {
-            parent::__construct(); // @phpstan-ignore-line TYPO3 version switch
-        }
+    public function __construct(ConnectionPool $connectionPool)
+    {
+        parent::__construct($connectionPool, TestCase::class, 'tx_dmfcore_domain_model_test_case');
     }
 
     public function getPid(): int
     {
-        if (!isset($this->pid)) {
-            try {
-                $config = $this->extensionConfiguration->get('dmf_core');
-                $this->pid = $config[CoreGlobalConfigurationSchema::KEY_TESTS][CoreGlobalConfigurationSchema::KEY_TESTS_STORAGE_PID]
-                    ?? CoreGlobalConfigurationSchema::DEFAULT_TESTS_STORAGE_PID;
-            } catch (ExtensionConfigurationExtensionNotConfiguredException|ExtensionConfigurationPathDoesNotExistException) {
-                $this->pid = CoreGlobalConfigurationSchema::DEFAULT_TESTS_STORAGE_PID;
+        if ($this->pid === null) {
+            if ($this->globalConfiguration instanceof GlobalConfigurationInterface) {
+                $testCaseSettings = $this->globalConfiguration->getGlobalSettings(TestCaseSettings::class);
+                $this->pid = $testCaseSettings->getPid();
+            } else {
+                $this->pid = 0;
             }
         }
 
         return $this->pid;
     }
 
-    public function createQuery(): QueryInterface
+    public function fetchByType(string $type): array
     {
-        $query = parent::createQuery();
-        $query->getQuerySettings()->setRespectStoragePage(true);
-        $query->getQuerySettings()->setStoragePageIds([$this->getPid()]);
-
-        return $query;
+        return $this->fetchFiltered(['type' => $type]);
     }
 
-    public function getAllTestCases(): array
+    public function fetchByName(string $name): array
     {
-        $query = $this->createQuery();
-
-        return $query->execute()->toArray();
+        return $this->fetchFiltered(['name' => $name]);
     }
 
-    public function getTypeSpecificTestCases(string $type): array
+    public function fetchAllTypes(): array
     {
-        return $this->findByType($type)->toArray();
+        // TODO fetch all types from DB
+        return ['distributor'];
+    }
+
+    public static function getSchema(): ContainerSchema
+    {
+        return new TestCaseSchema();
     }
 }

@@ -3,34 +3,37 @@
 namespace DigitalMarketingFramework\Typo3\Core\Domain\Repository;
 
 use DigitalMarketingFramework\Core\Exception\DigitalMarketingFrameworkException;
+use DigitalMarketingFramework\Core\GlobalConfiguration\GlobalConfigurationInterface;
+use DigitalMarketingFramework\Core\Model\Item;
 use DigitalMarketingFramework\Core\Model\ItemInterface;
 use DigitalMarketingFramework\Core\SchemaDocument\Schema\ContainerSchema;
 use DigitalMarketingFramework\Core\Storage\ItemStorageInterface;
 use DigitalMarketingFramework\Core\Utility\GeneralUtility;
-use DigitalMarketingFramework\Typo3\Core\Domain\Model\Item;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\ParameterType;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 
 /**
  * @template ItemClass of Item
- * @template ItemData of array<string,mixed>
- * @template Filters of array<string,mixed>
  *
- * @implements ItemStorageInterface<ItemClass,int,ItemData,Filters>
+ * @implements ItemStorageInterface<ItemClass,int>
  */
 abstract class ItemStorageRepository implements ItemStorageInterface
 {
-    protected int $pid = 0;
+    protected ?int $pid = null;
 
     /** @var array<string> */
     protected array $fields;
+
+    protected ?GlobalConfigurationInterface $globalConfiguration = null;
 
     /**
      * @param class-string<ItemClass> $itemClassName
      */
     public function __construct(
-        protected ExtensionConfiguration $extensionConfiguration,
         protected ConnectionPool $connectionPool,
         protected string $itemClassName,
         protected string $tableName,
@@ -87,15 +90,12 @@ abstract class ItemStorageRepository implements ItemStorageInterface
     /**
      * @param ItemClass $item
      *
-     * @return ItemData
+     * @return array<string,mixed>
      */
     protected function getItemData($item): array
     {
         $data = [];
 
-        if ($item->getId() !== null) {
-            $data['uid'] = $item->getId();
-        }
 
         foreach ($this->fields as $field) {
             $method = $this->getItemMethod($item, $field, 'get');
@@ -105,8 +105,22 @@ abstract class ItemStorageRepository implements ItemStorageInterface
         return $data;
     }
 
+    public function getGlobalConfiguration(): ?GlobalConfigurationInterface
+    {
+        return $this->globalConfiguration;
+    }
+
+    public function setGlobalConfiguration(GlobalConfigurationInterface $globalConfiguration): void
+    {
+        $this->globalConfiguration = $globalConfiguration;
+    }
+
     public function getPid(): int
     {
+        if ($this->pid === null) {
+                $this->pid = 0;
+        }
+
         return $this->pid;
     }
 
@@ -116,7 +130,7 @@ abstract class ItemStorageRepository implements ItemStorageInterface
     }
 
     /**
-     * @param ?array{page:int,itemsPerPage:int,sorting:array<string,string>} $navigation
+     * @param ?array{page:int,itemsPerPage:int} $navigation
      */
     protected function applyPagination(QueryBuilder $queryBuilder, ?array $navigation): void
     {
@@ -129,7 +143,7 @@ abstract class ItemStorageRepository implements ItemStorageInterface
     }
 
     /**
-     * @param ?array{page:int,itemsPerPage:int,sorting:array<string,string>} $navigation
+     * @param ?array{sorting:array<string,string>} $navigation
      */
     protected function applySorting(QueryBuilder $queryBuilder, ?array $navigation): void
     {
@@ -149,21 +163,31 @@ abstract class ItemStorageRepository implements ItemStorageInterface
         $this->applySorting($queryBuilder, $navigation);
     }
 
+    protected function getFilterCondition(QueryBuilder $queryBuilder, string $name, mixed $value, ParameterType|ArrayParameterType|null $type = null): ?string
+    {
+        if (is_array($value)) {
+            if ($value !== []) {
+                return $queryBuilder->expr()->in($name, $queryBuilder->createNamedParameter($value, $type ?? Connection::PARAM_STR_ARRAY));
+            }
+        } else {
+            if ($value !== '') {
+                return $queryBuilder->expr()->eq($name, $queryBuilder->createNamedParameter($value, $type ?? Connection::PARAM_STR));
+            }
+        }
+
+        return null;
+    }
+
     /**
-     * @param Filters $filters
+     * @param array<string,mixed> $filters
      */
     protected function applyFilters(QueryBuilder $queryBuilder, array $filters): void
     {
         $conditions = [];
         foreach ($filters as $field => $value) {
-            if (is_array($value)) {
-                if ($value !== []) {
-                    $conditions[] = $queryBuilder->expr()->in($field, $value);
-                }
-            } else {
-                if ($value !== '') {
-                    $conditions[] = $queryBuilder->expr()->eq($field, $value);
-                }
+            $condition = $this->getFilterCondition($queryBuilder, $field, $value);
+            if ($condition !== null) {
+                $conditions[] = $condition;
             }
         }
 
@@ -173,13 +197,13 @@ abstract class ItemStorageRepository implements ItemStorageInterface
     }
 
     /**
-     * @param Filters $filters
+     * @param array<string,mixed> $filters
      * @param ?array{page:int,itemsPerPage:int,sorting:array<string,string>} $navigation
      */
     protected function buildQuery(array $filters, ?array $navigation = null): QueryBuilder
     {
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable($this->tableName);
-        $queryBuilder->addSelect(...$this->fields);
+        $queryBuilder->addSelect('uid', ...$this->fields);
         $queryBuilder->from($this->tableName);
         $queryBuilder->where($queryBuilder->expr()->eq('pid', $this->getPid()));
         $this->applyFilters($queryBuilder, $filters);
@@ -189,7 +213,7 @@ abstract class ItemStorageRepository implements ItemStorageInterface
     }
 
     /**
-     * @param Filters $filters
+     * @param array<string,mixed> $filters
      * @param ?array{page:int,itemsPerPage:int,sorting:array<string,string>} $navigation
      */
     protected function buildCountQuery(array $filters, ?array $navigation = null): QueryBuilder
@@ -217,6 +241,17 @@ abstract class ItemStorageRepository implements ItemStorageInterface
         return $result;
     }
 
+    public function fetchOneFiltered(array $filters)
+    {
+        $result = $this->fetchFiltered($filters);
+
+        if ($result === []) {
+            return null;
+        }
+
+        return reset($result);
+    }
+
     public function countFiltered(array $filters): int
     {
         $queryBuilder = $this->buildCountQuery($filters);
@@ -241,6 +276,11 @@ abstract class ItemStorageRepository implements ItemStorageInterface
         return reset($result);
     }
 
+    public function fetchByIdList(array $ids): array
+    {
+        return $this->fetchFiltered(['uid' => $ids]);
+    }
+
     public function countAll(): int
     {
         return $this->countFiltered([]);
@@ -254,26 +294,25 @@ abstract class ItemStorageRepository implements ItemStorageInterface
     public function add($item): void
     {
         $data = $this->getItemData($item);
+        $data['pid'] = $this->getPid();
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable($this->tableName);
         $queryBuilder->insert($this->tableName);
-        foreach ($this->fields as $field) {
-            $queryBuilder->setValue($field, $data[$field]);
-        }
-        $queryBuilder->setValue('pid', $this->getPid());
+        $queryBuilder->values($data);
         $queryBuilder->executeStatement();
-        $uid = (int) $queryBuilder->getConnection()->lastInsertId();
-        $item->setId($uid);
+        $id = (int) $queryBuilder->getConnection()->lastInsertId();
+        $item->setId($id);
     }
 
     public function update($item): void
     {
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable($this->tableName);
         $queryBuilder->update($this->tableName);
+        $queryBuilder->where($queryBuilder->expr()->eq('uid', $item->getId()));
         $data = $this->getItemData($item);
         foreach ($this->fields as $field) {
-            $queryBuilder->setValue($field, $data[$field]);
+            $queryBuilder->set($field, $data[$field]);
         }
-        $queryBuilder->setValue('pid', $this->getPid());
+        $queryBuilder->set('pid', $this->getPid());
         $queryBuilder->executeStatement();
     }
 

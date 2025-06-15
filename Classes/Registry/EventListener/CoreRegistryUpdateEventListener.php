@@ -17,7 +17,6 @@ use DigitalMarketingFramework\Typo3\Core\GlobalConfiguration\GlobalConfiguration
 use DigitalMarketingFramework\Typo3\Core\GlobalConfiguration\Schema\CoreGlobalConfigurationSchema;
 use DigitalMarketingFramework\Typo3\Core\Log\LoggerFactory;
 use DigitalMarketingFramework\Typo3\Core\Resource\ExtensionResourceService;
-use DigitalMarketingFramework\Typo3\Core\TestCase\GlobalConfiguration\Settings\TestCaseSettings;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
@@ -62,6 +61,7 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
             $registry->createObject(YamlConfigurationDocumentParser::class)
         );
 
+        $this->endPointStorage->setGlobalConfiguration($registry->getGlobalConfiguration());
         $registry->setEndPointStorage($this->endPointStorage);
 
         $this->testCaseRepository->setGlobalConfiguration($registry->getGlobalConfiguration());

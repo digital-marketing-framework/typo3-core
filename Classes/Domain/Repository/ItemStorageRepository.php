@@ -3,122 +3,38 @@
 namespace DigitalMarketingFramework\Typo3\Core\Domain\Repository;
 
 use DigitalMarketingFramework\Core\Exception\DigitalMarketingFrameworkException;
-use DigitalMarketingFramework\Core\GlobalConfiguration\GlobalConfigurationInterface;
-use DigitalMarketingFramework\Core\Model\Item;
 use DigitalMarketingFramework\Core\Model\ItemInterface;
-use DigitalMarketingFramework\Core\SchemaDocument\Schema\ContainerSchema;
-use DigitalMarketingFramework\Core\Storage\ItemStorageInterface;
-use DigitalMarketingFramework\Core\Utility\GeneralUtility;
+use DigitalMarketingFramework\Core\Storage\ItemStorage;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\ParameterType;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 
 /**
- * @template ItemClass of Item
+ * @template ItemClass of ItemInterface
  *
- * @implements ItemStorageInterface<ItemClass,int>
+ * @extends ItemStorage<ItemClass>
  */
-abstract class ItemStorageRepository implements ItemStorageInterface
+abstract class ItemStorageRepository extends ItemStorage
 {
     protected ?int $pid = null;
-
-    /** @var array<string> */
-    protected array $fields;
-
-    protected ?GlobalConfigurationInterface $globalConfiguration = null;
 
     /**
      * @param class-string<ItemClass> $itemClassName
      */
     public function __construct(
         protected ConnectionPool $connectionPool,
-        protected string $itemClassName,
+        string $itemClassName,
         protected string $tableName,
     ) {
-        $this->fields = array_keys(static::getSchema()->getProperties());
-    }
-
-    public function create(?array $data = null)
-    {
-        $item = new $this->itemClassName();
-        if ($data !== null) {
-            $this->updateItem($item, $data);
-        }
-
-        return $item;
-    }
-
-    /**
-     * @param ItemClass $item
-     */
-    protected function getItemMethod(ItemInterface $item, string $field, string $type): string
-    {
-        $method = $type . ucfirst(GeneralUtility::underscoredToCamelCase($field));
-
-        if (!method_exists($item, $method)) {
-            throw new DigitalMarketingFrameworkException(sprintf('Method "%s" not found in class "%s"', $field, get_class($item)));
-        }
-
-        return $method;
-    }
-
-    /**
-     * @param ItemClass $item
-     * @param ItemData $data
-     */
-    protected function updateItem($item, array $data): void
-    {
-        $fields = $this->fields;
-
-        foreach ($fields as $field) {
-            if (!isset($data[$field])) {
-                continue;
-            }
-
-            $method = $this->getItemMethod($item, $field, 'set');
-            $item->$method($data[$field]); // @phpstan-ignore-line dynamic method call based on item schema
-        }
-
-        if (isset($data['uid'])) {
-            $item->setId($data['uid']);
-        }
-    }
-
-    /**
-     * @param ItemClass $item
-     *
-     * @return array<string,mixed>
-     */
-    protected function getItemData($item): array
-    {
-        $data = [];
-
-
-        foreach ($this->fields as $field) {
-            $method = $this->getItemMethod($item, $field, 'get');
-            $data[$field] = $item->$method(); // @phpstan-ignore-line dynamic method call based on item schema
-        }
-
-        return $data;
-    }
-
-    public function getGlobalConfiguration(): ?GlobalConfigurationInterface
-    {
-        return $this->globalConfiguration;
-    }
-
-    public function setGlobalConfiguration(GlobalConfigurationInterface $globalConfiguration): void
-    {
-        $this->globalConfiguration = $globalConfiguration;
+        parent::__construct($itemClassName);
     }
 
     public function getPid(): int
     {
         if ($this->pid === null) {
-                $this->pid = 0;
+            $this->pid = 0;
         }
 
         return $this->pid;
@@ -169,10 +85,8 @@ abstract class ItemStorageRepository implements ItemStorageInterface
             if ($value !== []) {
                 return $queryBuilder->expr()->in($name, $queryBuilder->createNamedParameter($value, $type ?? Connection::PARAM_STR_ARRAY));
             }
-        } else {
-            if ($value !== '') {
-                return $queryBuilder->expr()->eq($name, $queryBuilder->createNamedParameter($value, $type ?? Connection::PARAM_STR));
-            }
+        } elseif ($value !== '') {
+            return $queryBuilder->expr()->eq($name, $queryBuilder->createNamedParameter($value, $type ?? Connection::PARAM_STR));
         }
 
         return null;
@@ -259,13 +173,13 @@ abstract class ItemStorageRepository implements ItemStorageInterface
         $count = $queryBuilder->executeQuery()->fetchOne();
 
         if ($count === false) {
-            throw new DigitalMarketingFrameworkException(sprintf('Unable to calculate item count on table "%s"', $this->tableName));
+            throw new DigitalMarketingFrameworkException(sprintf('Unable to calculate item count on table "%s"', $this->tableName), 8261419171);
         }
 
         return $count;
     }
 
-    public function fetchById($id): ?Item
+    public function fetchById(string|int $id): ?ItemInterface
     {
         $result = $this->fetchFiltered(['uid' => $id], ['page' => 0, 'itemsPerPage' => 1, 'sorting' => []]);
 
@@ -299,7 +213,8 @@ abstract class ItemStorageRepository implements ItemStorageInterface
         $queryBuilder->insert($this->tableName);
         $queryBuilder->values($data);
         $queryBuilder->executeStatement();
-        $id = (int) $queryBuilder->getConnection()->lastInsertId();
+
+        $id = (int)$queryBuilder->getConnection()->lastInsertId();
         $item->setId($id);
     }
 
@@ -308,10 +223,12 @@ abstract class ItemStorageRepository implements ItemStorageInterface
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable($this->tableName);
         $queryBuilder->update($this->tableName);
         $queryBuilder->where($queryBuilder->expr()->eq('uid', $item->getId()));
+
         $data = $this->getItemData($item);
         foreach ($this->fields as $field) {
             $queryBuilder->set($field, $data[$field]);
         }
+
         $queryBuilder->set('pid', $this->getPid());
         $queryBuilder->executeStatement();
     }
@@ -322,10 +239,5 @@ abstract class ItemStorageRepository implements ItemStorageInterface
         $queryBuilder->delete($this->tableName);
         $queryBuilder->where($queryBuilder->expr()->eq('uid', $item->getId()));
         $queryBuilder->executeStatement();
-    }
-
-    public static function getSchema(): ContainerSchema
-    {
-        return new ContainerSchema();
     }
 }

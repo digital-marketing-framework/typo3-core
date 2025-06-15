@@ -23,7 +23,7 @@
     "homepage": "https://www.mediatis.de",
     "require": {
         "php": "^8.2",
-        "digital-marketing-framework/core": "dev-feature/unified-storage",
+        "digital-marketing-framework/core": "dev-feature/MFR-133-test-cases",
         "typo3/cms-core": "^12.4 || ^13.4"
     },
     "require-dev": {

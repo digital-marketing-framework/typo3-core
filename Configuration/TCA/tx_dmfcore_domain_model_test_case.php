@@ -17,9 +17,6 @@ $GLOBALS['TCA']['tx_dmfcore_domain_model_test_case'] = [
         'iconfile' => 'EXT:dmf_core/Resources/Public/Icons/TestCase.svg',
         'default_sortby' => 'changed DESC',
     ],
-    'interface' => [
-        'showRecordFieldList' => 'label,name,description,type,hash,created,changed,serialized_input,serialized_expected_output',
-    ],
     'types' => [
         '0' => [
             'showitem' => 'label,name,description,type,hash,created,changed,serialized_input,serialized_expected_output',
@@ -61,7 +58,7 @@ $GLOBALS['TCA']['tx_dmfcore_domain_model_test_case'] = [
                 'itemsProcFunc' => 'DigitalMarketingFramework\Typo3\Core\Tca\TestCaseItemsProcFunc->getAllTestCaseTypes',
                 'minitems' => 0,
                 'maxitems' => 1,
-                'size' => 1
+                'size' => 1,
             ],
         ],
         'hash' => [
@@ -75,18 +72,14 @@ $GLOBALS['TCA']['tx_dmfcore_domain_model_test_case'] = [
             'exclude' => 1,
             'label' => $ll . 'tx_dmfcore_domain_model_test_case.created',
             'config' => [
-                'type' => 'input',
-                'renderType' => 'inputDateTime',
-                'eval' => 'datetime',
+                'type' => 'datetime',
             ],
         ],
         'changed' => [
             'exclude' => 1,
             'label' => $ll . 'tx_dmfcore_domain_model_test_case.changed',
             'config' => [
-                'type' => 'input',
-                'renderType' => 'inputDateTime',
-                'eval' => 'datetime',
+                'type' => 'datetime',
             ],
         ],
         'serialized_input' => [

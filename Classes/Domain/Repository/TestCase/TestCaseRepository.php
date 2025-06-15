@@ -4,6 +4,7 @@ namespace DigitalMarketingFramework\Typo3\Core\Domain\Repository\TestCase;
 
 use DigitalMarketingFramework\Core\GlobalConfiguration\GlobalConfigurationInterface;
 use DigitalMarketingFramework\Core\Model\TestCase\TestCase;
+use DigitalMarketingFramework\Core\Model\TestCase\TestCaseInterface;
 use DigitalMarketingFramework\Core\SchemaDocument\Schema\ContainerSchema;
 use DigitalMarketingFramework\Core\TestCase\TestCaseSchema;
 use DigitalMarketingFramework\Core\TestCase\TestCaseStorageInterface;
@@ -12,8 +13,7 @@ use DigitalMarketingFramework\Typo3\Core\TestCase\GlobalConfiguration\Settings\T
 use TYPO3\CMS\Core\Database\ConnectionPool;
 
 /**
- * @extends ItemStorageRepository<TestCase>
- * @implements TestCaseStorageInterface<TestCase,int>
+ * @extends ItemStorageRepository<TestCaseInterface>
  */
 class TestCaseRepository extends ItemStorageRepository implements TestCaseStorageInterface
 {

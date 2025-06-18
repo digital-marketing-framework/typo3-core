@@ -46,15 +46,24 @@ abstract class ItemStorageRepository extends ItemStorage
     }
 
     /**
-     * @param ?array{page:int,itemsPerPage:int} $navigation
+     * @param array{page?:int,itemsPerPage?:int}|array{limit?:int,offset?:int}|null $navigation
      */
     protected function applyPagination(QueryBuilder $queryBuilder, ?array $navigation): void
     {
-        if ($navigation !== null && $navigation['itemsPerPage'] > 0) {
-            $queryBuilder->setMaxResults($navigation['itemsPerPage']);
-            if ($navigation['page'] > 0) {
-                $queryBuilder->setFirstResult($navigation['page']);
-            }
+        if (isset($navigation['limit']) || isset($navigation['offset'])) {
+            $limit = $navigation['limit'] ?? 0;
+            $offset = $navigation['offset'] ?? 0;
+        } else {
+            $limit = $navigation['itemsPerPage'] ?? 0;
+            $offset = $limit * ($navigation['page'] ?? 0);
+        }
+
+        if ($limit > 0) {
+            $queryBuilder->setMaxResults($limit);
+        }
+
+        if ($offset > 0) {
+            $queryBuilder->setFirstResult($offset);
         }
     }
 

@@ -164,9 +164,12 @@ abstract class ItemStorageRepository extends ItemStorage
         return $result;
     }
 
-    public function fetchOneFiltered(array $filters)
+    public function fetchOneFiltered(array $filters, ?array $navigation = null)
     {
-        $result = $this->fetchFiltered($filters);
+        $navigation ??= [];
+        $navigation['limit'] = 1;
+
+        $result = $this->fetchFiltered($filters, $navigation);
 
         if ($result === []) {
             return null;

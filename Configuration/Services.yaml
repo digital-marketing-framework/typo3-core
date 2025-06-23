@@ -7,6 +7,10 @@ services:
   DigitalMarketingFramework\Typo3\Core\:
     resource: '../Classes/*'
 
+  DigitalMarketingFramework\Typo3\Core\Tca\:
+    resource: '../Classes/Tca/*'
+    public: true
+
   DigitalMarketingFramework\Typo3\Core\Controller\BackendModuleController:
     tags: ['backend.controller']
 

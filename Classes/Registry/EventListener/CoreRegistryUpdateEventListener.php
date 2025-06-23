@@ -7,9 +7,11 @@ use DigitalMarketingFramework\Core\CoreInitialization;
 use DigitalMarketingFramework\Core\Registry\RegistryInterface;
 use DigitalMarketingFramework\Typo3\Core\Backend\AssetUriBuilder;
 use DigitalMarketingFramework\Typo3\Core\Backend\Controller\SectionController\ApiEditSectionController;
+use DigitalMarketingFramework\Typo3\Core\Backend\Controller\SectionController\TestsEditSectionController;
 use DigitalMarketingFramework\Typo3\Core\Backend\UriBuilder;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\YamlFileConfigurationDocumentStorage;
 use DigitalMarketingFramework\Typo3\Core\Domain\Repository\Api\EndPointRepository;
+use DigitalMarketingFramework\Typo3\Core\Domain\Repository\TestCase\TestCaseRepository;
 use DigitalMarketingFramework\Typo3\Core\FileStorage\FileStorage;
 use DigitalMarketingFramework\Typo3\Core\GlobalConfiguration\GlobalConfiguration;
 use DigitalMarketingFramework\Typo3\Core\GlobalConfiguration\Schema\CoreGlobalConfigurationSchema;
@@ -28,6 +30,7 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
         protected ResourceFactory $resourceFactory,
         protected EventDispatcherInterface $eventDispatcher,
         protected EndPointRepository $endPointStorage,
+        protected TestCaseRepository $testCaseRepository,
     ) {
         $initialization = new CoreInitialization('dmf_core');
         $initialization->setGlobalConfigurationSchema(new CoreGlobalConfigurationSchema());
@@ -44,11 +47,7 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
 
     protected function initServices(RegistryInterface $registry): void
     {
-        parent::initServices($registry);
-
         $registry->setLoggerFactory($this->loggerFactory);
-
-        $registry->setEndPointStorage($this->endPointStorage);
 
         $registry->setFileStorage(
             $registry->createObject(FileStorage::class, [$this->resourceFactory])
@@ -61,6 +60,12 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
         $registry->setConfigurationDocumentParser(
             $registry->createObject(YamlConfigurationDocumentParser::class)
         );
+
+        $this->endPointStorage->setGlobalConfiguration($registry->getGlobalConfiguration());
+        $registry->setEndPointStorage($this->endPointStorage);
+
+        $this->testCaseRepository->setGlobalConfiguration($registry->getGlobalConfiguration());
+        $registry->setTestCaseStorage($this->testCaseRepository);
 
         $vendorResourceService = $registry->getVendorResourceService();
         $vendorResourceService->setVendorPath(Environment::getProjectPath() . '/vendor');
@@ -77,11 +82,14 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
 
         $registry->setBackendUriBuilder(new UriBuilder());
         $registry->setBackendAssetUriBuilder(new AssetUriBuilder($registry));
+
+        parent::initServices($registry);
     }
 
     protected function initPlugins(RegistryInterface $registry): void
     {
         parent::initPlugins($registry);
         $registry->registerBackendSectionController(ApiEditSectionController::class);
+        $registry->registerBackendSectionController(TestsEditSectionController::class);
     }
 }

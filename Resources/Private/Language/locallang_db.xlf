@@ -30,6 +30,34 @@
 	  <trans-unit id="tx_dmfcore_domain_model_api_endpoint.configuration_document" xml:space="preserve">
 	    <source>Configuration Document</source>
 	  </trans-unit>
+
+	  <trans-unit id="tx_dmfcore_domain_model_test_case" xml:space="preserve">
+		<source>Anyrel - Test Case</source>
+	  </trans-unit>
+	  <trans-unit id="tx_dmfcore_domain_model_test_case.label" xml:space="preserve">
+		  <source>Label</source>
+		</trans-unit>
+	  <trans-unit id="tx_dmfcore_domain_model_test_case.name" xml:space="preserve">
+		  <source>Name</source>
+		</trans-unit>
+	  <trans-unit id="tx_dmfcore_domain_model_test_case.type" xml:space="preserve">
+		  <source>Type</source>
+		</trans-unit>
+	  <trans-unit id="tx_dmfcore_domain_model_test_case.hash" xml:space="preserve">
+		  <source>Hash</source>
+		</trans-unit>
+	  <trans-unit id="tx_dmfcore_domain_model_test_case.created" xml:space="preserve">
+		  <source>Created</source>
+		</trans-unit>
+	  <trans-unit id="tx_dmfcore_domain_model_test_case.changed" xml:space="preserve">
+		  <source>Changed</source>
+		</trans-unit>
+	  <trans-unit id="tx_dmfcore_domain_model_test_case.serialized_input" xml:space="preserve">
+		  <source>Input Data</source>
+		</trans-unit>
+	  <trans-unit id="tx_dmfcore_domain_model_test_case.serialized_expected_output" xml:space="preserve">
+		  <source>Expected Output Data</source>
+		</trans-unit>
     </body>
   </file>
 </xliff>

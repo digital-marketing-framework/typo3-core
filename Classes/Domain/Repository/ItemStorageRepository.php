@@ -102,10 +102,14 @@ abstract class ItemStorageRepository extends ItemStorage
     }
 
     /**
-     * @param array<string,mixed> $filters
+     * @param ?array<string,mixed> $filters
      */
-    protected function applyFilters(QueryBuilder $queryBuilder, array $filters): void
+    protected function applyFilters(QueryBuilder $queryBuilder, ?array $filters): void
     {
+        if ($filters === null) {
+            return;
+        }
+
         $conditions = [];
         foreach ($filters as $field => $value) {
             $condition = $this->getFilterCondition($queryBuilder, $field, $value);
@@ -120,10 +124,10 @@ abstract class ItemStorageRepository extends ItemStorage
     }
 
     /**
-     * @param array<string,mixed> $filters
+     * @param ?array<string,mixed> $filters
      * @param ?array{page:int,itemsPerPage:int,sorting:array<string,string>} $navigation
      */
-    protected function buildQuery(array $filters, ?array $navigation = null): QueryBuilder
+    protected function buildQuery(?array $filters = null, ?array $navigation = null): QueryBuilder
     {
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable($this->tableName);
         $queryBuilder->addSelect('uid', ...$this->fields);
@@ -151,17 +155,27 @@ abstract class ItemStorageRepository extends ItemStorage
         return $queryBuilder;
     }
 
-    public function fetchFiltered(array $filters, ?array $navigation = null): array
+    /**
+     * @param array<array<string,mixed>> $rows
+     *
+     * @return array<ItemClass>
+     */
+    protected function createResults(array $rows)
     {
-        $queryBuilder = $this->buildQuery($filters, $navigation);
-
-        $rows = $queryBuilder->executeQuery()->fetchAllAssociative();
         $result = [];
         foreach ($rows as $row) {
             $result[] = $this->create($row);
         }
 
         return $result;
+    }
+
+    public function fetchFiltered(array $filters, ?array $navigation = null): array
+    {
+        $queryBuilder = $this->buildQuery($filters, $navigation);
+        $rows = $queryBuilder->executeQuery()->fetchAllAssociative();
+
+        return $this->createResults($rows);
     }
 
     public function fetchOneFiltered(array $filters, ?array $navigation = null)

@@ -3,8 +3,11 @@ configurationStorage {
     # cat=Configuration Document Storage; type=string; label=Storage folder for configuration documents
     folder = 0:/digital_marketing_framework/configuration
 
-    # cat=Main Configuration Document; type=string; label=Default configuration document, mostly used by the Collector
+    # cat=Configuration Document Storage; type=string; label=Default configuration document
     defaultConfigurationDocument =
+
+    # cat=Configuration Document Storage; type=string; label=Configuration document aliases
+    documentAliases =
 
     # cat=Configuration Document Storage; type=boolean; label=Allow saving documents in extension folders
     allowSaveToExtensionPaths = 0

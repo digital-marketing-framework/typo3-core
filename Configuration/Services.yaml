@@ -32,3 +32,9 @@ services:
   # REST API
   DigitalMarketingFramework\Typo3\Core\Middleware\RestMiddleware:
     public: true
+
+  DigitalMarketingFramework\Typo3\Core\Command\CleanupCommand:
+    tags:
+      - name: console.command
+        command: 'anyrel:cleanup'
+        description: 'Execute Anyrel cleanup tasks.'

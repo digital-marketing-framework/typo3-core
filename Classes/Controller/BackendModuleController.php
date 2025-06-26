@@ -80,7 +80,7 @@ class BackendModuleController
 
     public function handleRequest(ServerRequestInterface $request): ResponseInterface
     {
-        $params = $request->getQueryParams()['dmf'];
+        $params = $request->getQueryParams()['dmf'] ?? [];
         $route = $params['route'] ?? '';
         $arguments = $params['arguments'] ?? [];
         $body = $this->getBodyData($request);

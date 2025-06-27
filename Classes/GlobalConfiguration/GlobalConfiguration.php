@@ -17,15 +17,21 @@ class GlobalConfiguration extends DefaultGlobalConfiguration
         parent::__construct($registry);
     }
 
-    public function get(string $key, mixed $default = null): mixed
+    public function get(string $key, mixed $default = null, bool $resolvePlaceholders = true): mixed
     {
         try {
             $key = $this->packageAliases->resolveAlias($key);
 
-            return $this->extensionConfiguration->get($key);
+            $value = $this->extensionConfiguration->get($key);
         } catch (ExtensionConfigurationExtensionNotConfiguredException|ExtensionConfigurationPathDoesNotExistException) {
-            return parent::get($key, $default);
+            $value = parent::get($key, $default, false);
         }
+
+        if ($resolvePlaceholders) {
+            $value = $this->registry->getEnvironmentService()->insertEnvironmentVariables($value);
+        }
+
+        return $value;
     }
 
     public function set(string $key, mixed $value): void

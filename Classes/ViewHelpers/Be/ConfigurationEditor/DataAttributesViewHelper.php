@@ -18,6 +18,7 @@ class DataAttributesViewHelper extends AbstractBackendViewHelper
         $this->registerArgument('documentType', 'string', 'Document type for ajax URLs', false, MetaData::DEFAULT_DOCUMENT_TYPE);
         $this->registerArgument('includes', 'bool', 'Configuration support includes', false, true);
         $this->registerArgument('routeParameters', 'array', 'Additional AJAX route parameters', false, []);
+        $this->registerArgument('contextIdentifier', 'string', 'Context identifier', false, '');
     }
 
     /**
@@ -32,7 +33,8 @@ class DataAttributesViewHelper extends AbstractBackendViewHelper
             globalDocument: $this->arguments['globalDocument'],
             documentType: $this->arguments['documentType'],
             includes: $this->arguments['includes'],
-            parameters: $this->arguments['routeParameters']
+            parameters: $this->arguments['routeParameters'],
+            contextIdentifier: $this->arguments['contextIdentifier']
         );
     }
 }

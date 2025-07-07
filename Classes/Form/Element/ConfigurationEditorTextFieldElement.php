@@ -18,11 +18,28 @@ class ConfigurationEditorTextFieldElement extends TextElement
      */
     public const RENDER_TYPE = 'digitalMarketingFrameworkConfigurationEditorTextFieldElement';
 
+    protected function getContextIdentifier(): string
+    {
+        // TODO add a (typo3-specific?) entry point for different context identifier producers
+        $tableName = $this->data['tableName'] ?? '';
+        $cType = $this->data['databaseRow']['CType'][0] ?? '';
+        if ($tableName === 'tt_content' && $cType === 'form_formframework') {
+            return 'form:' . $this->data['databaseRow']['pi_flexform']['data']['sDEF']['lDEF']['settings.persistenceIdentifier']['vDEF'][0] ?? '';
+        }
+
+        if ($tableName === 'tx_dmfcore_domain_model_api_endpoint') {
+            return 'api:' . $this->data['databaseRow']['name'];
+        }
+
+        return '';
+    }
+
     /**
      * @param array{
      *   readOnly?:bool,
      *   mode?:string,
      *   globalDocument?:bool,
+     *   contextIdentifier?:string,
      *   ajaxControllerDocumentType?:string,
      *   ajaxControllerSupportsIncludes?:bool,
      *   ajaxControllerAdditionalParameters?:array<string,string>
@@ -33,9 +50,10 @@ class ConfigurationEditorTextFieldElement extends TextElement
         $readonly = $config['readOnly'] ?? false;
         $mode = $config['mode'] ?? 'modal';
         $globalDocument = $config['globalDocument'] ?? false;
-        $documentType = $this->getControllerDocumentType($config);
-        $includes = $this->controllerSupportsIncludes($config);
-        $parameters = $this->getAdditionalControllerParameters($config);
+        $contextIdentifier = $config['contextIdentifier'] ?? $this->getContextIdentifier();
+        $documentType = $config['ajaxControllerDocumentType'] ?? MetaData::DEFAULT_DOCUMENT_TYPE;
+        $includes = $config['ajaxControllerSupportsIncludes'] ?? true;
+        $parameters = $config['ajaxControllerAdditionalParameters'] ?? [];
 
         $dataAttributes = ConfigurationEditorRenderUtility::getTextAreaDataAttributes(
             ready: true,
@@ -45,6 +63,7 @@ class ConfigurationEditorTextFieldElement extends TextElement
             documentType: $documentType,
             includes: $includes,
             parameters: $parameters,
+            contextIdentifier: $contextIdentifier,
         );
 
         $class = $textArea->getAttribute('class');
@@ -58,32 +77,6 @@ class ConfigurationEditorTextFieldElement extends TextElement
         foreach ($dataAttributes as $name => $value) {
             $textArea->setAttribute('data-' . $name, $value);
         }
-    }
-
-    /**
-     * @param array{ajaxControllerSupportsIncludes?:bool} $config
-     */
-    protected function controllerSupportsIncludes(array $config): bool
-    {
-        return $config['ajaxControllerSupportsIncludes'] ?? true;
-    }
-
-    /**
-     * @param array{ajaxControllerDocumentType?:string} $config
-     */
-    protected function getControllerDocumentType(array $config): string
-    {
-        return $config['ajaxControllerDocumentType'] ?? MetaData::DEFAULT_DOCUMENT_TYPE;
-    }
-
-    /**
-     * @param array{ajaxControllerAdditionalParameters?:array<string,string>} $config
-     *
-     * @return array<string,string>
-     */
-    protected function getAdditionalControllerParameters(array $config): array
-    {
-        return $config['ajaxControllerAdditionalParameters'] ?? [];
     }
 
     /**

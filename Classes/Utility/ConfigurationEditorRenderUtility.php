@@ -37,6 +37,7 @@ class ConfigurationEditorRenderUtility
         string $documentType = MetaData::DEFAULT_DOCUMENT_TYPE,
         bool $includes = true,
         array $parameters = [],
+        string $contextIdentifier = '',
     ): array {
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
 
@@ -50,6 +51,7 @@ class ConfigurationEditorRenderUtility
             'readonly' => $readonly ? 'true' : 'false',
             'global-document' => $globalDocument ? 'true' : 'false',
             'debug' => $debug ? 'true' : 'false',
+            'context-identifier' => $contextIdentifier,
 
             'url-schema' => $uriBuilder->build('ajax.configuration-editor.schema', $parameters),
             'url-defaults' => $uriBuilder->build('ajax.configuration-editor.defaults', $parameters),

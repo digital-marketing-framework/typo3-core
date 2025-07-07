@@ -52,6 +52,8 @@ class ConfigurationEditorRenderUtility
             'global-document' => $globalDocument ? 'true' : 'false',
             'debug' => $debug ? 'true' : 'false',
             'context-identifier' => $contextIdentifier,
+            'document-type' => $documentType,
+            'document-group' => $parameters['contentModifierGroup'] ?? '',
 
             'url-schema' => $uriBuilder->build('ajax.configuration-editor.schema', $parameters),
             'url-defaults' => $uriBuilder->build('ajax.configuration-editor.defaults', $parameters),

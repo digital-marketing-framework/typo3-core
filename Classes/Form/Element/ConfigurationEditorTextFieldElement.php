@@ -24,11 +24,17 @@ class ConfigurationEditorTextFieldElement extends TextElement
         $tableName = $this->data['tableName'] ?? '';
         $cType = $this->data['databaseRow']['CType'][0] ?? '';
         if ($tableName === 'tt_content' && $cType === 'form_formframework') {
-            return 'form:' . $this->data['databaseRow']['pi_flexform']['data']['sDEF']['lDEF']['settings.persistenceIdentifier']['vDEF'][0] ?? '';
+            $id = $this->data['databaseRow']['pi_flexform']['data']['sDEF']['lDEF']['settings.persistenceIdentifier']['vDEF'][0] ?? '';
+            if ($id !== '') {
+                return 'form:' . $id;
+            }
         }
 
         if ($tableName === 'tx_dmfcore_domain_model_api_endpoint') {
-            return 'api:' . $this->data['databaseRow']['name'];
+            $name = $this->data['databaseRow']['name'] ?? '';
+            if ($name !== '') {
+                return 'api:' . $name;
+            }
         }
 
         return '';

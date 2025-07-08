@@ -3,7 +3,8 @@
 namespace DigitalMarketingFramework\Typo3\Core\ViewHelpers\Be\ConfigurationEditor;
 
 use DigitalMarketingFramework\Core\ConfigurationEditor\MetaData;
-use DigitalMarketingFramework\Typo3\Core\Utility\ConfigurationEditorRenderUtility;
+use DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\ViewHelpers\Be\AbstractBackendViewHelper;
 
 class DataAttributesViewHelper extends AbstractBackendViewHelper
@@ -19,6 +20,7 @@ class DataAttributesViewHelper extends AbstractBackendViewHelper
         $this->registerArgument('includes', 'bool', 'Configuration support includes', false, true);
         $this->registerArgument('routeParameters', 'array', 'Additional AJAX route parameters', false, []);
         $this->registerArgument('contextIdentifier', 'string', 'Context identifier', false, '');
+        $this->registerArgument('uid', 'string', 'Unique editor identifier', false, '');
     }
 
     /**
@@ -26,7 +28,7 @@ class DataAttributesViewHelper extends AbstractBackendViewHelper
      */
     public function render(): array
     {
-        return ConfigurationEditorRenderUtility::getTextAreaDataAttributes(
+        return GeneralUtility::makeInstance(RegistryCollection::class)->getRegistry()->getBackendRenderingService()->getTextAreaDataAttributes(
             ready: $this->arguments['ready'],
             mode: $this->arguments['mode'],
             readonly: $this->arguments['readonly'],
@@ -34,7 +36,8 @@ class DataAttributesViewHelper extends AbstractBackendViewHelper
             documentType: $this->arguments['documentType'],
             includes: $this->arguments['includes'],
             parameters: $this->arguments['routeParameters'],
-            contextIdentifier: $this->arguments['contextIdentifier']
+            contextIdentifier: $this->arguments['contextIdentifier'],
+            uid: $this->arguments['uid']
         );
     }
 }

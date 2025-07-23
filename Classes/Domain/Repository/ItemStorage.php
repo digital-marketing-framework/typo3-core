@@ -18,8 +18,6 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder;
  */
 abstract class ItemStorage extends OriginalItemStorage
 {
-    protected const UID_FIELD = 'uid';
-
     /**
      * @param class-string<ItemClass> $itemClassName
      */
@@ -255,9 +253,12 @@ abstract class ItemStorage extends OriginalItemStorage
 
     public function update($item): void
     {
+        $id = $item->getId();
+        $idType = is_string($id) ? Connection::PARAM_STR : Connection::PARAM_INT;
+
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable($this->tableName);
         $queryBuilder->update($this->tableName);
-        $queryBuilder->where($queryBuilder->expr()->eq(static::UID_FIELD, $item->getId()));
+        $queryBuilder->where($queryBuilder->expr()->eq(static::UID_FIELD, $queryBuilder->createNamedParameter($id, $idType)));
 
         $data = $this->getItemData($item);
         foreach ($this->fields as $field) {
@@ -270,9 +271,12 @@ abstract class ItemStorage extends OriginalItemStorage
 
     public function remove($item): void
     {
+        $id = $item->getId();
+        $idType = is_string($id) ? Connection::PARAM_STR : Connection::PARAM_INT;
+
         $queryBuilder = $this->connectionPool->getQueryBuilderForTable($this->tableName);
         $queryBuilder->delete($this->tableName);
-        $queryBuilder->where($queryBuilder->expr()->eq(static::UID_FIELD, $item->getId()));
+        $queryBuilder->where($queryBuilder->expr()->eq(static::UID_FIELD, $queryBuilder->createNamedParameter($id, $idType)));
         $queryBuilder->executeStatement();
     }
 }

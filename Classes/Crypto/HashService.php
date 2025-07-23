@@ -19,6 +19,7 @@ class HashService implements HashServiceInterface
             return $hashService->generateHmac($subject);
         }
 
+        // @phpstan-ignore-next-line TYPO3 version switch
         $hashService = GeneralUtility::makeInstance(Typo3V13HashService::class);
 
         return $hashService->hmac($subject, $additionalSecret);
@@ -33,6 +34,7 @@ class HashService implements HashServiceInterface
             return $hashService->validateHmac($subject, $hash);
         }
 
+        // @phpstan-ignore-next-line TYPO3 version switch
         $hashService = GeneralUtility::makeInstance(Typo3V13HashService::class);
 
         return $hashService->validateHmac($subject, $additionalSecret, $hash);

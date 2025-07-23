@@ -2,12 +2,7 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\Domain\Repository;
 
-use DigitalMarketingFramework\Core\Exception\DigitalMarketingFrameworkException;
 use DigitalMarketingFramework\Core\Model\ItemInterface;
-use Doctrine\DBAL\ArrayParameterType;
-use Doctrine\DBAL\ParameterType;
-use TYPO3\CMS\Core\Database\Connection;
-use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 
 /**
@@ -42,6 +37,7 @@ abstract class ItemStorageRepository extends ItemStorage
     {
         $data = parent::getItemData($item);
         $data['pid'] = $this->getPid();
+
         return $data;
     }
 

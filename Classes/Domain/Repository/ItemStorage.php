@@ -14,7 +14,7 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 /**
  * @template ItemClass of ItemInterface
  *
- * @extends ItemStorage<ItemClass>
+ * @extends OriginalItemStorage<ItemClass>
  */
 abstract class ItemStorage extends OriginalItemStorage
 {

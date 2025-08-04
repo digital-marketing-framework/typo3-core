@@ -20,6 +20,11 @@ class ConfigurationEditorTextFieldElement extends TextElement
      */
     public const RENDER_TYPE = 'digitalMarketingFrameworkConfigurationEditorTextFieldElement';
 
+    /**
+     * @var string
+     */
+    public const JS_VENDOR = '@digital-marketing-framework';
+
     protected RegistryInterface $registry;
 
     protected AssetServiceInterface $assetService;
@@ -153,7 +158,7 @@ class ConfigurationEditorTextFieldElement extends TextElement
         $config = $parameterArray['fieldConf']['config'];
         foreach (MetaData::SCRIPTS as $path) {
             $script = $assetService->makeAssetPublic($path);
-            $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create('/' . $script);
+            $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create(static::JS_VENDOR . '/' . $script);
         }
 
         foreach (MetaData::STYLES as $path) {

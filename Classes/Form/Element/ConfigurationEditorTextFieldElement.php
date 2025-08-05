@@ -10,6 +10,7 @@ use DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection;
 use DOMDocument;
 use DOMElement;
 use TYPO3\CMS\Backend\Form\Element\TextElement;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -156,9 +157,14 @@ class ConfigurationEditorTextFieldElement extends TextElement
 
         $parameterArray = $this->data['parameterArray'];
         $config = $parameterArray['fieldConf']['config'];
+        $typo3Version = new Typo3Version();
         foreach (MetaData::SCRIPTS as $path) {
-            $script = $assetService->makeAssetPublic($path);
-            $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create(static::JS_VENDOR . '/' . $script);
+            $instructionName = static::JS_VENDOR . '/' . $path;
+            if ($typo3Version->getMajorVersion() <= 12) {
+                $instructionName = '/' . $assetService->makeAssetPublic($path);
+            }
+
+            $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create($instructionName);
         }
 
         foreach (MetaData::STYLES as $path) {

@@ -13,6 +13,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class RestMiddleware implements MiddlewareInterface
 {
@@ -22,9 +23,7 @@ class RestMiddleware implements MiddlewareInterface
         protected StreamFactoryInterface $streamFactory,
         protected ResponseFactoryInterface $responseFactory,
         protected EventDispatcherInterface $eventDispatcher,
-        protected RegistryCollection $registryCollection,
     ) {
-        $this->routeResolver = $this->registryCollection->getApiEntryRouteResolver();
     }
 
     protected function buildResponse(ApiResponseInterface $apiResponse): ResponseInterface
@@ -51,19 +50,30 @@ class RestMiddleware implements MiddlewareInterface
         $resource = $arguments['dmfResource'] ?? '';
         unset($arguments['dmfResource']);
 
-        $apiRequest = $this->routeResolver->buildRequest(
+        $routeResolver = $this->getRouteResolver();
+        $apiRequest = $routeResolver->buildRequest(
             $resource,
             $request->getMethod(),
             $arguments,
             $data
         );
 
-        return $this->routeResolver->resolveRequest($apiRequest);
+        return $routeResolver->resolveRequest($apiRequest);
+    }
+
+    protected function getRouteResolver(): EntryRouteResolverInterface
+    {
+        if (!isset($this->routeResolver)) {
+            $registryCollection = GeneralUtility::makeInstance(RegistryCollection::class);
+            $this->routeResolver = $registryCollection->getApiEntryRouteResolver();
+        }
+
+        return $this->routeResolver;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if (array_key_exists('dmfResource', $request->getQueryParams()) && $this->routeResolver->enabled()) {
+        if (array_key_exists('dmfResource', $request->getQueryParams()) && $this->getRouteResolver()->enabled()) {
             $apiResponse = $this->processRequest($request);
 
             return $this->buildResponse($apiResponse);

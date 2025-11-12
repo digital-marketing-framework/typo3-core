@@ -14,7 +14,7 @@ class JsonDataHandler implements SingletonInterface
      */
     protected function updateJsonField(array &$fieldArray, string $fieldName): void
     {
-        $data = $fieldArray[$fieldName] ?? '';
+        $data = (string)($fieldArray[$fieldName] ?? '');
         if ($data !== '') {
             try {
                 $jsonData = json_decode($data, flags: JSON_THROW_ON_ERROR);

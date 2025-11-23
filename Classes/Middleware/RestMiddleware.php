@@ -5,6 +5,7 @@ namespace DigitalMarketingFramework\Typo3\Core\Middleware;
 use DigitalMarketingFramework\Core\Api\Response\ApiResponseInterface;
 use DigitalMarketingFramework\Core\Api\RouteResolver\EntryRouteResolverInterface;
 use DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection;
+use DigitalMarketingFramework\Typo3\Core\Utility\ApiUtility;
 use JsonException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -73,7 +74,7 @@ class RestMiddleware implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if (array_key_exists('dmfResource', $request->getQueryParams()) && $this->getRouteResolver()->enabled()) {
+        if (array_key_exists('dmfResource', $request->getQueryParams()) && ApiUtility::enabled()) {
             $apiResponse = $this->processRequest($request);
 
             return $this->buildResponse($apiResponse);

@@ -2,13 +2,11 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\Routing\Enhancer;
 
-use DigitalMarketingFramework\Core\Api\RouteResolver\EntryRouteResolverInterface;
-use DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection;
+use DigitalMarketingFramework\Typo3\Core\Utility\ApiUtility;
 use TYPO3\CMS\Core\Routing\Enhancer\AbstractEnhancer;
 use TYPO3\CMS\Core\Routing\Enhancer\RoutingEnhancerInterface;
 use TYPO3\CMS\Core\Routing\Route;
 use TYPO3\CMS\Core\Routing\RouteCollection;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * routeEnhancers:
@@ -22,27 +20,13 @@ class ResourceEnhancer extends AbstractEnhancer implements RoutingEnhancerInterf
      */
     public const ENHANCER_NAME = 'DmfResourceEnhancer';
 
-    protected ?EntryRouteResolverInterface $entryRouteResolver = null;
-
-    public function getEntryRouteResolver(): ?EntryRouteResolverInterface
-    {
-        if (!$this->entryRouteResolver instanceof EntryRouteResolverInterface) {
-            $registryCollection = GeneralUtility::makeInstance(RegistryCollection::class);
-            $this->entryRouteResolver = $registryCollection->getApiEntryRouteResolver();
-        }
-
-        return $this->entryRouteResolver;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function enhanceForMatching(RouteCollection $collection): void
     {
-        $entryRouteResolver = $this->getEntryRouteResolver();
-        $enabled = $entryRouteResolver->enabled();
-        if ($enabled) {
-            $basePath = $entryRouteResolver->getBasePath();
+        if (ApiUtility::enabled()) {
+            $basePath = ApiUtility::getBasePath();
             /** @var Route $variant */
             $variant = clone $collection->get('default');
             $variant->setPath($basePath . '/{dmfResource?}');
@@ -56,10 +40,5 @@ class ResourceEnhancer extends AbstractEnhancer implements RoutingEnhancerInterf
      */
     public function enhanceForGeneration(RouteCollection $collection, array $parameters): void
     {
-    }
-
-    protected function getBasePath(): string
-    {
-        return $this->getEntryRouteResolver()->getBasePath();
     }
 }

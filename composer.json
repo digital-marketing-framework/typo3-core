@@ -55,6 +55,9 @@
             "app-dir": ".Build",
             "extension-key": "dmf_core",
             "web-dir": ".Build/Web"
+        },
+        "branch-alias": {
+            "dev-main": "3.x-dev"
         }
     },
     "scripts": {

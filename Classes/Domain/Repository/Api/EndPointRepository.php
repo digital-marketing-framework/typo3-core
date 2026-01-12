@@ -38,32 +38,18 @@ class EndPointRepository extends ItemStorageRepository implements EndPointStorag
 
     protected function mapDataField(string $name, mixed $value): mixed
     {
-        switch ($name) {
-            case 'enabled':
-            case 'push_enabled':
-            case 'pull_enabled':
-            case 'disable_context':
-            case 'allow_context_override':
-            case 'expose_to_frontend':
-                return (bool)$value;
-        }
-
-        return parent::mapDataField($name, $value);
+        return match ($name) {
+            'enabled', 'push_enabled', 'pull_enabled', 'disable_context', 'allow_context_override', 'expose_to_frontend' => (bool)$value,
+            default => parent::mapDataField($name, $value),
+        };
     }
 
     protected function mapItemField(string $name, mixed $value): mixed
     {
-        switch ($name) {
-            case 'enabled':
-            case 'push_enabled':
-            case 'pull_enabled':
-            case 'disable_context':
-            case 'allow_context_override':
-            case 'expose_to_frontend':
-                return (bool)$value ? 1 : 0;
-        }
-
-        return parent::mapItemField($name, $value);
+        return match ($name) {
+            'enabled', 'push_enabled', 'pull_enabled', 'disable_context', 'allow_context_override', 'expose_to_frontend' => (bool)$value ? 1 : 0,
+            default => parent::mapItemField($name, $value),
+        };
     }
 
     public function fetchByName(string $name): ?EndPointInterface

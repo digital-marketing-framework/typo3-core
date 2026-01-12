@@ -51,13 +51,13 @@
         "vendor-dir": ".Build/vendor"
     },
     "extra": {
+        "branch-alias": {
+            "dev-main": "3.x-dev"
+        },
         "typo3/cms": {
             "app-dir": ".Build",
             "extension-key": "dmf_core",
             "web-dir": ".Build/Web"
-        },
-        "branch-alias": {
-            "dev-main": "3.x-dev"
         }
     },
     "scripts": {

@@ -80,8 +80,12 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
         $extensionResourceService = $registry->createObject(ExtensionResourceService::class);
         $registry->registerResourceService($extensionResourceService);
 
-        $registry->setBackendUriBuilder(new UriBuilder());
-        $registry->setBackendAssetUriBuilder(new AssetUriBuilder($registry));
+        $registry->setBackendUriBuilder(
+            $registry->createObject(UriBuilder::class)
+        );
+        $registry->setBackendAssetUriBuilder(
+            $registry->createObject(AssetUriBuilder::class, [$registry])
+        );
 
         parent::initServices($registry);
     }

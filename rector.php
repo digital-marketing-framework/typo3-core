@@ -8,6 +8,7 @@ use Rector\DeadCode\Rector\ClassMethod\RemoveParentDelegatingConstructorRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector;
 use Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector;
 use Rector\Php81\Rector\ClassConst\FinalizePublicClassConstantRector;
+use Ssch\TYPO3Rector\CodeQuality\General\GeneralUtilityMakeInstanceToConstructorPropertyRector;
 
 return static function (RectorConfig $rectorConfig): void
 {
@@ -23,11 +24,12 @@ return static function (RectorConfig $rectorConfig): void
         RemoveParentDelegatingConstructorRector::class,
     ];
 
-    // Rules that exist in older rector but were deprecated/removed in newer versions.
+    // Version-specific rule exclusions.
     // Use FinalizePublicClassConstantRector as version indicator - it exists only in older rector.
     // (InstalledVersions::getVersion() returns null inside rector's config loading context)
     $isOldRector = class_exists(FinalizePublicClassConstantRector::class);
     if ($isOldRector) {
+        // Rules that exist in older rector but were deprecated/removed in newer versions.
         $skip = [
             ...$skip,
             // Skip: We don't want to force constants to be final
@@ -37,6 +39,14 @@ return static function (RectorConfig $rectorConfig): void
             RemoveUselessReturnTagRector::class,
             // Skip: Exception codes are unix timestamps, underscores don't improve readability
             AddLiteralSeparatorToNumberRector::class,
+        ];
+    } else {
+        // Rules that exist only in newer rector (TYPO3 13+).
+        $skip = [
+            ...$skip,
+            // Skip: Anyrel's registry pattern requires GeneralUtility::makeInstance() for lazy loading
+            // of CMS-specific services that may not be available during early initialization.
+            GeneralUtilityMakeInstanceToConstructorPropertyRector::class,
         ];
     }
 

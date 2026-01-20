@@ -11,6 +11,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 abstract class EditSectionController extends SectionController
 {
+    /**
+     * @var int
+     */
     public const WEIGHT = 0;
 
     public function __construct(string $keyword, RegistryInterface $registry, string $section, array $routes = ['edit'])

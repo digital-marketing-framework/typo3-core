@@ -6,6 +6,9 @@ use DigitalMarketingFramework\Core\Registry\RegistryInterface;
 
 class ApiEditSectionController extends EditSectionController
 {
+    /**
+     * @var int
+     */
     public const WEIGHT = 0;
 
     public function __construct(string $keyword, RegistryInterface $registry)

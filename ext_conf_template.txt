@@ -37,5 +37,8 @@ notifications {
     enabled = 0
 }
 
+# cat=General; type=options[Server Default=server,UTC-11 Pacific/Midway (SST)=Pacific/Midway,UTC-10 Pacific/Honolulu (HST)=Pacific/Honolulu,UTC-9 America/Anchorage (AKST)=America/Anchorage,UTC-8 America/Los Angeles (PST)=America/Los_Angeles,UTC-7 America/Denver (MST)=America/Denver,UTC-6 America/Chicago (CST)=America/Chicago,UTC-5 America/New York (EST)=America/New_York,UTC-4 America/Halifax (AST)=America/Halifax,UTC-3 America/São Paulo=America/Sao_Paulo,UTC-2 Atlantic/South Georgia=Atlantic/South_Georgia,UTC-1 Atlantic/Azores=Atlantic/Azores,UTC+0 UTC=UTC,UTC+0 Europe/London (GMT)=Europe/London,UTC+1 Europe/Berlin (CET)=Europe/Berlin,UTC+2 Africa/Cairo (EET)=Africa/Cairo,UTC+3 Europe/Moscow (MSK)=Europe/Moscow,UTC+3:30 Asia/Tehran=Asia/Tehran,UTC+4 Asia/Dubai=Asia/Dubai,UTC+4:30 Asia/Kabul=Asia/Kabul,UTC+5 Asia/Karachi (PKT)=Asia/Karachi,UTC+5:30 Asia/Kolkata (IST)=Asia/Kolkata,UTC+5:45 Asia/Kathmandu=Asia/Kathmandu,UTC+6 Asia/Dhaka=Asia/Dhaka,UTC+6:30 Asia/Yangon=Asia/Yangon,UTC+7 Asia/Bangkok=Asia/Bangkok,UTC+8 Asia/Singapore=Asia/Singapore,UTC+9 Asia/Tokyo (JST)=Asia/Tokyo,UTC+9:30 Australia/Darwin (ACST)=Australia/Darwin,UTC+10 Australia/Sydney (AEST)=Australia/Sydney,UTC+11 Pacific/Noumea=Pacific/Noumea,UTC+12 Pacific/Auckland (NZST)=Pacific/Auckland,UTC+13 Pacific/Tongatapu=Pacific/Tongatapu]; label=Default Timezone: Timezone used for date/time values. "Server Default" uses the server's configured timezone.
+defaultTimezone = server
+
 # cat=Debug; type=boolean; label=Debug Mode
 debug = 0

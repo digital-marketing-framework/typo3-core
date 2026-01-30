@@ -10,6 +10,7 @@ use DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection;
 use DOMDocument;
 use DOMElement;
 use TYPO3\CMS\Backend\Form\Element\TextElement;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -19,6 +20,11 @@ class ConfigurationEditorTextFieldElement extends TextElement
      * @var string
      */
     public const RENDER_TYPE = 'digitalMarketingFrameworkConfigurationEditorTextFieldElement';
+
+    /**
+     * @var string
+     */
+    public const JS_VENDOR = '@digital-marketing-framework';
 
     protected RegistryInterface $registry;
 
@@ -102,6 +108,35 @@ class ConfigurationEditorTextFieldElement extends TextElement
         return '';
     }
 
+    protected function getDocumentName(): string
+    {
+        $tableName = $this->data['tableName'] ?? '';
+
+        if ($tableName === 'tx_dmfcore_domain_model_api_endpoint') {
+            return $this->data['databaseRow']['name'] ?? '';
+        }
+
+        // For form plugins, we don't have easy access to the form name here
+        // The form plugin override inherits from the form's document anyway
+        return '';
+    }
+
+    protected function getContextType(): string
+    {
+        $tableName = $this->data['tableName'] ?? '';
+        $cType = $this->data['databaseRow']['CType'][0] ?? '';
+
+        if ($tableName === 'tt_content' && $cType === 'form_formframework') {
+            return 'form-plugin';
+        }
+
+        if ($tableName === 'tx_dmfcore_domain_model_api_endpoint') {
+            return 'api';
+        }
+
+        return '';
+    }
+
     /**
      * @param array{
      *   readOnly?:bool,
@@ -109,6 +144,8 @@ class ConfigurationEditorTextFieldElement extends TextElement
      *   globalDocument?:bool,
      *   contextIdentifier?:string,
      *   uid?:string,
+     *   documentName?:string,
+     *   contextType?:string,
      *   ajaxControllerDocumentType?:string,
      *   ajaxControllerSupportsIncludes?:bool,
      *   ajaxControllerAdditionalParameters?:array<string,string>
@@ -125,7 +162,9 @@ class ConfigurationEditorTextFieldElement extends TextElement
             includes: $config['ajaxControllerSupportsIncludes'] ?? true,
             parameters: $config['ajaxControllerAdditionalParameters'] ?? [],
             contextIdentifier: $config['contextIdentifier'] ?? $this->getContextIdentifier(),
-            uid: $config['uid'] ?? $this->getUid()
+            uid: $config['uid'] ?? $this->getUid(),
+            documentName: $config['documentName'] ?? $this->getDocumentName(),
+            contextType: $config['contextType'] ?? $this->getContextType()
         );
 
         $class = $textArea->getAttribute('class');
@@ -151,9 +190,14 @@ class ConfigurationEditorTextFieldElement extends TextElement
 
         $parameterArray = $this->data['parameterArray'];
         $config = $parameterArray['fieldConf']['config'];
+        $typo3Version = new Typo3Version();
         foreach (MetaData::SCRIPTS as $path) {
-            $script = $assetService->makeAssetPublic($path);
-            $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create('/' . $script);
+            $instructionName = static::JS_VENDOR . '/' . $path;
+            if ($typo3Version->getMajorVersion() <= 12) {
+                $instructionName = '/' . $assetService->makeAssetPublic($path);
+            }
+
+            $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create($instructionName);
         }
 
         foreach (MetaData::STYLES as $path) {

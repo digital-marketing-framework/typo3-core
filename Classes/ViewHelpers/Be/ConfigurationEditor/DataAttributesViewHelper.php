@@ -21,6 +21,8 @@ class DataAttributesViewHelper extends AbstractBackendViewHelper
         $this->registerArgument('routeParameters', 'array', 'Additional AJAX route parameters', false, []);
         $this->registerArgument('contextIdentifier', 'string', 'Context identifier', false, '');
         $this->registerArgument('uid', 'string', 'Unique editor identifier', false, '');
+        $this->registerArgument('documentName', 'string', 'Document name for embedded documents', false, '');
+        $this->registerArgument('contextType', 'string', 'Context type (form, form-plugin, api, etc.)', false, '');
     }
 
     /**
@@ -37,7 +39,9 @@ class DataAttributesViewHelper extends AbstractBackendViewHelper
             includes: $this->arguments['includes'],
             parameters: $this->arguments['routeParameters'],
             contextIdentifier: $this->arguments['contextIdentifier'],
-            uid: $this->arguments['uid']
+            uid: $this->arguments['uid'],
+            documentName: $this->arguments['documentName'],
+            contextType: $this->arguments['contextType']
         );
     }
 }

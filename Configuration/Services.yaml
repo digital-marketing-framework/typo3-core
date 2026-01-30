@@ -14,6 +14,12 @@ services:
   DigitalMarketingFramework\Typo3\Core\Controller\BackendModuleController:
     tags: ['backend.controller']
 
+  # vendor assets JS modules
+  DigitalMarketingFramework\Typo3\Core\Form\Element\EventListener\ResolveJavaScriptImportEventListener:
+    tags:
+        - name: event.listener
+          event: TYPO3\CMS\Core\Page\Event\ResolveJavaScriptImportEvent
+
   # registry collection
   DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection:
     public: true

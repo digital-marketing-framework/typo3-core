@@ -18,10 +18,19 @@ class CoreGlobalConfigurationSchema extends OriginalCoreGlobalConfigurationSchem
      */
     public const DEFAULT_CONFIGURATION_STORAGE_PID = 0;
 
+    /**
+     * @var string
+     */
     public const KEY_TESTS = 'tests';
 
+    /**
+     * @var string
+     */
     public const KEY_TESTS_STORAGE_PID = 'pid';
 
+    /**
+     * @var int
+     */
     public const DEFAULT_TESTS_STORAGE_PID = 0;
 
     public function __construct()

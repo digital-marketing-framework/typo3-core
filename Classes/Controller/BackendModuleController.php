@@ -5,7 +5,6 @@ namespace DigitalMarketingFramework\Typo3\Core\Controller;
 use DigitalMarketingFramework\Core\Backend\Request;
 use DigitalMarketingFramework\Core\Backend\Response\JsonResponse;
 use DigitalMarketingFramework\Core\Backend\Response\RedirectResponse;
-use DigitalMarketingFramework\Typo3\Core\Backend\UriBuilder;
 use DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection;
 use JsonException;
 use Psr\Http\Message\ResponseInterface;
@@ -50,7 +49,6 @@ class BackendModuleController
 {
     public function __construct(
         protected RegistryCollection $registryCollection,
-        protected UriBuilder $uriBuilder,
     ) {
     }
 

@@ -108,6 +108,35 @@ class ConfigurationEditorTextFieldElement extends TextElement
         return '';
     }
 
+    protected function getDocumentName(): string
+    {
+        $tableName = $this->data['tableName'] ?? '';
+
+        if ($tableName === 'tx_dmfcore_domain_model_api_endpoint') {
+            return $this->data['databaseRow']['name'] ?? '';
+        }
+
+        // For form plugins, we don't have easy access to the form name here
+        // The form plugin override inherits from the form's document anyway
+        return '';
+    }
+
+    protected function getContextType(): string
+    {
+        $tableName = $this->data['tableName'] ?? '';
+        $cType = $this->data['databaseRow']['CType'][0] ?? '';
+
+        if ($tableName === 'tt_content' && $cType === 'form_formframework') {
+            return 'form-plugin';
+        }
+
+        if ($tableName === 'tx_dmfcore_domain_model_api_endpoint') {
+            return 'api';
+        }
+
+        return '';
+    }
+
     /**
      * @param array{
      *   readOnly?:bool,
@@ -115,6 +144,8 @@ class ConfigurationEditorTextFieldElement extends TextElement
      *   globalDocument?:bool,
      *   contextIdentifier?:string,
      *   uid?:string,
+     *   documentName?:string,
+     *   contextType?:string,
      *   ajaxControllerDocumentType?:string,
      *   ajaxControllerSupportsIncludes?:bool,
      *   ajaxControllerAdditionalParameters?:array<string,string>
@@ -131,7 +162,9 @@ class ConfigurationEditorTextFieldElement extends TextElement
             includes: $config['ajaxControllerSupportsIncludes'] ?? true,
             parameters: $config['ajaxControllerAdditionalParameters'] ?? [],
             contextIdentifier: $config['contextIdentifier'] ?? $this->getContextIdentifier(),
-            uid: $config['uid'] ?? $this->getUid()
+            uid: $config['uid'] ?? $this->getUid(),
+            documentName: $config['documentName'] ?? $this->getDocumentName(),
+            contextType: $config['contextType'] ?? $this->getContextType()
         );
 
         $class = $textArea->getAttribute('class');

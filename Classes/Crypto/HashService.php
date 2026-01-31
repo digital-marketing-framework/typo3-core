@@ -16,7 +16,7 @@ class HashService implements HashServiceInterface
         if ($version->getMajorVersion() <= 12) {
             $hashService = GeneralUtility::makeInstance(Typo3V12HashService::class);
 
-            return $hashService->generateHmac($subject);
+            return $hashService->generateHmac($subject . $additionalSecret);
         }
 
         // @phpstan-ignore-next-line TYPO3 version switch
@@ -32,7 +32,7 @@ class HashService implements HashServiceInterface
         if ($version->getMajorVersion() <= 12) {
             $hashService = GeneralUtility::makeInstance(Typo3V12HashService::class);
 
-            return $hashService->validateHmac($subject, $hash);
+            return $hashService->validateHmac($subject . $additionalSecret, $hash);
         }
 
         // @phpstan-ignore-next-line TYPO3 version switch

@@ -10,6 +10,7 @@ use DigitalMarketingFramework\Typo3\Core\Backend\Controller\SectionController\Ap
 use DigitalMarketingFramework\Typo3\Core\Backend\Controller\SectionController\TestsEditSectionController;
 use DigitalMarketingFramework\Typo3\Core\Backend\UriBuilder;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\YamlFileConfigurationDocumentStorage;
+use DigitalMarketingFramework\Typo3\Core\Crypto\HashService;
 use DigitalMarketingFramework\Typo3\Core\Domain\Repository\Api\EndPointRepository;
 use DigitalMarketingFramework\Typo3\Core\Domain\Repository\TestCase\TestCaseRepository;
 use DigitalMarketingFramework\Typo3\Core\FileStorage\FileStorage;
@@ -27,6 +28,7 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
     public function __construct(
         protected ExtensionConfiguration $extensionConfiguration,
         protected LoggerFactory $loggerFactory,
+        protected HashService $hashService,
         protected ResourceFactory $resourceFactory,
         protected EventDispatcherInterface $eventDispatcher,
         protected EndPointRepository $endPointStorage,
@@ -48,6 +50,8 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
     protected function initServices(RegistryInterface $registry): void
     {
         $registry->setLoggerFactory($this->loggerFactory);
+
+        $registry->setHashService($this->hashService);
 
         $registry->setFileStorage(
             $registry->createObject(FileStorage::class, [$this->resourceFactory])

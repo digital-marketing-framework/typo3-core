@@ -27,6 +27,11 @@ api {
     pid = 0
 }
 
+tests {
+    # cat=Tests; type=integer; label=Storage Page ID
+    pid = 0
+}
+
 dataPrivacy {
     # cat=Data Privacy; type=boolean; label=Enable Unregulated Data Privacy Plugin
     enableUnregulated = 0

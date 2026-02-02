@@ -7,6 +7,7 @@ use DigitalMarketingFramework\Core\CoreInitialization;
 use DigitalMarketingFramework\Core\Registry\RegistryInterface;
 use DigitalMarketingFramework\Typo3\Core\Backend\AssetUriBuilder;
 use DigitalMarketingFramework\Typo3\Core\Backend\Controller\SectionController\ApiEditSectionController;
+use DigitalMarketingFramework\Typo3\Core\Backend\Controller\SectionController\GlobalSettingsSectionController;
 use DigitalMarketingFramework\Typo3\Core\Backend\Controller\SectionController\TestsEditSectionController;
 use DigitalMarketingFramework\Typo3\Core\Backend\UriBuilder;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\YamlFileConfigurationDocumentStorage;
@@ -97,6 +98,7 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
     protected function initPlugins(RegistryInterface $registry): void
     {
         parent::initPlugins($registry);
+        $registry->registerBackendSectionController(GlobalSettingsSectionController::class);
         $registry->registerBackendSectionController(ApiEditSectionController::class);
         $registry->registerBackendSectionController(TestsEditSectionController::class);
     }

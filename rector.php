@@ -6,6 +6,7 @@ use Mediatis\Typo3CodingStandards\Php\Typo3RectorSetup;
 use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\ClassMethod\RemoveParentDelegatingConstructorRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector;
+use Rector\Php71\Rector\FuncCall\CountOnNullRector;
 use Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector;
 use Rector\Php81\Rector\ClassConst\FinalizePublicClassConstantRector;
 use Ssch\TYPO3Rector\CodeQuality\General\GeneralUtilityMakeInstanceToConstructorPropertyRector;
@@ -39,6 +40,9 @@ return static function (RectorConfig $rectorConfig): void
             RemoveUselessReturnTagRector::class,
             // Skip: Exception codes are unix timestamps, underscores don't improve readability
             AddLiteralSeparatorToNumberRector::class,
+            // Skip: Old Rector can't infer array types from cross-package method calls,
+            // suggests unnecessary is_countable() checks. Rule removed in Rector 2.x.
+            CountOnNullRector::class,
         ];
     } else {
         // Rules that exist only in newer rector (TYPO3 13+).

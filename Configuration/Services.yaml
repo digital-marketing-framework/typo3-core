@@ -44,3 +44,9 @@ services:
       - name: console.command
         command: 'anyrel:cleanup'
         description: 'Execute Anyrel cleanup tasks.'
+
+  DigitalMarketingFramework\Typo3\Core\Command\MigrateConfigurationCommand:
+    tags:
+      - name: console.command
+        command: 'anyrel:migrate'
+        description: 'Migrate all outdated configuration documents.'

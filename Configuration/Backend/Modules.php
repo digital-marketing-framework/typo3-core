@@ -7,7 +7,7 @@ return [
         'parent' => 'web',
         'inheritNavigationComponentFromMainModule' => false,
         'position' => ['after' => 'web_FormFormbuilder'],
-        'access' => 'admin',
+        'access' => 'user',
         'workspaces' => 'live',
         'path' => '/module/web/digital-marketing-framework',
         'labels' => 'LLL:EXT:dmf_core/Resources/Private/Language/locallang_manager.xlf',

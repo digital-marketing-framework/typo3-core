@@ -6,10 +6,11 @@ use DigitalMarketingFramework\Core\ConfigurationDocument\Parser\YamlConfiguratio
 use DigitalMarketingFramework\Core\CoreInitialization;
 use DigitalMarketingFramework\Core\Registry\RegistryInterface;
 use DigitalMarketingFramework\Typo3\Core\Backend\AssetUriBuilder;
-use DigitalMarketingFramework\Typo3\Core\Backend\Controller\SectionController\ApiEditSectionController;
 use DigitalMarketingFramework\Typo3\Core\Backend\Controller\SectionController\GlobalSettingsSectionController;
-use DigitalMarketingFramework\Typo3\Core\Backend\Controller\SectionController\TestsEditSectionController;
-use DigitalMarketingFramework\Typo3\Core\Backend\UriBuilder;
+use DigitalMarketingFramework\Typo3\Core\Backend\UriRouteResolver\ApiEditUriRouteResolver;
+use DigitalMarketingFramework\Typo3\Core\Backend\UriRouteResolver\ApiEndPointDataSourceEditUriRouteResolver;
+use DigitalMarketingFramework\Typo3\Core\Backend\UriRouteResolver\TestsEditUriRouteResolver;
+use DigitalMarketingFramework\Typo3\Core\Backend\UriRouteResolver\Typo3DefaultUriRouteResolver;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\YamlFileConfigurationDocumentStorage;
 use DigitalMarketingFramework\Typo3\Core\Crypto\HashService;
 use DigitalMarketingFramework\Typo3\Core\Domain\Repository\Api\EndPointRepository;
@@ -85,9 +86,6 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
         $extensionResourceService = $registry->createObject(ExtensionResourceService::class);
         $registry->registerResourceService($extensionResourceService);
 
-        $registry->setBackendUriBuilder(
-            $registry->createObject(UriBuilder::class)
-        );
         $registry->setBackendAssetUriBuilder(
             $registry->createObject(AssetUriBuilder::class, [$registry])
         );
@@ -99,7 +97,9 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
     {
         parent::initPlugins($registry);
         $registry->registerBackendSectionController(GlobalSettingsSectionController::class);
-        $registry->registerBackendSectionController(ApiEditSectionController::class);
-        $registry->registerBackendSectionController(TestsEditSectionController::class);
+        $registry->registerBackendUriRouteResolver(Typo3DefaultUriRouteResolver::class);
+        $registry->registerBackendUriRouteResolver(ApiEditUriRouteResolver::class);
+        $registry->registerBackendUriRouteResolver(TestsEditUriRouteResolver::class);
+        $registry->registerBackendUriRouteResolver(ApiEndPointDataSourceEditUriRouteResolver::class);
     }
 }

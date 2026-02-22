@@ -8,7 +8,6 @@ use DigitalMarketingFramework\Core\Registry\RegistryInterface;
 use DigitalMarketingFramework\Typo3\Core\Backend\AssetUriBuilder;
 use DigitalMarketingFramework\Typo3\Core\Backend\Controller\SectionController\GlobalSettingsSectionController;
 use DigitalMarketingFramework\Typo3\Core\Backend\UriRouteResolver\ApiEditUriRouteResolver;
-use DigitalMarketingFramework\Typo3\Core\Backend\UriRouteResolver\ApiEndPointDataSourceEditUriRouteResolver;
 use DigitalMarketingFramework\Typo3\Core\Backend\UriRouteResolver\TestsEditUriRouteResolver;
 use DigitalMarketingFramework\Typo3\Core\Backend\UriRouteResolver\Typo3DefaultUriRouteResolver;
 use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\YamlFileConfigurationDocumentStorage;
@@ -100,6 +99,5 @@ class CoreRegistryUpdateEventListener extends AbstractCoreRegistryUpdateEventLis
         $registry->registerBackendUriRouteResolver(Typo3DefaultUriRouteResolver::class);
         $registry->registerBackendUriRouteResolver(ApiEditUriRouteResolver::class);
         $registry->registerBackendUriRouteResolver(TestsEditUriRouteResolver::class);
-        $registry->registerBackendUriRouteResolver(ApiEndPointDataSourceEditUriRouteResolver::class);
     }
 }

@@ -20,7 +20,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * CLI command to migrate all configuration documents.
  */
-class MigrateConfigurationCommand extends Command
+class MigrateConfigurationCommand extends AbstractCommand
 {
     public function __construct(
         private readonly Registry $typo3Registry,
@@ -35,7 +35,7 @@ class MigrateConfigurationCommand extends Command
         $this->addOption('dry-run', null, InputOption::VALUE_NONE, 'Show what would be migrated without making changes');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function executeCommand(InputInterface $input, OutputInterface $output): int
     {
         $registryCollection = GeneralUtility::makeInstance(RegistryCollection::class);
         $schemaDocument = $registryCollection->getConfigurationSchemaDocument();

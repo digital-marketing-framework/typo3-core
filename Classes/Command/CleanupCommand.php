@@ -8,14 +8,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class CleanupCommand extends Command
+class CleanupCommand extends AbstractCommand
 {
     protected function configure(): void
     {
         $this->setHelp('Execute all Anyrel cleanup tasks.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    protected function executeCommand(InputInterface $input, OutputInterface $output): int
     {
         $registryCollection = GeneralUtility::makeInstance(RegistryCollection::class);
         $cleanupManager = $registryCollection->getRegistry()->getCleanupManager();

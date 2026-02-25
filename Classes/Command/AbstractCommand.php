@@ -6,11 +6,14 @@ use DigitalMarketingFramework\Typo3\Core\Utility\CliEnvironmentUtility;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\CMS\Core\Core\Bootstrap;
 
 abstract class AbstractCommand extends Command
 {
     final protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        Bootstrap::initializeBackendAuthentication();
+
         return CliEnvironmentUtility::ensureBackendRequest(
             fn () => $this->executeCommand($input, $output)
         );

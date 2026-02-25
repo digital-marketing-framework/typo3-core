@@ -16,7 +16,12 @@ use TYPO3\CMS\Core\Http\ServerRequest;
  * TYPO3 core uses the same pattern in its own CLI commands
  * (e.g. DeactivateExtensionCommand, ResetPasswordCommand).
  *
+ * Note: Commands using this utility with FAL operations also need
+ * Bootstrap::initializeBackendAuthentication() to avoid permission errors
+ * from StoragePermissionsAspect (which checks isAdmin() on the BE_USER).
+ *
  * @see \TYPO3\CMS\Extbase\Configuration\ConfigurationManager::getConfiguration()
+ * @see \TYPO3\CMS\Core\Resource\Security\StoragePermissionsAspect
  */
 class CliEnvironmentUtility
 {

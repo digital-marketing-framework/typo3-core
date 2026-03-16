@@ -108,6 +108,14 @@ class MigrateConfigurationCommand extends AbstractCommand
 
         $this->displayMigratables($output, [$identifier => $migratable]);
 
+        if ($migratable->hasParseError()) {
+            $output->writeln('');
+            $output->writeln(sprintf('<error>Document has a parse error: %s</error>', $migratable->getParseError()));
+            $output->writeln('');
+
+            return Command::FAILURE;
+        }
+
         if (!$migratable->isOutdated()) {
             $output->writeln('');
             $output->writeln('<info>Document is already up to date.</info>');
@@ -201,9 +209,15 @@ class MigrateConfigurationCommand extends AbstractCommand
 
         $outdatedCount = 0;
         $readOnlyCount = 0;
+        $errorCount = 0;
 
         foreach ($migratables as $migratable) {
             $flags = [];
+            if ($migratable->hasParseError()) {
+                $flags[] = '<fg=red>parse error</>';
+                ++$errorCount;
+            }
+
             if ($migratable->isReadOnly()) {
                 $flags[] = 'readonly';
                 ++$readOnlyCount;
@@ -231,7 +245,9 @@ class MigrateConfigurationCommand extends AbstractCommand
                 $includedBy
             ));
 
-            if ($migratable->isOutdated() && $migratable->getMigrationInfo() !== []) {
+            if ($migratable->hasParseError()) {
+                $output->writeln(sprintf('    <fg=red>%s</>', $migratable->getParseError()));
+            } elseif ($migratable->isOutdated() && $migratable->getMigrationInfo() !== []) {
                 foreach ($migratable->getMigrationInfo() as $package => $info) {
                     $from = $info['from'] !== '' ? $info['from'] : '1.0.0';
                     $color = match ($info['status']) {
@@ -251,10 +267,11 @@ class MigrateConfigurationCommand extends AbstractCommand
 
         $output->writeln('');
         $output->writeln(sprintf(
-            '  Total: %d documents, %d readonly, %d outdated',
+            '  Total: %d documents, %d readonly, %d outdated%s',
             count($migratables),
             $readOnlyCount,
-            $outdatedCount
+            $outdatedCount,
+            $errorCount > 0 ? sprintf(', %d with errors', $errorCount) : ''
         ));
     }
 

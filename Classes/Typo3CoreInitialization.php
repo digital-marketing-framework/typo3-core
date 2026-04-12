@@ -1,0 +1,115 @@
+<?php
+
+namespace DigitalMarketingFramework\Typo3\Core;
+
+use DigitalMarketingFramework\Core\Backend\Controller\SectionController\SectionControllerInterface;
+use DigitalMarketingFramework\Core\Backend\UriRouteResolver\UriRouteResolverInterface;
+use DigitalMarketingFramework\Core\ConfigurationDocument\Parser\YamlConfigurationDocumentParser;
+use DigitalMarketingFramework\Core\CoreInitialization;
+use DigitalMarketingFramework\Core\Plugin\PluginInterface;
+use DigitalMarketingFramework\Core\Registry\RegistryDomain;
+use DigitalMarketingFramework\Core\Registry\RegistryInterface;
+use DigitalMarketingFramework\Typo3\Core\Backend\AssetUriBuilder;
+use DigitalMarketingFramework\Typo3\Core\Backend\Controller\SectionController\GlobalSettingsSectionController;
+use DigitalMarketingFramework\Typo3\Core\Backend\UriRouteResolver\ApiEditUriRouteResolver;
+use DigitalMarketingFramework\Typo3\Core\Backend\UriRouteResolver\TestsEditUriRouteResolver;
+use DigitalMarketingFramework\Typo3\Core\Backend\UriRouteResolver\Typo3DefaultUriRouteResolver;
+use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\YamlFileConfigurationDocumentStorage;
+use DigitalMarketingFramework\Typo3\Core\Crypto\HashService;
+use DigitalMarketingFramework\Typo3\Core\Domain\Repository\Api\EndPointRepository;
+use DigitalMarketingFramework\Typo3\Core\Domain\Repository\TestCase\TestCaseRepository;
+use DigitalMarketingFramework\Typo3\Core\FileStorage\FileStorage;
+use DigitalMarketingFramework\Typo3\Core\GlobalConfiguration\GlobalConfiguration;
+use DigitalMarketingFramework\Typo3\Core\GlobalConfiguration\Schema\CoreGlobalConfigurationSchema;
+use DigitalMarketingFramework\Typo3\Core\Log\LoggerFactory;
+use DigitalMarketingFramework\Typo3\Core\Resource\ExtensionResourceService;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
+
+class Typo3CoreInitialization extends Typo3Initialization
+{
+    /** @var array<"core"|"distributor"|"collector",array<class-string<PluginInterface>,array<string|int,class-string<PluginInterface>>>> */
+    protected const PLUGINS = [
+        RegistryDomain::CORE => [
+            SectionControllerInterface::class => [
+                GlobalSettingsSectionController::class,
+            ],
+            UriRouteResolverInterface::class => [
+                Typo3DefaultUriRouteResolver::class,
+                ApiEditUriRouteResolver::class,
+                TestsEditUriRouteResolver::class,
+            ],
+        ],
+    ];
+
+    public function __construct(
+        protected ExtensionConfiguration $extensionConfiguration,
+        protected LoggerFactory $loggerFactory,
+        protected HashService $hashService,
+        protected ResourceFactory $resourceFactory,
+        protected EventDispatcherInterface $eventDispatcher,
+        protected EndPointRepository $endPointStorage,
+        protected TestCaseRepository $testCaseRepository,
+    ) {
+        parent::__construct(
+            inner: new CoreInitialization('dmf_core'),
+            packageName: 'typo3-core',
+            packageAlias: 'dmf_core',
+            globalConfigurationSchema: new CoreGlobalConfigurationSchema(),
+        );
+    }
+
+    public function initGlobalConfiguration(string $domain, RegistryInterface $registry): void
+    {
+        parent::initGlobalConfiguration($domain, $registry);
+
+        $globalConfiguration = new GlobalConfiguration($registry, $this->extensionConfiguration);
+        $registry->setGlobalConfiguration($globalConfiguration);
+    }
+
+    public function initServices(string $domain, RegistryInterface $registry): void
+    {
+        $registry->setLoggerFactory($this->loggerFactory);
+
+        $registry->setHashService($this->hashService);
+
+        $registry->setFileStorage(
+            $registry->createObject(FileStorage::class, [$this->resourceFactory])
+        );
+
+        $registry->setConfigurationDocumentStorage(
+            $registry->createObject(YamlFileConfigurationDocumentStorage::class)
+        );
+
+        $registry->setConfigurationDocumentParser(
+            $registry->createObject(YamlConfigurationDocumentParser::class)
+        );
+
+        $this->endPointStorage->setGlobalConfiguration($registry->getGlobalConfiguration());
+        $registry->setEndPointStorage($this->endPointStorage);
+
+        $this->testCaseRepository->setGlobalConfiguration($registry->getGlobalConfiguration());
+        $registry->setTestCaseStorage($this->testCaseRepository);
+
+        $vendorResourceService = $registry->getVendorResourceService();
+        $vendorResourceService->setVendorPath(Environment::getProjectPath() . '/vendor');
+
+        $assetService = $registry->getAssetService();
+        $assetService->setAssetConfig([
+            'tempBasePath' => Environment::getPublicPath() . '/typo3temp',
+            'publicTempBasePath' => 'typo3temp',
+            'salt' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'],
+        ]);
+
+        $extensionResourceService = $registry->createObject(ExtensionResourceService::class);
+        $registry->registerResourceService($extensionResourceService);
+
+        $registry->setBackendAssetUriBuilder(
+            $registry->createObject(AssetUriBuilder::class, [$registry])
+        );
+
+        parent::initServices($domain, $registry);
+    }
+}

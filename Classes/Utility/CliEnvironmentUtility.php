@@ -4,6 +4,7 @@ namespace DigitalMarketingFramework\Typo3\Core\Utility;
 
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Core\Http\Uri;
 
 /**
  * Workaround for TYPO3 13+ CLI commands that need Extbase configuration.
@@ -44,7 +45,11 @@ class CliEnvironmentUtility
             return $callback();
         }
 
-        $GLOBALS['TYPO3_REQUEST'] = (new ServerRequest())
+        // A non-null URI is required because TYPO3's ServerRequest leaves
+        // $uri as null when constructed without one, which violates PSR-7's
+        // getUri(): UriInterface contract and crashes consumers like
+        // networkteam/sentry-client that call $request->getUri()->__toString().
+        $GLOBALS['TYPO3_REQUEST'] = (new ServerRequest(new Uri('cli://typo3')))
             ->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_BE);
         try {
             return $callback();

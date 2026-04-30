@@ -49,7 +49,10 @@ class CliEnvironmentUtility
         // $uri as null when constructed without one, which violates PSR-7's
         // getUri(): UriInterface contract and crashes consumers like
         // networkteam/sentry-client that call $request->getUri()->__toString().
-        $GLOBALS['TYPO3_REQUEST'] = (new ServerRequest(new Uri('cli://typo3')))
+        // Uri::fromAnyScheme() is required because the default Uri constructor
+        // only accepts http/https/ws/wss; the "cli://" marker scheme would
+        // otherwise be rejected by sanitizeScheme().
+        $GLOBALS['TYPO3_REQUEST'] = (new ServerRequest(Uri::fromAnyScheme('cli://typo3')))
             ->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_BE);
         try {
             return $callback();

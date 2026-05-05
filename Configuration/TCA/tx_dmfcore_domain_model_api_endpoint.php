@@ -19,11 +19,11 @@ $GLOBALS['TCA']['tx_dmfcore_domain_model_api_endpoint'] = [
     ],
     'types' => [
         '0' => [
-            'showitem' => '--div--;General,name,enabled,expose_to_frontend,configuration_document,--div--;Push,push_enabled,disable_context,allow_context_override,--div--;Pull,pull_enabled',
+            'showitem' => '--div--;General,name,enabled,expose_to_frontend,configuration_document,--div--;Push,push_enabled,disable_context,allow_context_override,http_redirect,--div--;Pull,pull_enabled',
         ],
     ],
     'palettes' => [
-        '0' => ['showitem' => '--div--;General,name,enabled,expose_to_frontend,configuration_document,--div--;Push,push_enabled,disable_context,allow_context_override,--div--;Pull,pull_enabled'],
+        '0' => ['showitem' => '--div--;General,name,enabled,expose_to_frontend,configuration_document,--div--;Push,push_enabled,disable_context,allow_context_override,http_redirect,--div--;Pull,pull_enabled'],
     ],
     'columns' => [
         'name' => [
@@ -71,6 +71,13 @@ $GLOBALS['TCA']['tx_dmfcore_domain_model_api_endpoint'] = [
         'expose_to_frontend' => [
             'exclude' => 1,
             'label' => $ll . 'tx_dmfcore_domain_model_api_endpoint.expose_to_frontend',
+            'config' => [
+                'type' => 'check',
+            ],
+        ],
+        'http_redirect' => [
+            'exclude' => 1,
+            'label' => $ll . 'tx_dmfcore_domain_model_api_endpoint.http_redirect',
             'config' => [
                 'type' => 'check',
             ],

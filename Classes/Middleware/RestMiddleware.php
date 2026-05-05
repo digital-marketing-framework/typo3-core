@@ -14,6 +14,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class RestMiddleware implements MiddlewareInterface
@@ -29,6 +30,11 @@ class RestMiddleware implements MiddlewareInterface
 
     protected function buildResponse(ApiResponseInterface $apiResponse): ResponseInterface
     {
+        $redirectUrl = $apiResponse->getRedirectUrl();
+        if ($redirectUrl !== null && $redirectUrl !== '') {
+            return new RedirectResponse($redirectUrl, $apiResponse->getStatusCode());
+        }
+
         $message = $apiResponse->getStatusMessage();
         $code = $apiResponse->getStatusCode();
 
@@ -40,11 +46,22 @@ class RestMiddleware implements MiddlewareInterface
 
     protected function processRequest(ServerRequestInterface $request): ApiResponseInterface
     {
-        $body = (string)$request->getBody();
-        try {
-            $data = $body === '' ? null : json_decode($body, true, flags: JSON_THROW_ON_ERROR);
-        } catch (JsonException) {
-            $data = null;
+        $contentType = $request->getHeaderLine('Content-Type');
+        if ($contentType !== '' && (str_contains($contentType, 'application/x-www-form-urlencoded') || str_contains($contentType, 'multipart/form-data'))) {
+            // Form-encoded body: treat all parsed fields as the payload (no
+            // wrapper). Context cannot be supplied this way; form clients
+            // (Pardot/Web-to-Lead style) carry context naturally via cookies
+            // and headers.
+            $parsedBody = $request->getParsedBody();
+            $data = is_array($parsedBody) && $parsedBody !== [] ? ['payload' => $parsedBody] : null;
+        } else {
+            // JSON body (default): {payload: ..., context: ...}
+            $body = (string)$request->getBody();
+            try {
+                $data = $body === '' ? null : json_decode($body, true, flags: JSON_THROW_ON_ERROR);
+            } catch (JsonException) {
+                $data = null;
+            }
         }
 
         $arguments = $request->getQueryParams();

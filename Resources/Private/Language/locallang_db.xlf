@@ -27,6 +27,9 @@
 	  <trans-unit id="tx_dmfcore_domain_model_api_endpoint.expose_to_frontend" xml:space="preserve">
 	    <source>Expose End Point to Frontend</source>
 	  </trans-unit>
+	  <trans-unit id="tx_dmfcore_domain_model_api_endpoint.http_redirect" xml:space="preserve">
+	    <source>Respond with HTTP Redirect (303)</source>
+	  </trans-unit>
 	  <trans-unit id="tx_dmfcore_domain_model_api_endpoint.configuration_document" xml:space="preserve">
 	    <source>Configuration Document</source>
 	  </trans-unit>

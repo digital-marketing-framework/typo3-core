@@ -39,7 +39,7 @@ class EndPointRepository extends ItemStorageRepository implements EndPointStorag
     protected function mapDataField(string $name, mixed $value): mixed
     {
         return match ($name) {
-            'enabled', 'push_enabled', 'pull_enabled', 'disable_context', 'allow_context_override', 'expose_to_frontend' => (bool)$value,
+            'enabled', 'push_enabled', 'pull_enabled', 'disable_context', 'allow_context_override', 'expose_to_frontend', 'http_redirect' => (bool)$value,
             default => parent::mapDataField($name, $value),
         };
     }
@@ -47,7 +47,7 @@ class EndPointRepository extends ItemStorageRepository implements EndPointStorag
     protected function mapItemField(string $name, mixed $value): mixed
     {
         return match ($name) {
-            'enabled', 'push_enabled', 'pull_enabled', 'disable_context', 'allow_context_override', 'expose_to_frontend' => (bool)$value ? 1 : 0,
+            'enabled', 'push_enabled', 'pull_enabled', 'disable_context', 'allow_context_override', 'expose_to_frontend', 'http_redirect' => (bool)$value ? 1 : 0,
             default => parent::mapItemField($name, $value),
         };
     }

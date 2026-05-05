@@ -19,6 +19,7 @@ use DigitalMarketingFramework\Typo3\Core\Crypto\HashService;
 use DigitalMarketingFramework\Typo3\Core\Domain\Repository\Api\EndPointRepository;
 use DigitalMarketingFramework\Typo3\Core\Domain\Repository\TestCase\TestCaseRepository;
 use DigitalMarketingFramework\Typo3\Core\FileStorage\FileStorage;
+use DigitalMarketingFramework\Typo3\Core\Frontend\Typo3FrontendUriBuilder;
 use DigitalMarketingFramework\Typo3\Core\GlobalConfiguration\GlobalConfiguration;
 use DigitalMarketingFramework\Typo3\Core\GlobalConfiguration\Schema\CoreGlobalConfigurationSchema;
 use DigitalMarketingFramework\Typo3\Core\Log\LoggerFactory;
@@ -108,6 +109,10 @@ class Typo3CoreInitialization extends Typo3Initialization
 
         $registry->setBackendAssetUriBuilder(
             $registry->createObject(AssetUriBuilder::class, [$registry])
+        );
+
+        $registry->setFrontendUriBuilder(
+            $registry->createObject(Typo3FrontendUriBuilder::class)
         );
 
         parent::initServices($domain, $registry);

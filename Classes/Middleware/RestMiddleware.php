@@ -92,6 +92,14 @@ class RestMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if (array_key_exists('dmfResource', $request->getQueryParams()) && ApiUtility::enabled()) {
+            // v14 stopped setting $GLOBALS['TYPO3_REQUEST'] in middlewares (only the
+            // RequestHandler still sets it, as b/w compat). Our API short-circuits the
+            // middleware chain without reaching the RequestHandler, but downstream code
+            // like LinkFactory::createUri() still falls back to this global — and v14's
+            // strictly-typed ContentObjectRenderer::setRequest() rejects null. Set the
+            // global here so downstream URL building works regardless of TYPO3 version.
+            $GLOBALS['TYPO3_REQUEST'] = $request;
+
             $apiResponse = $this->processRequest($request);
 
             return $this->buildResponse($apiResponse);

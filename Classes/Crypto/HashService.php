@@ -14,8 +14,10 @@ class HashService implements HashServiceInterface
     {
         $version = new Typo3Version();
         if ($version->getMajorVersion() <= 12) {
+            // @phpstan-ignore-next-line TYPO3 version switch — Extbase HashService removed in v14
             $hashService = GeneralUtility::makeInstance(Typo3V12HashService::class);
 
+            // @phpstan-ignore-next-line TYPO3 version switch
             return $hashService->generateHmac($subject . $additionalSecret);
         }
 
@@ -30,8 +32,10 @@ class HashService implements HashServiceInterface
     {
         $version = new Typo3Version();
         if ($version->getMajorVersion() <= 12) {
+            // @phpstan-ignore-next-line TYPO3 version switch — Extbase HashService removed in v14
             $hashService = GeneralUtility::makeInstance(Typo3V12HashService::class);
 
+            // @phpstan-ignore-next-line TYPO3 version switch
             return $hashService->validateHmac($subject . $additionalSecret, $hash);
         }
 

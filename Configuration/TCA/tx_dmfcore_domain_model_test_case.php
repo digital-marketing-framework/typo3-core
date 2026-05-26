@@ -6,7 +6,7 @@ defined('TYPO3') || exit;
 
 $ll = 'LLL:EXT:dmf_core/Resources/Private/Language/locallang_db.xlf:';
 
-$GLOBALS['TCA']['tx_dmfcore_domain_model_test_case'] = [
+return [
     'ctrl' => [
         'label' => 'label',
         'tstamp' => 'changed',

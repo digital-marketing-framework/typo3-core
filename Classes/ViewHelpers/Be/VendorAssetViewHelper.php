@@ -2,10 +2,8 @@
 
 namespace DigitalMarketingFramework\Typo3\Core\ViewHelpers\Be;
 
-use Closure;
 use DigitalMarketingFramework\Typo3\Core\Registry\RegistryCollection;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 class VendorAssetViewHelper extends AbstractViewHelper
@@ -17,21 +15,15 @@ class VendorAssetViewHelper extends AbstractViewHelper
         $this->registerArgument('returnUrl', 'bool', 'return the url of the resulting asset', false, true);
     }
 
-    /**
-     * @param array<string,mixed> $arguments
-     */
-    public static function renderStatic(
-        array $arguments,
-        Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext,
-    ): string {
+    public function render(): string
+    {
         $registryCollection = GeneralUtility::makeInstance(RegistryCollection::class);
         $registry = $registryCollection->getRegistry();
         $assetService = $registry->getAssetService();
 
-        $url = $assetService->makeAssetPublic($arguments['path']);
+        $url = $assetService->makeAssetPublic($this->arguments['path']);
 
-        if ((bool)$arguments['returnUrl']) {
+        if ((bool)$this->arguments['returnUrl']) {
             return $url;
         }
 

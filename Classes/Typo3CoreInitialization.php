@@ -28,6 +28,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\CMS\Core\Resource\StorageRepository;
 
 class Typo3CoreInitialization extends Typo3Initialization
 {
@@ -50,6 +51,7 @@ class Typo3CoreInitialization extends Typo3Initialization
         protected LoggerFactory $loggerFactory,
         protected HashService $hashService,
         protected ResourceFactory $resourceFactory,
+        protected StorageRepository $storageRepository,
         protected EventDispatcherInterface $eventDispatcher,
         protected EndPointRepository $endPointStorage,
         protected TestCaseRepository $testCaseRepository,
@@ -77,7 +79,7 @@ class Typo3CoreInitialization extends Typo3Initialization
         $registry->setHashService($this->hashService);
 
         $registry->setFileStorage(
-            $registry->createObject(FileStorage::class, [$this->resourceFactory])
+            $registry->createObject(FileStorage::class, [$this->resourceFactory, $this->storageRepository])
         );
 
         $registry->setConfigurationDocumentStorage(

@@ -15,6 +15,7 @@ use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
+use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class FileStorage implements FileStorageInterface, LoggerAwareInterface
@@ -25,13 +26,16 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
 
     public function __construct(
         protected ResourceFactory $resourceFactory,
+        protected StorageRepository $storageRepository,
     ) {
     }
 
     protected function getDefaultStorageUid(): int
     {
         if ($this->defaultStorageUid === null) {
-            $defaultStorage = $this->resourceFactory->getDefaultStorage();
+            // ResourceFactory::getDefaultStorage() and ::getStorageObject() were removed
+            // in TYPO3 14 (#107735) — use StorageRepository. Available identically in v12+.
+            $defaultStorage = $this->storageRepository->getDefaultStorage();
             if (!$defaultStorage instanceof ResourceStorage) {
                 throw new DigitalMarketingFrameworkException('No default resource storage found', 5349599510);
             }
@@ -198,7 +202,7 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
             $identifierParts = explode(':', $folderIdentifier);
             $storageUid = (int)array_shift($identifierParts);
             $path = implode(':', $identifierParts);
-            $storage = $this->resourceFactory->getStorageObject($storageUid);
+            $storage = $this->storageRepository->getStorageObject($storageUid);
             try {
                 $storage->createFolder($path);
             } catch (Exception $e) {

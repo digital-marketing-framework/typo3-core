@@ -1,0 +1,26 @@
+# .github/dependabot.yml — MEDO-469 standardized config for digital-marketing-framework packages
+# Grouped updates to keep PR noise low across the Composer/PHP library packages.
+# - Composer: minor+patch grouped into one weekly PR; security fixes grouped; majors come individually.
+# - GitHub Actions: workflow action bumps grouped into one weekly PR.
+version: 2
+updates:
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      composer-minor-patch:
+        applies-to: version-updates
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+      composer-security:
+        applies-to: security-updates
+        patterns: ["*"]
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      github-actions:
+        patterns: ["*"]

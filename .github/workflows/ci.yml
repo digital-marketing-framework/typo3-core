@@ -35,7 +35,7 @@ jobs:
         steps:
             -
                 name: Checkout
-                uses: actions/checkout@v4
+                uses: actions/checkout@v7
             -
                 name: 'Install PHP'
                 uses: shivammathur/setup-php@v2
@@ -51,7 +51,7 @@ jobs:
                 run: 'composer config --global --list'
             -
                 name: 'Cache dependencies installed with composer'
-                uses: actions/cache@v3
+                uses: actions/cache@v6
                 with:
                     key: 'php${{ matrix.php_version }}-typo3${{ matrix.typo3_version }}'
                     path: ~/.cache/composer
@@ -70,6 +70,6 @@ jobs:
         if: "(github.actor != 'dependabot[bot]')"
         steps:
             -
-                uses: actions/checkout@v4
+                uses: actions/checkout@v7
             -
                 run: 'semgrep scan --config auto --error'

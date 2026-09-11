@@ -28,7 +28,7 @@ class GlobalConfiguration extends DefaultGlobalConfiguration
         }
 
         if ($resolvePlaceholders) {
-            $value = $this->registry->getEnvironmentService()->insertEnvironmentVariables($value);
+            return $this->registry->getEnvironmentService()->insertEnvironmentVariables($value);
         }
 
         return $value;

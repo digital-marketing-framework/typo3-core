@@ -5,6 +5,7 @@ namespace DigitalMarketingFramework\Typo3\Core;
 use DigitalMarketingFramework\Core\Backend\Controller\SectionController\SectionControllerInterface;
 use DigitalMarketingFramework\Core\Backend\UriRouteResolver\UriRouteResolverInterface;
 use DigitalMarketingFramework\Core\ConfigurationDocument\Parser\YamlConfigurationDocumentParser;
+use DigitalMarketingFramework\Core\ConfigurationDocument\Storage\YamlFileConfigurationDocumentStorage;
 use DigitalMarketingFramework\Core\CoreInitialization;
 use DigitalMarketingFramework\Core\Plugin\PluginInterface;
 use DigitalMarketingFramework\Core\Registry\RegistryDomain;
@@ -14,7 +15,6 @@ use DigitalMarketingFramework\Typo3\Core\Backend\Controller\SectionController\Gl
 use DigitalMarketingFramework\Typo3\Core\Backend\UriRouteResolver\ApiEditUriRouteResolver;
 use DigitalMarketingFramework\Typo3\Core\Backend\UriRouteResolver\TestsEditUriRouteResolver;
 use DigitalMarketingFramework\Typo3\Core\Backend\UriRouteResolver\Typo3DefaultUriRouteResolver;
-use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\YamlFileConfigurationDocumentStorage;
 use DigitalMarketingFramework\Typo3\Core\Crypto\HashService;
 use DigitalMarketingFramework\Typo3\Core\Domain\Repository\Api\EndPointRepository;
 use DigitalMarketingFramework\Typo3\Core\Domain\Repository\TestCase\TestCaseRepository;

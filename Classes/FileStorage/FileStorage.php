@@ -125,7 +125,8 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
 
             // Writing a file implies the folder it goes in: nobody should have to create the
             // storage folder by hand before the first document can be saved. createFolder()
-            // already returns early when it exists.
+            // makes only what is missing and protects the folder either way, which is how a
+            // folder that was there all along gets its access file.
             $folderIdentifier = $storageUid . ':' . $pathinfo['dirname'];
             $this->createFolder($folderIdentifier);
 
@@ -311,7 +312,11 @@ class FileStorage implements FileStorageInterface, LoggerAwareInterface
         }
 
         $accessFilePath = rtrim($basePath, '/') . '/' . trim($folder->getIdentifier(), '/') . '/' . static::ACCESS_FILE_NAME;
-        if (file_exists($accessFilePath) || !is_dir(dirname($accessFilePath))) {
+        // A folder that takes no new file cannot be protected from here. Saying so through a
+        // PHP warning on every attempt is not saying it to anyone who can act on it; the
+        // storage answers isStorageReady() with false, which is what reaches the backend.
+        $accessFileFolder = dirname($accessFilePath);
+        if (file_exists($accessFilePath) || !is_dir($accessFileFolder) || !is_writable($accessFileFolder)) {
             return;
         }
 

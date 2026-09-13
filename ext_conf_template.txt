@@ -1,7 +1,7 @@
 
 configurationStorage {
     # cat=Configuration Document Storage; type=string; label=Storage folder for configuration documents
-    folder = 0:/digital_marketing_framework/configuration
+    folder = 1:/digital_marketing_framework/configuration
 
     # cat=Configuration Document Storage; type=string; label=Default configuration document
     defaultConfigurationDocument =
@@ -14,6 +14,14 @@ configurationStorage {
 
     # cat=Configuration Document Storage; type=boolean; label=Allow saving documents in extension folders
     allowSaveToExtensionPaths = 0
+}
+
+fieldDefinitionStorage {
+    # cat=Field Definition Storage; type=string; label=Storage folder for field definitions
+    folder = 1:/digital_marketing_framework/fields
+
+    # cat=Field Definition Storage; type=string; label=Additional field definition folders (comma-separated)
+    additionalFolders =
 }
 
 api {

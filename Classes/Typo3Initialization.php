@@ -42,6 +42,9 @@ class Typo3Initialization extends Initialization implements Typo3InitializationI
     /** @var string[] */
     protected const CONFIGURATION_DOCUMENT_FOLDERS = ['ConfigurationDocuments'];
 
+    /** @var string[] */
+    protected const FIELD_DEFINITION_FOLDERS = ['FieldDefinitions'];
+
     /** @var array<string,int> */
     protected const TEMPLATE_FOLDERS = ['Frontend' => 200];
 

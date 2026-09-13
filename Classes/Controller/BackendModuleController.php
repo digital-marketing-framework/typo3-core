@@ -70,7 +70,7 @@ class BackendModuleController
         }
 
         if (!is_array($body)) {
-            $body = [];
+            return [];
         }
 
         return $body;
@@ -86,10 +86,11 @@ class BackendModuleController
 
         $req = new Request($route, $arguments, $body, $method);
         $result = $this->registryCollection->getRegistry()->getBackendManager()->getResponse($req);
-
         if ($result instanceof RedirectResponse) {
             return new Typo3RedirectResponse($result->getRedirectLocation());
-        } elseif ($result instanceof JsonResponse) {
+        }
+
+        if ($result instanceof JsonResponse) {
             return new Typo3JsonResponse($result->getData());
         }
 

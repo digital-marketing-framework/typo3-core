@@ -53,6 +53,11 @@ notifications {
 # cat=General; type=string; label=Default Host: Host address to use for logging when running CLI commands.
 environment =
 
+backend {
+    # cat=Backend; type=options[Automatic=auto,Light=light,Dark=dark]; label=Color Scheme: Appearance of the Anyrel backend. Automatic follows the surrounding system.
+    colorScheme = auto
+}
+
 frontend {
     # cat=Frontend; type=string; label=Data Attribute Prefix
     prefix = dmf

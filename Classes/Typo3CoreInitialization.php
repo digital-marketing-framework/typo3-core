@@ -5,6 +5,7 @@ namespace DigitalMarketingFramework\Typo3\Core;
 use DigitalMarketingFramework\Core\Backend\Controller\SectionController\SectionControllerInterface;
 use DigitalMarketingFramework\Core\Backend\UriRouteResolver\UriRouteResolverInterface;
 use DigitalMarketingFramework\Core\ConfigurationDocument\Parser\YamlConfigurationDocumentParser;
+use DigitalMarketingFramework\Core\ConfigurationDocument\Storage\YamlFileConfigurationDocumentStorage;
 use DigitalMarketingFramework\Core\CoreInitialization;
 use DigitalMarketingFramework\Core\Plugin\PluginInterface;
 use DigitalMarketingFramework\Core\Registry\RegistryDomain;
@@ -14,7 +15,6 @@ use DigitalMarketingFramework\Typo3\Core\Backend\Controller\SectionController\Gl
 use DigitalMarketingFramework\Typo3\Core\Backend\UriRouteResolver\ApiEditUriRouteResolver;
 use DigitalMarketingFramework\Typo3\Core\Backend\UriRouteResolver\TestsEditUriRouteResolver;
 use DigitalMarketingFramework\Typo3\Core\Backend\UriRouteResolver\Typo3DefaultUriRouteResolver;
-use DigitalMarketingFramework\Typo3\Core\ConfigurationDocument\Storage\YamlFileConfigurationDocumentStorage;
 use DigitalMarketingFramework\Typo3\Core\Crypto\HashService;
 use DigitalMarketingFramework\Typo3\Core\Domain\Repository\Api\EndPointRepository;
 use DigitalMarketingFramework\Typo3\Core\Domain\Repository\TestCase\TestCaseRepository;
@@ -28,6 +28,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\CMS\Core\Resource\StorageRepository;
 
 class Typo3CoreInitialization extends Typo3Initialization
 {
@@ -50,6 +51,7 @@ class Typo3CoreInitialization extends Typo3Initialization
         protected LoggerFactory $loggerFactory,
         protected HashService $hashService,
         protected ResourceFactory $resourceFactory,
+        protected StorageRepository $storageRepository,
         protected EventDispatcherInterface $eventDispatcher,
         protected EndPointRepository $endPointStorage,
         protected TestCaseRepository $testCaseRepository,
@@ -77,7 +79,7 @@ class Typo3CoreInitialization extends Typo3Initialization
         $registry->setHashService($this->hashService);
 
         $registry->setFileStorage(
-            $registry->createObject(FileStorage::class, [$this->resourceFactory])
+            $registry->createObject(FileStorage::class, [$this->resourceFactory, $this->storageRepository])
         );
 
         $registry->setConfigurationDocumentStorage(
